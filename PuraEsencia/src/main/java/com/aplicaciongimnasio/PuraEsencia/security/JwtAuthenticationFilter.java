@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @Component
@@ -32,9 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String jwt = null;
         String username = null;
+
         // Verifica si el encabezado tiene el token JWT y si la ruta necesita autenticación
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            logger.error("38");
             jwt = authHeader.substring(7);
             try {
                 username = jwtUtil.extractEmail(jwt);
@@ -44,7 +43,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Verifica si el usuario no está autenticado
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                logger.error("48");
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 // Valida el token y establece la autenticación

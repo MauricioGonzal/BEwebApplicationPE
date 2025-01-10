@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.LoginRequest;
 import com.aplicaciongimnasio.PuraEsencia.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -19,9 +21,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password) {
+    public String login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
         return jwtUtil.generateToken(authentication.getName());
     }

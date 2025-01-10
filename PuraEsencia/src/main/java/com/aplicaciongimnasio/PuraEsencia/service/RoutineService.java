@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
@@ -24,19 +25,22 @@ public class RoutineService {
 
     // Crear una rutina con ejercicios
     @Transactional
-    public Routine createRoutineWithExercises(Routine routine, List<Long> exerciseIds) {
-        Set<Exercise> exercises = new HashSet<>();
+    public Routine createRoutineWithExercises(RoutineRequest routineRequest) {
+        // Crear la entidad Routine
+        Routine routine = new Routine();
+        routine.setName(routineRequest.getName());
 
-        // Buscar los ejercicios a partir de los IDs proporcionados
-        for (Long exerciseId : exerciseIds) {
+        // Buscar los ejercicios por sus IDs
+        Set<Exercise> exercises = new HashSet<>();
+        for (Long exerciseId : routineRequest.getExerciseIds()) {
             Exercise exercise = exerciseRepository.findById(exerciseId)
                     .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado con ID: " + exerciseId));
             exercises.add(exercise);
         }
 
-        routine.setExercises(exercises);  // Asigna los ejercicios a la rutina
+        routine.setExercises(exercises); // Asignar los ejercicios a la rutina
 
-        // Guarda la rutina con los ejercicios asociados
+        // Guardar la rutina
         return routineRepository.save(routine);
     }
 

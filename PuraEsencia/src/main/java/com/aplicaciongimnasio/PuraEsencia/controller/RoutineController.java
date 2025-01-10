@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.service.ExerciseService;
 import com.aplicaciongimnasio.PuraEsencia.service.RoutineService;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
 @RequestMapping("/api/routines")
 public class RoutineController {
 
@@ -22,8 +24,8 @@ public class RoutineController {
 
     // Crear una rutina con ejercicios
     @PostMapping("/create")
-    public Routine createRoutineWithExercises(@RequestBody Routine routine, @RequestParam List<Long> exerciseIds) {
-        return routineService.createRoutineWithExercises(routine, exerciseIds);
+    public Routine createRoutineWithExercises(@RequestBody RoutineRequest routineRequest) {
+        return routineService.createRoutineWithExercises(routineRequest);
     }
 
     // Obtener una rutina por ID

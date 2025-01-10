@@ -3,6 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.config;
 import com.aplicaciongimnasio.PuraEsencia.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable) // Desactiva CSRF
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("api/users/create", "api/auth/login").permitAll() // Permite acceso sin autenticación
                         .anyRequest().authenticated() // Requiere autenticación para cualquier otra solicitud
                 )
