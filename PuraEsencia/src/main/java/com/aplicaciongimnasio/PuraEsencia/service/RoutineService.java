@@ -3,16 +3,16 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
+import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class RoutineService {
@@ -22,6 +22,9 @@ public class RoutineService {
 
     @Autowired
     private ExerciseRepository exerciseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Crear una rutina con ejercicios
     @Transactional
@@ -48,6 +51,12 @@ public class RoutineService {
     public Routine getRoutineById(Long id) {
         return routineRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada con ID: " + id));
+    }
+
+    public Routine getRoutineByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(User::getRoutine) // Obtener la rutina asociada
+                .orElseThrow(() -> new RuntimeException("Usuario o rutina no encontrada"));
     }
 
     @Transactional

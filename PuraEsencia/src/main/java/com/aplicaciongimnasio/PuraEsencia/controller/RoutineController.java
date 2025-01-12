@@ -29,9 +29,15 @@ public class RoutineController {
     }
 
     // Obtener una rutina por ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Routine getRoutineById(@PathVariable Long id) {
         return routineService.getRoutineById(id);
+    }
+
+    // Obtener una rutina por email
+    @GetMapping("/email/{email}")
+    public Routine getRoutineByEmail(@PathVariable String email) {
+        return routineService.getRoutineByEmail(email);
     }
 
     @PutMapping("/{routineId}/add-exercises")
