@@ -4,10 +4,13 @@ import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import com.aplicaciongimnasio.PuraEsencia.security.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +86,25 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         return user.getRoutine();
+    }
+
+    // Asignar un cliente a un entrenador
+    public void assignClientToTrainer(Long clientId, Long trainerId) {
+        User client = userRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        User trainer = userRepository.findById(trainerId)
+                .orElseThrow(() -> new RuntimeException("Entrenador no encontrado"));
+
+        if (!trainer.getRole().equals(Role.TRAINER)) {
+            throw new IllegalArgumentException("El usuario seleccionado no es un entrenador");
+        }
+
+        client.setTrainer(trainer);
+        userRepository.save(client);
+    }
+
+    // Obtener clientes de un entrenador
+    public List<User> getClientsByTrainerId(Long trainerId) {
+        return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT);
     }
 }

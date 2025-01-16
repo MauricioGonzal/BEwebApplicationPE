@@ -28,6 +28,9 @@ public class User {
     @JoinColumn(name = "routine_id", nullable = true) // El usuario puede o no tener una rutina
     private Routine routine;
 
-    // Getters y setters
+    // Relación con el entrenador
+    @ManyToOne
+    @JoinColumn(name = "trainer_id") // Clave foránea que apunta al entrenador
+    private User trainer;
 }
 

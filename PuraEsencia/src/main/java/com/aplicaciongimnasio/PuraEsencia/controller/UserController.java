@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
 @RequestMapping("/api/users")
@@ -52,5 +54,17 @@ public class UserController {
     @GetMapping("/{userId}/routine")
     public ResponseEntity<Routine> getUserRoutine(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserRoutine(userId));
+    }
+
+    // Endpoint para asignar cliente a entrenador
+    @PostMapping("/assign-trainer")
+    public void assignClientToTrainer(@RequestParam Long clientId, @RequestParam Long trainerId) {
+        userService.assignClientToTrainer(clientId, trainerId);
+    }
+
+    // Endpoint para obtener clientes de un entrenador
+    @GetMapping("/{trainerId}/clients")
+    public List<User> getClientsByTrainer(@PathVariable Long trainerId) {
+        return userService.getClientsByTrainerId(trainerId);
     }
 }
