@@ -107,4 +107,9 @@ public class UserService {
     public List<User> getClientsByTrainerId(Long trainerId) {
         return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT);
     }
+
+    public Optional<User> getTrainerByOneClient(Long clientId){
+        Optional<User> user = userRepository.findById(clientId);
+        return Optional.ofNullable(user.get().getTrainer());
+    }
 }

@@ -34,6 +34,6 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
-        return jwtUtil.generateToken(authentication.getName(), user.get().getRole());
+        return jwtUtil.generateToken(authentication.getName(), user.get().getRole(), user.get().getId());
     }
 }

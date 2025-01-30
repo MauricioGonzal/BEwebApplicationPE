@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c7b1670f-198e-4d39-8923-e9f9ac59b37a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/security/JwtUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

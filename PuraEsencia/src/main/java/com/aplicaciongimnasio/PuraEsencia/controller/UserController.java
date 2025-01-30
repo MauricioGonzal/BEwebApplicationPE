@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
@@ -67,4 +68,12 @@ public class UserController {
     public List<User> getClientsByTrainer(@PathVariable Long trainerId) {
         return userService.getClientsByTrainerId(trainerId);
     }
+
+    // Endpoint para obtener el entrenador a partir de un cliente
+    @GetMapping("/{clientId}/trainer")
+    public Optional<User> getTrainerByOneClient(@PathVariable Long clientId) {
+        return userService.getTrainerByOneClient(clientId);
+    }
+
+
 }
