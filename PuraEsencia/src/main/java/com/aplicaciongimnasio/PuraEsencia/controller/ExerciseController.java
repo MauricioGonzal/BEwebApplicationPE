@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
 @RequestMapping("/api/exercises")
@@ -26,6 +28,12 @@ public class ExerciseController {
     @GetMapping("/{id}")
     public Exercise getExerciseById(@PathVariable Long id) {
         return exerciseService.getExerciseById(id);
+    }
+
+    // Obtener todos los ejercicios
+    @GetMapping
+    public List<Exercise> getAllExercises() {
+        return exerciseService.getAllExercises();
     }
 
     @DeleteMapping("/delete/{id}")

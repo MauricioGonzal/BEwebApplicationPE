@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,10 @@ public class ExerciseService {
     public Exercise getExerciseById(Long id) {
         return exerciseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado con ID: " + id));
+    }
+
+    public List<Exercise> getAllExercises() {
+        return exerciseRepository.findAll();
     }
 
     // Otros métodos relacionados con ejercicios (si los necesitas)
