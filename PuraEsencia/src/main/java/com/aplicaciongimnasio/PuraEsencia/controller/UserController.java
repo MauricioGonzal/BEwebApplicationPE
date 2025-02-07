@@ -2,12 +2,14 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
+import com.aplicaciongimnasio.PuraEsencia.security.Role;
 import com.aplicaciongimnasio.PuraEsencia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,14 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/getAllByRole/{role}")
+    public List<User> getAllByRole(@PathVariable String role) {
+        var roleFilter = Arrays.stream(Role.values())
+                .filter(r -> r.name().equalsIgnoreCase(role.toUpperCase()))
+                .findFirst()
+                .orElse(null); // Retorna null si no encuentra coincidencia
+        return userService.getAllByRole(roleFilter);
+    }
 
     @DeleteMapping("/delete/{username}")  // Endpoint para eliminar un usuario por su username
     public ResponseEntity<String> deleteUser(@PathVariable String username) {

@@ -108,6 +108,11 @@ public class UserService {
         return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT);
     }
 
+    // Obtener todos los user por role
+    public List<User> getAllByRole(Role role) {
+        return userRepository.findAllByRole(role);
+    }
+
     public Optional<User> getTrainerByOneClient(Long clientId){
         Optional<User> user = userRepository.findById(clientId);
         return Optional.ofNullable(user.get().getTrainer());

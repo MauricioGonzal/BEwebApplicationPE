@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteByEmail(String email);
     // Obtener clientes de un entrenador
     List<User> findByTrainerIdAndRole(Long trainerId, Role role);
+    // Obtener todos los usuarios de un tipo determinado
+    List<User> findAllByRole(Role role);
 }
