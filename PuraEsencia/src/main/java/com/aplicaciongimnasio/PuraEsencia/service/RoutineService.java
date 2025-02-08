@@ -1,18 +1,18 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RoutineService {
@@ -26,25 +26,20 @@ public class RoutineService {
     @Autowired
     private UserRepository userRepository;
 
-    // Crear una rutina con ejercicios
-    @Transactional
-    public Routine createRoutineWithExercises(RoutineRequest routineRequest) {
-        // Crear la entidad Routine
+
+    public Routine createRoutine(RoutineRequest routineRequest) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
         Routine routine = new Routine();
-        routine.setName(routineRequest.getName());
+        routine.setName(routineRequest.getTitle());
+        routine.setDescription(routineRequest.getDescription());
+        routine.setIsCustom(routineRequest.getIsCustom());
 
-        // Buscar los ejercicios por sus IDs
-        Set<Exercise> exercises = new HashSet<>();
-        for (Long exerciseId : routineRequest.getExerciseIds()) {
-            Exercise exercise = exerciseRepository.findById(exerciseId)
-                    .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado con ID: " + exerciseId));
-            exercises.add(exercise);
-        }
+        // Asignar el Map<String, List<ExerciseDetails>> a exercisesByDay
+        routine.setExercisesByDay(routineRequest.getExercises());
 
-        routine.setExercises(exercises); // Asignar los ejercicios a la rutina
-
-        // Guardar la rutina
+        // Guardar la rutina en la base de datos
         return routineRepository.save(routine);
+
     }
 
     // Obtener una rutina por ID
@@ -59,12 +54,17 @@ public class RoutineService {
                 .orElseThrow(() -> new RuntimeException("Usuario o rutina no encontrada"));
     }
 
+    // Obtener una rutina por ID
+    public List<Routine> getRoutinesByCustom(Boolean custom) {
+        return routineRepository.findAllByIsCustom(custom);
+    }
+
     @Transactional
     public Routine addExercisesToRoutine(Long routineId, Set<Long> exerciseIds) {
-        // Buscar la rutina existente
+         //Buscar la rutina existente
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
-
+/*//
         // Buscar los ejercicios por sus IDs
         Set<Exercise> exercisesToAdd = new HashSet<>(exerciseRepository.findAllById(exerciseIds));
 
@@ -76,6 +76,7 @@ public class RoutineService {
         routine.getExercises().addAll(exercisesToAdd);
 
         // Guardar y devolver la rutina actualizada
-        return routineRepository.save(routine);
+        return routineRepository.save(routine);*/
+        return routine;
     }
 }

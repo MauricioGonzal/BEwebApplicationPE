@@ -10,13 +10,11 @@ import org.hibernate.usertype.UserType;
 @Getter
 @Setter
 public class User {
-    //id, firstName, lastName, email, password, userType
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String email;
     private String password;
 

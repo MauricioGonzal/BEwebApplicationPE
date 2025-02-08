@@ -54,11 +54,8 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         // Actualizar los campos del usuario
-        if (updatedUser.getFirstName() != null) {
-            user.setFirstName(updatedUser.getFirstName());
-        }
-        if (updatedUser.getLastName() != null) {
-            user.setLastName(updatedUser.getLastName());
+        if (updatedUser.getRoutine() != null) {
+            user.setFullName(updatedUser.getFullName());
         }
         if (updatedUser.getRole() != null) {
             user.setRole(updatedUser.getRole());

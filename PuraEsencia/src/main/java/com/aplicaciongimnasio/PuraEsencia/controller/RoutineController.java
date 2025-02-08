@@ -4,7 +4,9 @@ import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.service.ExerciseService;
 import com.aplicaciongimnasio.PuraEsencia.service.RoutineService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +24,11 @@ public class RoutineController {
     @Autowired
     private ExerciseService exerciseService;
 
-    // Crear una rutina con ejercicios
-    @PostMapping("/create")
-    public Routine createRoutineWithExercises(@RequestBody RoutineRequest routineRequest) {
-        return routineService.createRoutineWithExercises(routineRequest);
+    @PostMapping
+    public ResponseEntity<Routine> createRoutine(@RequestBody RoutineRequest routineRequest) throws JsonProcessingException {
+        System.out.println("holaaaaaa" + routineRequest);
+        Routine routine = routineService.createRoutine(routineRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(routine);
     }
 
     // Obtener una rutina por ID
@@ -40,11 +43,11 @@ public class RoutineController {
         return routineService.getRoutineByEmail(email);
     }
 
-    @PutMapping("/{routineId}/add-exercises")
-    public ResponseEntity<Routine> addExercisesToRoutine(
-            @PathVariable Long routineId,
-            @RequestParam Set<Long> exerciseIds) {
-        Routine updatedRoutine = routineService.addExercisesToRoutine(routineId, exerciseIds);
-        return ResponseEntity.ok(updatedRoutine);
+    // Obtener una rutina por email
+    @GetMapping("/nocustom")
+    public List<Routine> getRoutinesByCustom() {
+        return routineService.getRoutinesByCustom(false);
     }
+
+
 }
