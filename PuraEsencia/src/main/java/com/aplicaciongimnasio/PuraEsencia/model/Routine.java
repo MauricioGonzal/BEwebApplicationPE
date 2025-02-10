@@ -51,4 +51,14 @@ public class Routine {
             e.printStackTrace();
         }
     }
+
+    public void setExercisesByDay(Map<String, List<ExerciseDetails>> exercisesByDay) {
+        this.exercisesByDay = exercisesByDay;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            this.exercisesJson = mapper.writeValueAsString(exercisesByDay);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
