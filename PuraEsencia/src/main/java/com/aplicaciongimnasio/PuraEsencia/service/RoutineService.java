@@ -7,10 +7,10 @@ import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -28,7 +28,6 @@ public class RoutineService {
 
 
     public Routine createRoutine(RoutineRequest routineRequest) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
         Routine routine = new Routine();
         routine.setName(routineRequest.getTitle());
         routine.setDescription(routineRequest.getDescription());
@@ -59,24 +58,17 @@ public class RoutineService {
         return routineRepository.findAllByIsCustom(custom);
     }
 
-    @Transactional
-    public Routine addExercisesToRoutine(Long routineId, Set<Long> exerciseIds) {
-         //Buscar la rutina existente
-        Routine routine = routineRepository.findById(routineId)
-                .orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
-/*//
-        // Buscar los ejercicios por sus IDs
-        Set<Exercise> exercisesToAdd = new HashSet<>(exerciseRepository.findAllById(exerciseIds));
+    public Routine updateRoutine(Long id, RoutineRequest routineRequest) {
+        Routine routine = routineRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rutina no encontrada"));
 
-        if (exercisesToAdd.isEmpty()) {
-            throw new RuntimeException("No se encontraron ejercicios con los IDs proporcionados");
-        }
+        // Actualizar datos de la rutina
+        routine.setName(routineRequest.getTitle());
+        routine.setDescription(routineRequest.getDescription());
+        routine.setExercisesByDay(routineRequest.getExercises());
 
-        // Agregar los ejercicios a la rutina existente
-        routine.getExercises().addAll(exercisesToAdd);
-
-        // Guardar y devolver la rutina actualizada
-        return routineRepository.save(routine);*/
-        return routine;
+        return routineRepository.save(routine);
     }
+
+
 }

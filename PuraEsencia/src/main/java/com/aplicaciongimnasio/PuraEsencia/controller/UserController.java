@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.security.Role;
@@ -57,9 +58,9 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{userId}/assign-routine/{routineId}")
-    public ResponseEntity<User> assignRoutineToUser(@PathVariable Long userId, @PathVariable Long routineId) {
-        return ResponseEntity.ok(userService.assignRoutineToUser(userId, routineId));
+    @PutMapping("/assign-routine")
+    public ResponseEntity<User> assignRoutineToUser(@RequestBody AssignRoutineRequest assignRoutineRequest) {
+        return ResponseEntity.ok(userService.assignRoutineToUser(assignRoutineRequest));
     }
 
     @GetMapping("/{userId}/routine")

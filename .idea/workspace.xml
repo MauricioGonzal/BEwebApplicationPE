@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="c7b1670f-198e-4d39-8923-e9f9ac59b37a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/ExerciseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/ExerciseController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/RoutineController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/RoutineController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/dto/RoutineRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/dto/RoutineRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Routine.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Routine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Exercise.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Exercise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/ExerciseDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/ExerciseDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/RoutineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/RoutineRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/ExerciseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/ExerciseService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/RoutineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/RoutineService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/UserService.java" afterDir="false" />
     </list>
@@ -74,12 +76,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/RoutineService.java</url>
-          <line>32</line>
+          <line>30</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/RoutineController.java</url>
-          <line>29</line>
+          <line>28</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

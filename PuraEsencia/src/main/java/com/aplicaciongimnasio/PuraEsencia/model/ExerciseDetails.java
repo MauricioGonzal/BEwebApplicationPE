@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class ExerciseDetails {
     private Long exerciseId;  // ID del ejercicio (relación con Exercise)
+    private String name;
+    private String description;
     private int series;       // Número de series
     private int repetitions;  // Número de repeticiones
 }

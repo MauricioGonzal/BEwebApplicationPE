@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
@@ -67,14 +68,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User assignRoutineToUser(Long userId, Long routineId) {
-        User user = userRepository.findById(userId)
+    public User assignRoutineToUser(AssignRoutineRequest assignRoutineRequest) {
+        User user = userRepository.findById(assignRoutineRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Routine routine = routineRepository.findById(routineId)
+        Routine routine = routineRepository.findById(assignRoutineRequest.getRoutineId())
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
 
+        System.out.println(assignRoutineRequest);
+        User trainer = userRepository.findById(assignRoutineRequest.getTrainerId())
+                .orElseThrow(() -> new RuntimeException("Trainer no encontrado"));
+
         user.setRoutine(routine);
+        user.setTrainer(trainer);
         return userRepository.save(user);
     }
 

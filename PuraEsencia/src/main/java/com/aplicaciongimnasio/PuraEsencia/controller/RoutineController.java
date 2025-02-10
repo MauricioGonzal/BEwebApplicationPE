@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
@@ -47,6 +46,15 @@ public class RoutineController {
     @GetMapping("/nocustom")
     public List<Routine> getRoutinesByCustom() {
         return routineService.getRoutinesByCustom(false);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Routine> updateRoutine(
+            @PathVariable Long id,
+            @RequestBody RoutineRequest routineRequest) {
+
+        Routine updatedRoutine = routineService.updateRoutine(id, routineRequest);
+        return ResponseEntity.ok(updatedRoutine);
     }
 
 
