@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c7b1670f-198e-4d39-8923-e9f9ac59b37a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Routine.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Routine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/ExerciseDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/ExerciseDetails.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
