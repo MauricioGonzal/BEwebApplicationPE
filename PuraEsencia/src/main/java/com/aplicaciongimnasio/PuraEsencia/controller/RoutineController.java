@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.service.ExerciseService;
 import com.aplicaciongimnasio.PuraEsencia.service.RoutineService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
@@ -44,7 +46,7 @@ public class RoutineController {
 
     // Obtener una rutina por email
     @GetMapping("/nocustom")
-    public List<Routine> getRoutinesByCustom() {
+    public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom() {
         return routineService.getRoutinesByCustom(false);
     }
 

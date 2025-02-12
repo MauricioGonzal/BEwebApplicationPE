@@ -1,6 +1,9 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineResponse;
+import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
+import com.aplicaciongimnasio.PuraEsencia.model.ExerciseDetails;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
@@ -53,11 +56,40 @@ public class RoutineService {
                 .orElseThrow(() -> new RuntimeException("Usuario o rutina no encontrada"));
     }
 
-    // Obtener una rutina por ID
-    public List<Routine> getRoutinesByCustom(Boolean custom) {
-        return routineRepository.findAllByIsCustom(custom);
-    }
 
+    public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom(Boolean custom) {
+        List<Routine> routines = routineRepository.findAllByIsCustom(custom);
+        Map<Long, Map<Integer, List<RoutineResponse>>> response = new HashMap<>();
+        Map<Integer, List<RoutineResponse>> routineItem = new HashMap<>();
+
+        for (Routine routine : routines) {
+            if (routine.getExercisesByDay() != null) {
+                for (Map.Entry<String, List<ExerciseDetails>> entry : routine.getExercisesByDay().entrySet()) {
+                    Integer day = Integer.parseInt(entry.getKey()); // Convertir el día a número
+                    List<ExerciseDetails> exerciseDetailsList = entry.getValue();
+                    List<RoutineResponse> exerciseResponses = new ArrayList<>();
+
+                    for (ExerciseDetails details : exerciseDetailsList) {
+                        List<Exercise> exerciseList = new ArrayList<>();
+                        for (Long exerciseId : details.getExerciseIds()) {
+                            exerciseRepository.findById(exerciseId).ifPresent(exerciseList::add);
+                        }
+                        exerciseResponses.add(new RoutineResponse(
+                                exerciseList,
+                                details.getSeries(),
+                                details.getRepetitions(),
+                                details.getRest()
+                        ));
+                    }
+
+                    routineItem.computeIfAbsent(day, k -> new ArrayList<>()).addAll(exerciseResponses);
+                }
+            }
+            response.put(routine.getId(), routineItem);
+        }
+
+        return response;
+    }
     public Routine updateRoutine(Long id, RoutineRequest routineRequest) {
         Routine routine = routineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rutina no encontrada"));
