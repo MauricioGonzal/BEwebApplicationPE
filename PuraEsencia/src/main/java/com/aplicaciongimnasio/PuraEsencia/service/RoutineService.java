@@ -60,9 +60,11 @@ public class RoutineService {
     public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom(Boolean custom) {
         List<Routine> routines = routineRepository.findAllByIsCustom(custom);
         Map<Long, Map<Integer, List<RoutineResponse>>> response = new HashMap<>();
-        Map<Integer, List<RoutineResponse>> routineItem = new HashMap<>();
 
         for (Routine routine : routines) {
+            // Crear un nuevo Map para cada rutina para evitar que se compartan las listas entre rutinas
+            Map<Integer, List<RoutineResponse>> routineItem = new HashMap<>();
+
             if (routine.getExercisesByDay() != null) {
                 for (Map.Entry<String, List<ExerciseDetails>> entry : routine.getExercisesByDay().entrySet()) {
                     Integer day = Integer.parseInt(entry.getKey()); // Convertir el día a número
@@ -85,11 +87,14 @@ public class RoutineService {
                     routineItem.computeIfAbsent(day, k -> new ArrayList<>()).addAll(exerciseResponses);
                 }
             }
+
+            // Asignar el Map de cada rutina a la respuesta
             response.put(routine.getId(), routineItem);
         }
 
         return response;
     }
+
     public Routine updateRoutine(Long id, RoutineRequest routineRequest) {
         Routine routine = routineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rutina no encontrada"));
