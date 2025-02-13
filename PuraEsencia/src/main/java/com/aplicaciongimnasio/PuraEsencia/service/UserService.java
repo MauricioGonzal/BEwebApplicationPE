@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -61,11 +62,26 @@ public class UserService {
         if (updatedUser.getRole() != null) {
             user.setRole(updatedUser.getRole());
         }
-        if (updatedUser.getPassword() != null) {
-            // Encriptar la nueva contraseña
-            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        }
         return userRepository.save(user);
+    }
+
+    public boolean changePassword(Long userId, String currentPassword, String newPassword) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+
+        User user = optionalUser.get();
+
+        // Verifica si la contraseña actual es correcta
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            return false;
+        }
+
+        // Encripta la nueva contraseña y actualiza el usuario
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
     }
 
     public User assignRoutineToUser(AssignRoutineRequest assignRoutineRequest) {

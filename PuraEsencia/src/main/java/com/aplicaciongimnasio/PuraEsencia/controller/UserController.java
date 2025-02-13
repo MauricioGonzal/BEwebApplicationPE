@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.ChangePasswordRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.security.Role;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -57,6 +59,21 @@ public class UserController {
         User user = userService.updateUser(email, updatedUser);
         return ResponseEntity.ok(user);
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
+        boolean isUpdated = userService.changePassword(
+                request.getUserId(),
+                request.getCurrentPassword(),
+                request.getNewPassword()
+        );
+
+        if (!isUpdated) {
+            return ResponseEntity.badRequest().body("Error: Contraseña actual incorrecta");
+        }
+        return ResponseEntity.ok("Contraseña cambiada exitosamente");
+    }
+
 
     @PutMapping("/assign-routine")
     public ResponseEntity<User> assignRoutineToUser(@RequestBody AssignRoutineRequest assignRoutineRequest) {
