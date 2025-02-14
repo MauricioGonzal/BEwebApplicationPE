@@ -16,4 +16,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByTrainerIdAndRole(Long trainerId, Role role);
     // Obtener todos los usuarios de un tipo determinado
     List<User> findAllByRole(Role role);
+
+    Optional<User> findById(Long id);
+
+    void deleteById(Long id);
+
 }

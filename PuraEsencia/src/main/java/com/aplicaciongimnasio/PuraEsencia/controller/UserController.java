@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
@@ -43,9 +43,9 @@ public class UserController {
         return userService.getAllByRole(roleFilter);
     }
 
-    @DeleteMapping("/delete/{username}")  // Endpoint para eliminar un usuario por su username
-    public ResponseEntity<String> deleteUser(@PathVariable String username) {
-        boolean isDeleted = userService.deleteUserByEmail(username);  // Llamada al servicio para eliminar el usuario
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        boolean isDeleted = userService.deleteUserById(userId);  // Llamada al servicio para eliminar el usuario
         if (isDeleted) {
             return ResponseEntity.ok("Usuario eliminado exitosamente");
         } else {

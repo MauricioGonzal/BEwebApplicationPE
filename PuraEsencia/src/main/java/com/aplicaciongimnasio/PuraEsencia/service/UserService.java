@@ -34,15 +34,17 @@ public class UserService {
         // Asigna la contraseña encriptada al usuario
         user.setPassword(encryptedPassword);
 
+        user.setIsActive(true);
+
         // Guarda el usuario en la base de datos (suponiendo que tienes un repositorio)
         return userRepository.save(user);
     }
 
     @Transactional
-    public boolean deleteUserByEmail(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public boolean deleteUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
-            userRepository.deleteByEmail(email);  // Elimina el usuario por username
+            userRepository.deleteById(id);  // Elimina el usuario por username
             return true;
         }
         return false;  // Si no se encuentra, retorna false

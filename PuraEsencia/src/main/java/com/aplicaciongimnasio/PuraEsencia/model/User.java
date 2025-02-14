@@ -29,5 +29,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "trainer_id") // Clave foránea que apunta al entrenador
     private User trainer;
+
+    @Column(columnDefinition = "TINYINT(1)") // MySQL
+    private Boolean isActive;
 }
 
