@@ -7,10 +7,13 @@ import com.aplicaciongimnasio.PuraEsencia.model.WorkoutLog;
 import com.aplicaciongimnasio.PuraEsencia.model.WorkoutSession;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.WorkoutLogRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.WorkoutSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +22,9 @@ public class WorkoutSessionService {
 
     @Autowired
     private WorkoutSessionRepository workoutSessionRepository;
+
+    @Autowired
+    private WorkoutLogRepository workoutLogRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -35,6 +41,10 @@ public class WorkoutSessionService {
         // Crear nueva sesión de entrenamiento
         WorkoutSession session = new WorkoutSession();
         session.setUser(user);
+        session.setDate(new Date());
+
+        var id = workoutSessionRepository.save(session);
+        System.out.println(id);
 
         // Convertir logs del DTO a entidades
         List<WorkoutLog> logs = request.getLogs().stream().map(logRequest -> {
@@ -48,10 +58,12 @@ public class WorkoutSessionService {
             log.setWeight(logRequest.getWeight());
             log.setNotes(logRequest.getNotes());
 
+            workoutLogRepository.save(log);
+
             return log;
         }).toList();
 
-        return workoutSessionRepository.save(session);
+        return id;
     }
 
     // Obtiene las sesiones de un usuario dado el ID
