@@ -18,26 +18,22 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    // Registrar una nueva transacción (pago de membresía o venta de producto)
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
         return ResponseEntity.ok(transactionService.saveTransaction(transaction));
     }
 
-    // Obtener todas las transacciones registradas
     @GetMapping
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
-    // Obtener total de ingresos en un día específico
     @GetMapping("/total/{date}")
     public ResponseEntity<Double> getTotalByDate(@PathVariable String date) {
         LocalDate transactionDate = LocalDate.parse(date);
         return ResponseEntity.ok(transactionService.getTotalByDate(transactionDate));
     }
 
-    // Cerrar caja (sumar ingresos del día y registrar el cierre)
     @PostMapping("/close/{date}")
     public ResponseEntity<CashClosure> closeCashRegister(@PathVariable String date) {
         LocalDate closureDate = LocalDate.parse(date);

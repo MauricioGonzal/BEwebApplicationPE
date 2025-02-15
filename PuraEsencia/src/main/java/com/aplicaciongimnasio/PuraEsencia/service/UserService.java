@@ -28,6 +28,9 @@ public class UserService {
 
     // Este método crea un nuevo usuario con la contraseña encriptada
     public User createUser(User user) {
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new IllegalArgumentException("El correo ya está registrado.");
+        }
         // Encriptar la contraseña antes de guardarla
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
 

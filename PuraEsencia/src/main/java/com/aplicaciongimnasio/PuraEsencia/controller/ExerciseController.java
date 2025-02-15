@@ -17,19 +17,16 @@ public class ExerciseController {
     @Autowired
     private ExerciseService exerciseService;
 
-    // Crear un nuevo ejercicio
     @PostMapping("/create")
     public Exercise createExercise(@RequestBody Exercise exercise) {
         return exerciseService.createExercise(exercise);
     }
 
-    // Obtener un ejercicio por ID
     @GetMapping("/{id}")
     public Exercise getExerciseById(@PathVariable Long id) {
         return exerciseService.getExerciseById(id);
     }
 
-    // Obtener todos los ejercicios
     @GetMapping
     public List<Exercise> getAllExercises() {
         return exerciseService.getAllExercises();

@@ -1,0 +1,35 @@
+package com.aplicaciongimnasio.PuraEsencia.controller;
+
+import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
+import com.aplicaciongimnasio.PuraEsencia.model.PriceList;
+import com.aplicaciongimnasio.PuraEsencia.service.PriceListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
+@RequestMapping("/api/pricelists")
+public class PriceListController {
+    @Autowired
+    private PriceListService priceListService;
+
+    @PostMapping
+    public ResponseEntity<?> createPrice(@RequestBody PriceList priceList) {
+        try {
+            return ResponseEntity.ok(priceListService.createPrice(priceList));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping
+    public List<PriceList> getAllPriceList() {
+        return priceListService.getAllPriceList();
+    }
+}

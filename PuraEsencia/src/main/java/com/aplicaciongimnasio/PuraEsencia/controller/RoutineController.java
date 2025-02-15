@@ -32,19 +32,16 @@ public class RoutineController {
         return ResponseEntity.status(HttpStatus.CREATED).body(routine);
     }
 
-    // Obtener una rutina por ID
     @GetMapping("/id/{id}")
     public Routine getRoutineById(@PathVariable Long id) {
         return routineService.getRoutineById(id);
     }
 
-    // Obtener una rutina por email
     @GetMapping("/email/{email}")
     public Routine getRoutineByEmail(@PathVariable String email) {
         return routineService.getRoutineByEmail(email);
     }
 
-    // Obtener una rutina por email
     @GetMapping("/nocustom")
     public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom() {
         return routineService.getRoutinesByCustom(false);

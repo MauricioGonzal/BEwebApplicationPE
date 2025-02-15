@@ -30,6 +30,11 @@ public class User {
     @JoinColumn(name = "trainer_id") // Clave foránea que apunta al entrenador
     private User trainer;
 
+    // Relación con ficha de salud
+    @OneToOne
+    @JoinColumn(name = "health_record_id") // Clave foránea que apunta al entrenador
+    private HealthRecord healthRecord;
+
     @Column(columnDefinition = "TINYINT(1)") // MySQL
     private Boolean isActive;
 }

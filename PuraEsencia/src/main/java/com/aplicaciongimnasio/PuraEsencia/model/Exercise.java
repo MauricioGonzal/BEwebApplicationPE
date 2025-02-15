@@ -14,5 +14,6 @@ public class Exercise {
     private Long id;
     private String name;  // Nombre del ejercicio
     private String description;  // Descripción del ejercicio
+    private String url;
 
 }

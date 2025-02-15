@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(userService.createUser(user));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/{email}")
@@ -39,13 +45,13 @@ public class UserController {
         var roleFilter = Arrays.stream(Role.values())
                 .filter(r -> r.name().equalsIgnoreCase(role.toUpperCase()))
                 .findFirst()
-                .orElse(null); // Retorna null si no encuentra coincidencia
+                .orElse(null); //
         return userService.getAllByRole(roleFilter);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        boolean isDeleted = userService.deleteUserById(userId);  // Llamada al servicio para eliminar el usuario
+        boolean isDeleted = userService.deleteUserById(userId);
         if (isDeleted) {
             return ResponseEntity.ok("Usuario eliminado exitosamente");
         } else {
@@ -84,19 +90,16 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserRoutine(userId));
     }
 
-    // Endpoint para asignar cliente a entrenador
     @PostMapping("/assign-trainer")
     public void assignClientToTrainer(@RequestParam Long clientId, @RequestParam Long trainerId) {
         userService.assignClientToTrainer(clientId, trainerId);
     }
 
-    // Endpoint para obtener clientes de un entrenador
     @GetMapping("/{trainerId}/clients")
     public List<User> getClientsByTrainer(@PathVariable Long trainerId) {
         return userService.getClientsByTrainerId(trainerId);
     }
 
-    // Endpoint para obtener el entrenador a partir de un cliente
     @GetMapping("/{clientId}/trainer")
     public Optional<User> getTrainerByOneClient(@PathVariable Long clientId) {
         return userService.getTrainerByOneClient(clientId);
