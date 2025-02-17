@@ -31,4 +31,5 @@ public class PriceList {
     private PaymentMethod paymentMethod;
 
     private Float amount;
+
 }

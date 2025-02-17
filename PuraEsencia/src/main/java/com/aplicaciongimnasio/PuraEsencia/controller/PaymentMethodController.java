@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
 import com.aplicaciongimnasio.PuraEsencia.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;

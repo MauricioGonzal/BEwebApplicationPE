@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
+import com.aplicaciongimnasio.PuraEsencia.model.HealthRecord;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
@@ -55,6 +56,10 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     public User updateUser(String email, User updatedUser) {
@@ -140,5 +145,15 @@ public class UserService {
     public Optional<User> getTrainerByOneClient(Long clientId){
         Optional<User> user = userRepository.findById(clientId);
         return Optional.ofNullable(user.get().getTrainer());
+    }
+
+    public Boolean assignHealthRecord(Long userId, HealthRecord HealthRecord){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setHealthRecord(HealthRecord);
+
+        return true;
+
     }
 }

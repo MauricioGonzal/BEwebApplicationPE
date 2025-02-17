@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7b1670f-198e-4d39-8923-e9f9ac59b37a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/ExerciseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/ExerciseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/RoutineController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/RoutineController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/PaymentMethodController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/PaymentMethodController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/TransactionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Exercise.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Exercise.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/HealthRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/HealthRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/PriceList.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/PriceList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/PriceListRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/PriceListRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/PriceListService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/PriceListService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/TransactionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +25,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>

@@ -2,8 +2,8 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
 import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
-import com.aplicaciongimnasio.PuraEsencia.repository.CashClosureRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.TransactionRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -18,10 +18,39 @@ public class TransactionService {
     @Autowired
     private CashClosureRepository cashClosureRepository;
 
+    @Autowired
+    private PriceListService priceListService;
+
+    @Autowired
+    private TransactionCategoryRepository transactionCategoryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
+
     /**
      * Registra una nueva transacción en la caja.
      */
+
     public Transaction saveTransaction(Transaction transaction) {
+        var user = userRepository.findById(transaction.getUser().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        transaction.setUser(user);
+
+        var transactionCategory = transactionCategoryRepository.findById(transaction.getTransactionCategory().getId())
+                .orElseThrow(() -> new RuntimeException("Transaction Category not found"));
+        transaction.setTransactionCategory(transactionCategory);
+
+        var paymentMethod = paymentMethodRepository.findById(transaction.getPaymentMethod().getId())
+                .orElseThrow(() -> new RuntimeException("Payment Method not found"));
+        transaction.setPaymentMethod(paymentMethod);
+
+        // Obtener el monto correcto de la lista de precios
+        var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod);
+        transaction.setAmount(amount);
+
         return transactionRepository.save(transaction);
     }
 
