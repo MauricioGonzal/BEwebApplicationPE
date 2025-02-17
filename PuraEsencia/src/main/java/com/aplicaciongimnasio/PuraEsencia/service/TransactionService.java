@@ -35,9 +35,11 @@ public class TransactionService {
      */
 
     public Transaction saveTransaction(Transaction transaction) {
-        var user = userRepository.findById(transaction.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        transaction.setUser(user);
+        if(transaction.getUser() != null){
+            var user = userRepository.findById(transaction.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            transaction.setUser(user);
+        }
 
         var transactionCategory = transactionCategoryRepository.findById(transaction.getTransactionCategory().getId())
                 .orElseThrow(() -> new RuntimeException("Transaction Category not found"));
@@ -47,10 +49,14 @@ public class TransactionService {
                 .orElseThrow(() -> new RuntimeException("Payment Method not found"));
         transaction.setPaymentMethod(paymentMethod);
 
-        // Obtener el monto correcto de la lista de precios
-        var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod);
-        transaction.setAmount(amount);
-
+        if(!transactionCategory.getName().equals("Egreso")){
+            // Obtener el monto correcto de la lista de precios
+            var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod);
+            transaction.setAmount(amount);
+        }
+        else{
+            transaction.setAmount(0 - transaction.getAmount());
+        }
         return transactionRepository.save(transaction);
     }
 

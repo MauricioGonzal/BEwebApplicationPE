@@ -37,5 +37,7 @@ public class User {
 
     @Column(columnDefinition = "TINYINT(1)") // MySQL
     private Boolean isActive;
+
+
 }
 

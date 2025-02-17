@@ -30,4 +30,6 @@ public class Transaction {
 
     private Float amount;
     private LocalDateTime date = LocalDateTime.now();
+
+    private String comment;
 }
