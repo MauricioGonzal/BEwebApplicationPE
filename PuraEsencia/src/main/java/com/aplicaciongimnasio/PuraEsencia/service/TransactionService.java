@@ -22,6 +22,9 @@ public class TransactionService {
     private PriceListService priceListService;
 
     @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
     private TransactionCategoryRepository transactionCategoryRepository;
 
     @Autowired
@@ -34,13 +37,8 @@ public class TransactionService {
      * Registra una nueva transacción en la caja.
      */
 
+    @Transactional
     public Transaction saveTransaction(Transaction transaction) {
-        if(transaction.getUser() != null){
-            var user = userRepository.findById(transaction.getUser().getId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            transaction.setUser(user);
-        }
-
         var transactionCategory = transactionCategoryRepository.findById(transaction.getTransactionCategory().getId())
                 .orElseThrow(() -> new RuntimeException("Transaction Category not found"));
         transaction.setTransactionCategory(transactionCategory);
@@ -56,6 +54,13 @@ public class TransactionService {
         }
         else{
             transaction.setAmount(0 - transaction.getAmount());
+        }
+
+        if(transaction.getUser() != null){
+            var user = userRepository.findById(transaction.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            transaction.setUser(user);
+            paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO");
         }
         return transactionRepository.save(transaction);
     }

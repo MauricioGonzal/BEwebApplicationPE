@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "payments")
@@ -26,16 +27,13 @@ public class Payment {
     private User user;
 
     @Column(nullable = false)
-    private BigDecimal amount; // 💰 Monto pagado
+    private Float amount; // 💰 Monto pagado
 
-    @Column(nullable = false)
+    @Column
     private LocalDate paymentDate; // 📅 Fecha de pago
 
     @Column(nullable = false)
-    private Integer month; // 📆 Mes de la cuota
-
-    @Column(nullable = false)
-    private Integer year; // 📆 Año de la cuota
+    private LocalDate dueDate;
 
     @Column(nullable = false)
     private String status; // ✅ "PAGADO" o "PENDIENTE"

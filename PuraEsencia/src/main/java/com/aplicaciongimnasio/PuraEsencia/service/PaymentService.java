@@ -6,7 +6,6 @@ import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,29 +18,30 @@ public class PaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public String registerPayment(Long userId, BigDecimal amount, Integer month, Integer year) {
+    public String registerPayment(Long userId, Float amount, String status) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Verificar si ya hay un pago para el mes y año
-        List<Payment> existingPayments = paymentRepository.findByUserIdAndMonthAndYear(userId, month, year);
+        /*// Verificar si ya hay un pago para el mes y año
+        List<Payment> existingPayments = paymentRepository.findByUserIdAndMonthAndYear(userId);
         if (!existingPayments.isEmpty()) {
-            return "El usuario ya tiene un pago registrado para " + month + "/" + year;
-        }
+            return "El usuario ya tiene un pago registrado para ";
+        }*/
+
+        var date = LocalDate.now();
 
         Payment payment = new Payment();
         payment.setUser(user);
         payment.setAmount(amount);
-        payment.setPaymentDate(LocalDate.now());
-        payment.setMonth(month);
-        payment.setYear(year);
-        payment.setStatus("PAGADO");
+        payment.setPaymentDate(date);
+        payment.setStatus(status);
+        payment.setDueDate(date.plusMonths(1));
 
         paymentRepository.save(payment);
         return "Pago registrado correctamente.";
     }
 
-    public List<Payment> getUserPayments(Long userId) {
-        return paymentRepository.findByUserId(userId);
+    public List<Payment> getPaymentsByStatus(String status) {
+        return paymentRepository.findByStatus(status);
     }
 }
