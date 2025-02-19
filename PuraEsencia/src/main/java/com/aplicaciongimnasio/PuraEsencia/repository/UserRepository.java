@@ -12,13 +12,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     void deleteByEmail(String email);
-    // Obtener clientes de un entrenador
     List<User> findByTrainerIdAndRole(Long trainerId, Role role);
-    // Obtener todos los usuarios de un tipo determinado
     List<User> findAllByRole(Role role);
-
+    List<User> findAllByRoleAndIsActive(Role role, boolean isActive);
     Optional<User> findById(Long id);
-
     void deleteById(Long id);
 
 }

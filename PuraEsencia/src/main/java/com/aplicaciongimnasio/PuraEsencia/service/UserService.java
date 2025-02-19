@@ -62,6 +62,16 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public boolean logicDelete(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            userOptional.get().setIsActive(false);
+            userRepository.save(userOptional.get());// Elimina el usuario por username
+            return true;
+        }
+        return false;
+    }
+
     public User updateUser(String email, User updatedUser) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -139,7 +149,7 @@ public class UserService {
 
     // Obtener todos los user por role
     public List<User> getAllByRole(Role role) {
-        return userRepository.findAllByRole(role);
+        return userRepository.findAllByRoleAndIsActive(role, true);
     }
 
     public Optional<User> getTrainerByOneClient(Long clientId){

@@ -60,7 +60,7 @@ public class TransactionService {
             var user = userRepository.findById(transaction.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             transaction.setUser(user);
-            paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO");
+            paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now());
         }
         return transactionRepository.save(transaction);
     }

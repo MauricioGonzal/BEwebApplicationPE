@@ -18,7 +18,7 @@ public class PaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public String registerPayment(Long userId, Float amount, String status) {
+    public String registerPayment(Long userId, Float amount, String status, LocalDate date) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -28,7 +28,6 @@ public class PaymentService {
             return "El usuario ya tiene un pago registrado para ";
         }*/
 
-        var date = LocalDate.now();
 
         Payment payment = new Payment();
         payment.setUser(user);
