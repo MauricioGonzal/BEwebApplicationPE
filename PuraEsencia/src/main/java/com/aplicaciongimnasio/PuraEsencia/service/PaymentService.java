@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PaymentService {
@@ -43,4 +44,24 @@ public class PaymentService {
     public List<Payment> getPaymentsByStatus(String status) {
         return paymentRepository.findByStatus(status);
     }
+
+    public List<Payment> getPaymentsByStatusAndUserId(String status, Long userId) {
+        return paymentRepository.findByStatusAndUserId(status,userId);
+    }
+
+    public Payment getLastPayment(Long userId){
+        return paymentRepository.findLastByUserId(userId);
+    }
+
+    public Boolean updateDueDate(Long userId, Map<String, String> newDueDate) {
+
+        Payment lastPayment = getLastPayment(userId);
+
+        lastPayment.setDueDate(LocalDate.parse(newDueDate.get("dueDate")));
+        paymentRepository.save(lastPayment);
+
+        return true;
+    }
+
+
 }

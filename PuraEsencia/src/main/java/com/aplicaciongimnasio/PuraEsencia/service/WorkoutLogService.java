@@ -13,8 +13,7 @@ public class WorkoutLogService {
     @Autowired
     private WorkoutLogRepository workoutLogRepository;
 
-    // Obtiene los logs de una sesión dada
     public List<WorkoutLog> getLogsBySessionId(Long sessionId) {
-        return workoutLogRepository.findBySessionId(sessionId); // Llama al repositorio para obtener los logs
+        return workoutLogRepository.findBySessionId(sessionId);
     }
 }

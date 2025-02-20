@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByUserId(Long userId);
     List<Payment> findByStatus(String status);
-    Optional<Payment> findFirstByStatusAndUserIdOrderByDueDateDesc(String status, Long userId);
-
+    List<Payment> findByStatusAndUserId(String status, Long userId);
+    Optional<Payment> findFirstByUserIdOrderByDueDateDesc(Long userId);
+    Payment findLastByUserId(Long userId);
 }

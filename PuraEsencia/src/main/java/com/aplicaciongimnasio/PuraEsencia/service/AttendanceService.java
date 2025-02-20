@@ -29,25 +29,21 @@ public class AttendanceService {
     @Autowired
     private PaymentService paymentService;
 
-
-
     public String registerAttendance(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Optional<Payment> lastPayment = paymentRepository.findFirstByStatusAndUserIdOrderByDueDateDesc("PAGADO", user.getId());
+        Optional<Payment> lastPayment = paymentRepository.findFirstByUserIdOrderByDueDateDesc(user.getId());
 
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now(); // 🕒 Se registra la hora actual
 
         if (lastPayment.isPresent()) {
             LocalDate dueDate = lastPayment.get().getDueDate();
-
             if (dueDate.isBefore(today)) {
-                paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate);
-                System.out.println("El último pago registrado tiene una fecha vencida: " + dueDate);
-            } else {
-                System.out.println("El último pago registrado no está vencido.");
+                if(!isOutOfDueDate(user.getId())){
+                    paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate);
+                }
             }
         }
 
@@ -62,5 +58,29 @@ public class AttendanceService {
 
     public List<Attendance> getAttendanceByUser(Long userId) {
         return attendanceRepository.findByUserIdAndDate(userId, LocalDate.now());
+    }
+
+    public Attendance getLastAttendanceByUser(Long userId){
+        return attendanceRepository.findFirstByUserId(userId);
+    }
+
+    public Boolean isOutOfDueDate(Long userId){
+        var isOutOfDueDate = false;
+        Optional<Payment> lastPayment = paymentRepository.findFirstByUserIdOrderByDueDateDesc(userId);
+
+        LocalDate today = LocalDate.now();
+
+        if (lastPayment.isPresent()) {
+            LocalDate dueDate = lastPayment.get().getDueDate();
+
+            if (dueDate.isBefore(today)) {
+                var limitDayToAssist = dueDate.plusDays(7);
+                var lastAttendance = getLastAttendanceByUser(userId);
+                if(lastAttendance == null || (lastAttendance.getDate().isAfter(dueDate) && lastAttendance.getDate().isBefore(limitDayToAssist))){
+                    isOutOfDueDate = true;
+                }
+            }
+        }
+        return isOutOfDueDate;
     }
 }

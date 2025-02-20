@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,20 +26,16 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // Este método crea un nuevo usuario con la contraseña encriptada
     public User createUser(User user) {
         if(userRepository.findByEmail(user.getEmail()).isPresent()){
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
-        // Encriptar la contraseña antes de guardarla
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
 
-        // Asigna la contraseña encriptada al usuario
         user.setPassword(encryptedPassword);
 
         user.setIsActive(true);
 
-        // Guarda el usuario en la base de datos (suponiendo que tienes un repositorio)
         return userRepository.save(user);
     }
 
@@ -48,10 +43,10 @@ public class UserService {
     public boolean deleteUserById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
-            userRepository.deleteById(id);  // Elimina el usuario por username
+            userRepository.deleteById(id);
             return true;
         }
-        return false;  // Si no se encuentra, retorna false
+        return false;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -66,7 +61,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             userOptional.get().setIsActive(false);
-            userRepository.save(userOptional.get());// Elimina el usuario por username
+            userRepository.save(userOptional.get());
             return true;
         }
         return false;
@@ -75,7 +70,6 @@ public class UserService {
     public User updateUser(String email, User updatedUser) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        // Actualizar los campos del usuario
         if (updatedUser.getRoutine() != null) {
             user.setFullName(updatedUser.getFullName());
         }
@@ -93,12 +87,10 @@ public class UserService {
 
         User user = optionalUser.get();
 
-        // Verifica si la contraseña actual es correcta
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             return false;
         }
 
-        // Encripta la nueva contraseña y actualiza el usuario
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return true;
@@ -127,7 +119,6 @@ public class UserService {
         return user.getRoutine();
     }
 
-    // Asignar un cliente a un entrenador
     public void assignClientToTrainer(Long clientId, Long trainerId) {
         User client = userRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
@@ -142,12 +133,10 @@ public class UserService {
         userRepository.save(client);
     }
 
-    // Obtener clientes de un entrenador
     public List<User> getClientsByTrainerId(Long trainerId) {
         return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT);
     }
 
-    // Obtener todos los user por role
     public List<User> getAllByRole(Role role) {
         return userRepository.findAllByRoleAndIsActive(role, true);
     }

@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
+import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import jakarta.transaction.Transactional;
@@ -31,6 +32,9 @@ public class TransactionService {
     private UserRepository userRepository;
 
     @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
     private PaymentMethodRepository paymentMethodRepository;
 
     /**
@@ -48,7 +52,6 @@ public class TransactionService {
         transaction.setPaymentMethod(paymentMethod);
 
         if(!transactionCategory.getName().equals("Egreso")){
-            // Obtener el monto correcto de la lista de precios
             var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod);
             transaction.setAmount(amount);
         }
@@ -60,7 +63,15 @@ public class TransactionService {
             var user = userRepository.findById(transaction.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             transaction.setUser(user);
-            paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now());
+            List<Payment> overduePayments = paymentService.getPaymentsByStatusAndUserId("PENDIENTE", user.getId());
+            if(!overduePayments.isEmpty()){
+                Payment firstOverduePayment = overduePayments.getFirst();
+                firstOverduePayment.setStatus("PAGADO");
+                paymentRepository.save(firstOverduePayment);
+            }
+            else{
+                paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now());
+            }
         }
         return transactionRepository.save(transaction);
     }

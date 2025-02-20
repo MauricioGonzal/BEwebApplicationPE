@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class WorkoutSessionService {
@@ -34,11 +33,9 @@ public class WorkoutSessionService {
 
     @Transactional
     public WorkoutSession saveWorkoutSession(WorkoutSessionRequest request) {
-        // Buscar usuario
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Crear nueva sesión de entrenamiento
         WorkoutSession session = new WorkoutSession();
         session.setUser(user);
         session.setDate(new Date());
@@ -46,7 +43,6 @@ public class WorkoutSessionService {
         var id = workoutSessionRepository.save(session);
         System.out.println(id);
 
-        // Convertir logs del DTO a entidades
         List<WorkoutLog> logs = request.getLogs().stream().map(logRequest -> {
             Exercise exercise = exerciseRepository.findById(logRequest.getExerciseId())
                     .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado"));
@@ -66,9 +62,8 @@ public class WorkoutSessionService {
         return id;
     }
 
-    // Obtiene las sesiones de un usuario dado el ID
     public List<WorkoutSession> getSessionsByUserId(Long userId) {
-        return workoutSessionRepository.findByUserId(userId); // Llama al repositorio para obtener las sesiones
+        return workoutSessionRepository.findByUserId(userId);
     }
 }
 

@@ -20,6 +20,6 @@ public class HealthRecordService {
 
         userService.assignHealthRecord(userId, healthRecordCreated);
 
-        return healthRecordRepository.save(healthRecord);
+        return healthRecordCreated;
     }
 }
