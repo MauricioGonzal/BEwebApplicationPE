@@ -23,7 +23,6 @@ public class AttendanceController {
         if (userId == null) {
             return ResponseEntity.badRequest().body("Falta userId");
         }
-
         String responseMessage = attendanceService.registerAttendance(userId);
         return ResponseEntity.ok(responseMessage);
     }

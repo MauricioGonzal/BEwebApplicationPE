@@ -49,11 +49,7 @@ public class UserController {
 
     @GetMapping("/getAllByRole/{role}")
     public List<User> getAllByRole(@PathVariable String role) {
-        var roleFilter = Arrays.stream(Role.values())
-                .filter(r -> r.name().equalsIgnoreCase(role.toUpperCase()))
-                .findFirst()
-                .orElse(null); //
-        return userService.getAllByRole(roleFilter);
+        return userService.getAllByRole(role);
     }
 
     @DeleteMapping("/{userId}")

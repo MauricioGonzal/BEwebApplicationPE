@@ -14,8 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteByEmail(String email);
     List<User> findByTrainerIdAndRole(Long trainerId, Role role);
     List<User> findAllByRole(Role role);
-    List<User> findAllByRoleAndIsActive(Role role, boolean isActive);
+    List<User> findAllByRoleInAndIsActive(List<Role> roles, boolean isActive);
     Optional<User> findById(Long id);
     void deleteById(Long id);
+    List<User> findAllByRoleAndIsActive(Role role, boolean isActive);
 
 }

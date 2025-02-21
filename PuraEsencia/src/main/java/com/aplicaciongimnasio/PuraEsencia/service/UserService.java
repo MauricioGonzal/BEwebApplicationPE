@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -134,11 +136,28 @@ public class UserService {
     }
 
     public List<User> getClientsByTrainerId(Long trainerId) {
-        return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT);
+        return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT_GYM);
     }
 
-    public List<User> getAllByRole(Role role) {
-        return userRepository.findAllByRoleAndIsActive(role, true);
+    public List<User> getAllByRole(String role) {
+        if (role.equalsIgnoreCase("CLIENTS")) {
+            // Aquí se convierte a un List<Role> a partir de los strings de roles
+            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES", "CLIENT_BOTH")
+                    .map(Role::valueOf)  // Convierte el String en el enum correspondiente
+                    .collect(Collectors.toList());
+
+            // Llama al repositorio con la lista de roles
+            return userRepository.findAllByRoleInAndIsActive(roles, true);
+        } else {
+            try {
+                // Convierte el role a un enum si no es "CLIENTS"
+                Role userRole = Role.valueOf(role.toUpperCase());
+                return userRepository.findAllByRoleAndIsActive(userRole, true);
+            } catch (IllegalArgumentException e) {
+                // Manejo de error si el String no es un valor válido del enum
+                throw new IllegalArgumentException("Role no válido: " + role);
+            }
+        }
     }
 
     public Optional<User> getTrainerByOneClient(Long clientId){
@@ -151,6 +170,8 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         user.setHealthRecord(HealthRecord);
+
+        userRepository.save(user);
 
         return true;
 

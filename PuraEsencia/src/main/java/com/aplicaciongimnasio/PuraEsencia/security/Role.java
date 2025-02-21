@@ -1,7 +1,9 @@
 package com.aplicaciongimnasio.PuraEsencia.security;
 
 public enum Role {
-    CLIENT,
+    CLIENT_GYM,
     TRAINER,
-    ADMIN
+    ADMIN,
+    CLIENT_CLASSES,
+    CLIENT_BOTH
 }
