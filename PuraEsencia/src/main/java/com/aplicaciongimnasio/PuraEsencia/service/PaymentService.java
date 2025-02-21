@@ -55,10 +55,7 @@ public class PaymentService {
 
     public Boolean updateDueDate(Long userId, Map<String, String> newDueDate) {
 
-        Payment lastPayment = getLastPayment(userId);
-
-        lastPayment.setDueDate(LocalDate.parse(newDueDate.get("dueDate")));
-        paymentRepository.save(lastPayment);
+        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")));
 
         return true;
     }
