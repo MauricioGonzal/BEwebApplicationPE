@@ -31,7 +31,7 @@ public class AttendanceController {
         if (userId == null) {
             return ResponseEntity.badRequest().body("Falta userId");
         }
-        String responseMessage = attendanceService.registerAttendance(userId, request.getAttendanceType());
+        String responseMessage = attendanceService.registerAttendance(request);
         return ResponseEntity.ok(responseMessage);
     }
 
@@ -57,5 +57,17 @@ public class AttendanceController {
         LocalDate today = LocalDate.now();
         List<Attendance> presentUser = attendanceRepository.findByDate(today);
         return ResponseEntity.ok(presentUser);
+    }
+
+    @GetMapping("/{userId}/current-month")
+    public ResponseEntity<Long> getAttendancesForUser(@PathVariable Long userId) {
+        long count = attendanceService.getAttendancesInCurrentMonth(userId);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/{userId}/details")
+    public ResponseEntity<List<Attendance>> getAttendanceDetails(@PathVariable Long userId) {
+        List<Attendance> attendances = attendanceService.getAttendancesForCurrentMonth(userId);
+        return ResponseEntity.ok(attendances);
     }
 }

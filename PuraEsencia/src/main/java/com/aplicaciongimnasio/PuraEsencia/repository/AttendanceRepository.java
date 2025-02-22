@@ -15,4 +15,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     Attendance findFirstByUserId(Long userId);
     boolean existsByUserIdAndDate(Long userId, LocalDate today);
     List<Attendance> findByDate(LocalDate today);
+
+    @Query("SELECT COUNT(a) FROM Attendance a WHERE a.user.id = :userId AND MONTH(a.date) = MONTH(CURRENT_DATE) AND YEAR(a.date) = YEAR(CURRENT_DATE)")
+    long countAttendancesInCurrentMonth(@Param("userId") Long userId);
+
+    List<Attendance> findByUserIdAndDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 }

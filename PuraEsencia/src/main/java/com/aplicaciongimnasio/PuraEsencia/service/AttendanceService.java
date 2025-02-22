@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
 import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
@@ -36,9 +37,11 @@ public class AttendanceService {
     private AttendanceTypeRepository attendanceTypeRepository;
 
 
-    public String registerAttendance(Long userId, AttendanceType attendanceType) {
-        User user = userRepository.findById(userId)
+    public String registerAttendance(AttendanceRequest attendanceRequest) {
+        User user = userRepository.findById(attendanceRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        AttendanceType attendanceType = attendanceRequest.getAttendanceType();
 
         if(attendanceType == null){
             Role role = user.getRole();
@@ -101,5 +104,15 @@ public class AttendanceService {
             }
         }
         return isOutOfDueDate;
+    }
+
+    public long getAttendancesInCurrentMonth(Long userId) {
+        return attendanceRepository.countAttendancesInCurrentMonth(userId);
+    }
+
+    public List<Attendance> getAttendancesForCurrentMonth(Long userId) {
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate endOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+        return attendanceRepository.findByUserIdAndDateBetween(userId, startOfMonth, endOfMonth);
     }
 }
