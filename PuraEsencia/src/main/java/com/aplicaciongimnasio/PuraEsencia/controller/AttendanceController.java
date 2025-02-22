@@ -1,6 +1,8 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
+import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceRepository;
 import com.aplicaciongimnasio.PuraEsencia.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,12 @@ public class AttendanceController {
     private AttendanceRepository attendanceRepository;
 
     @PostMapping
-    public ResponseEntity<String> markAttendance(@RequestBody Map<String, Long> request) {
-        Long userId = request.get("userId");
+    public ResponseEntity<String> markAttendance(@RequestBody AttendanceRequest request) {
+        Long userId =  request.getUserId();
         if (userId == null) {
             return ResponseEntity.badRequest().body("Falta userId");
         }
-        String responseMessage = attendanceService.registerAttendance(userId);
+        String responseMessage = attendanceService.registerAttendance(userId, request.getAttendanceType());
         return ResponseEntity.ok(responseMessage);
     }
 
@@ -51,9 +53,9 @@ public class AttendanceController {
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<Long>> getTodayAttendance() {
+    public ResponseEntity<List<Attendance>> getTodayAttendance() {
         LocalDate today = LocalDate.now();
-        List<Long> presentUserIds = attendanceRepository.findUserIdsByDate(today);
-        return ResponseEntity.ok(presentUserIds);
+        List<Attendance> presentUser = attendanceRepository.findByDate(today);
+        return ResponseEntity.ok(presentUser);
     }
 }

@@ -1,11 +1,14 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
+import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceTypeRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import com.aplicaciongimnasio.PuraEsencia.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +32,24 @@ public class AttendanceService {
     @Autowired
     private PaymentService paymentService;
 
-    public String registerAttendance(Long userId) {
+    @Autowired
+    private AttendanceTypeRepository attendanceTypeRepository;
+
+
+    public String registerAttendance(Long userId, AttendanceType attendanceType) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if(attendanceType == null){
+            Role role = user.getRole();
+            if (role == Role.valueOf("CLIENT_GYM")) {
+                attendanceType = attendanceTypeRepository.getById(1L);
+            }
+            else if(role == Role.valueOf("CLIENT_CLASSES")){
+                attendanceType = attendanceTypeRepository.getById(2L);
+            }
+        }
+
 
         Optional<Payment> lastPayment = paymentRepository.findFirstByUserIdOrderByDueDateDesc(user.getId());
 
@@ -51,6 +69,7 @@ public class AttendanceService {
         attendance.setUser(user);
         attendance.setDate(today);
         attendance.setTime(now);
+        attendance.setAttendanceType(attendanceType);
         attendanceRepository.save(attendance);
 
         return "Asistencia registrada: " + today + " a las " + now;

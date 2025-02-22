@@ -14,6 +14,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByUserIdAndDate(Long userId, java.time.LocalDate date);
     Attendance findFirstByUserId(Long userId);
     boolean existsByUserIdAndDate(Long userId, LocalDate today);
-    @Query("SELECT a.user.id FROM Attendance a WHERE a.date = :today")
-    List<Long> findUserIdsByDate(@Param("today") LocalDate today);
+    List<Attendance> findByDate(LocalDate today);
 }

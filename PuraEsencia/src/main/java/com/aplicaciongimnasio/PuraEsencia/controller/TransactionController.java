@@ -36,15 +36,24 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
-    @GetMapping("/total/{date}")
-    public ResponseEntity<Double> getTotalByDate(@PathVariable String date) {
-        LocalDate transactionDate = LocalDate.parse(date);
-        return ResponseEntity.ok(transactionService.getTotalByDate(transactionDate));
+    @GetMapping("/today")
+    public ResponseEntity<List<Transaction>> getAllTransactionsOfToday() {
+        return ResponseEntity.ok(transactionService.getByDate(LocalDate.now()));
     }
 
-    @PostMapping("/close/{date}")
-    public ResponseEntity<CashClosure> closeCashRegister(@PathVariable String date) {
-        LocalDate closureDate = LocalDate.parse(date);
-        return ResponseEntity.ok(transactionService.closeCashRegister(closureDate));
+    @GetMapping("/total/{date}")
+    public ResponseEntity<Double> getTotalByDate(@PathVariable String date) {
+        LocalDate transactionsDate = LocalDate.parse(date);
+        return ResponseEntity.ok(transactionService.getTotalByDate(transactionsDate));
+    }
+
+    @PostMapping("/DailyClosing")
+    public ResponseEntity<CashClosure> closeCashRegister() {
+        return ResponseEntity.ok(transactionService.closeCashRegister());
+    }
+
+    @PostMapping("/monthlyClosing")
+    public ResponseEntity<CashClosure> monthlyCloseCashRegister() {
+        return ResponseEntity.ok(transactionService.monthlyCloseCashRegister());
     }
 }

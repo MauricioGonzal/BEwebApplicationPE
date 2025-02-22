@@ -1,10 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,18 +10,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CashClosure {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private LocalDate date;
-    private double totalIncome;
 
-    public CashClosure(LocalDate date, double totalIncome) {
-        this.date = date;
-        this.totalIncome = totalIncome;
-    }
+    private double totalIncome;
 }
+
 

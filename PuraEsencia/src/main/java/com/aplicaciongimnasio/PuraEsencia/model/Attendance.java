@@ -30,5 +30,9 @@ public class Attendance {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "attendance_type_id", nullable = false) // Relación ManyToOne
+    private AttendanceType attendanceType;
 }
 
