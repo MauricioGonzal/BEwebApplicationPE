@@ -65,6 +65,12 @@ public class AttendanceController {
         return ResponseEntity.ok(count);
     }
 
+    @GetMapping("/current-month")
+    public ResponseEntity<?> getMonthlyAttendances() {
+        var count = attendanceService.getAttendancesForAllUsersInCurrentMonth();
+        return ResponseEntity.ok(count);
+    }
+
     @GetMapping("/{userId}/details")
     public ResponseEntity<List<Attendance>> getAttendanceDetails(@PathVariable Long userId) {
         List<Attendance> attendances = attendanceService.getAttendancesForCurrentMonth(userId);

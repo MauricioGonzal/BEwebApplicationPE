@@ -20,4 +20,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     long countAttendancesInCurrentMonth(@Param("userId") Long userId);
 
     List<Attendance> findByUserIdAndDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+
+    List<Attendance> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
 }
