@@ -43,7 +43,10 @@ public class AttendanceService {
         User user = userRepository.findById(attendanceRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        AttendanceType attendanceType = attendanceRequest.getAttendanceType();
+        Long attendanceTypeId = attendanceRequest.getAttendanceTypeId();
+
+        AttendanceType attendanceType = attendanceTypeRepository.findById(attendanceTypeId)
+                .orElseThrow(() -> new RuntimeException("Tipo de asistencia no encontrado"));
 
         if(attendanceType == null){
             Role role = user.getRole();
@@ -65,7 +68,7 @@ public class AttendanceService {
             LocalDate dueDate = lastPayment.get().getDueDate();
             if (dueDate.isBefore(today)) {
                 if(!isOutOfDueDate(user.getId())){
-                    paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate);
+                    paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1));
                 }
             }
         }

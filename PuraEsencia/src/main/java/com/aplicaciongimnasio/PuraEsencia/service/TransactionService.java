@@ -71,7 +71,16 @@ public class TransactionService {
                 paymentRepository.save(firstOverduePayment);
             }
             else{
-                paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now());
+                List<Payment> payments = paymentService.getPaymentsByStatusAndUserId("PAGADO", user.getId());
+                if(!payments.isEmpty()){
+                    Payment lastPayment = payments.getLast();
+                    if(lastPayment.getDueDate().isAfter(LocalDate.now())){
+                        paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1));
+                    }
+                }
+                else{
+                    paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1));
+                }
             }
         }
         return transactionRepository.save(transaction);

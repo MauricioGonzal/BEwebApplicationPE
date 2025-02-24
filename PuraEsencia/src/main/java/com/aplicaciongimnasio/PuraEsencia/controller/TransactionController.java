@@ -47,7 +47,7 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getTotalByDate(transactionsDate));
     }
 
-    @PostMapping("/DailyClosing")
+    @PostMapping("/dailyClosing")
     public ResponseEntity<CashClosure> closeCashRegister() {
         return ResponseEntity.ok(transactionService.closeCashRegister());
     }

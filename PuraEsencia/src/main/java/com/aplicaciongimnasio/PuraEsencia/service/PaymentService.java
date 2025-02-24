@@ -19,7 +19,7 @@ public class PaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public String registerPayment(Long userId, Float amount, String status, LocalDate date) {
+    public String registerPayment(Long userId, Float amount, String status, LocalDate paymentDate, LocalDate dueDate) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -33,9 +33,9 @@ public class PaymentService {
         Payment payment = new Payment();
         payment.setUser(user);
         payment.setAmount(amount);
-        payment.setPaymentDate(date);
+        payment.setPaymentDate(paymentDate);
         payment.setStatus(status);
-        payment.setDueDate(date.plusMonths(1));
+        payment.setDueDate(dueDate);
 
         paymentRepository.save(payment);
         return "Pago registrado correctamente.";
@@ -55,7 +55,7 @@ public class PaymentService {
 
     public Boolean updateDueDate(Long userId, Map<String, String> newDueDate) {
 
-        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")));
+        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")), LocalDate.parse(newDueDate.get("dueDate")).plusMonths(1));
 
         return true;
     }
