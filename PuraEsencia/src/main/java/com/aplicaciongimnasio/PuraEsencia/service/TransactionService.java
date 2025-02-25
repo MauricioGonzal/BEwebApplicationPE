@@ -38,6 +38,9 @@ public class TransactionService {
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
 
+    @Autowired
+    private MembershipRepository membershipRepository;
+
     /**
      * Registra una nueva transacción en la caja.
      */
@@ -52,8 +55,12 @@ public class TransactionService {
                 .orElseThrow(() -> new RuntimeException("Payment Method not found"));
         transaction.setPaymentMethod(paymentMethod);
 
+        var membership = membershipRepository.findById(transaction.getMembership().getId())
+                .orElseThrow(() -> new RuntimeException("Membership not found"));
+        transaction.setMembership(membership);
+
         if(!transactionCategory.getName().equals("Egreso")){
-            var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod);
+            var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, membership);
             transaction.setAmount(amount);
         }
         else{
@@ -75,7 +82,13 @@ public class TransactionService {
                 if(!payments.isEmpty()){
                     Payment lastPayment = payments.getLast();
                     if(lastPayment.getDueDate().isAfter(LocalDate.now())){
-                        paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1));
+                        var maxDays = membership.getMaxDays();
+                        if(maxDays != null && maxDays != 30){
+                            paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays));
+                        }
+                        else{
+                            paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1));
+                        }
                     }
                 }
                 else{

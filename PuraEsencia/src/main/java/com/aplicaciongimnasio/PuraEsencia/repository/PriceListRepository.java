@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.repository;
 
+import com.aplicaciongimnasio.PuraEsencia.model.Membership;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
 import com.aplicaciongimnasio.PuraEsencia.model.PriceList;
 import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
@@ -10,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface PriceListRepository extends JpaRepository<PriceList, Long> {
-    Optional<PriceList> findByTransactionCategoryAndPaymentMethod(TransactionCategory transactionCategory, PaymentMethod paymentMethod);
+    Optional<PriceList> findByTransactionCategoryAndPaymentMethodAndMembership(TransactionCategory transactionCategory, PaymentMethod paymentMethod, Membership membership);
 }
