@@ -23,5 +23,12 @@ public class Membership {
 
     @Column
     private Integer maxClasses; // Número de clases asignadas a este plan
+
+    @Column
+    private Integer maxDays; // Número de clases asignadas a este plan
+
+    @ManyToOne
+    @JoinColumn(name = "transaction_category_id")
+    private TransactionCategory transactionCategory;
 }
 

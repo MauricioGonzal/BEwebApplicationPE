@@ -30,6 +30,10 @@ public class PriceList {
     @JoinColumn(name = "payment_method_id") // Clave foránea que apunta al entrenador
     private PaymentMethod paymentMethod;
 
+    @ManyToOne
+    @JoinColumn(name = "membership_id")
+    private Membership membership;
+
     private Float amount;
 
 }
