@@ -48,12 +48,12 @@ public class TransactionController {
     }
 
     @PostMapping("/dailyClosing")
-    public ResponseEntity<CashClosure> closeCashRegister() {
-        return ResponseEntity.ok(transactionService.closeCashRegister());
+    public ResponseEntity<CashClosure> closeDailyCashRegister() {
+        return ResponseEntity.ok(transactionService.closeDailyCashRegister());
     }
 
     @PostMapping("/monthlyClosing")
-    public ResponseEntity<CashClosure> monthlyCloseCashRegister() {
-        return ResponseEntity.ok(transactionService.monthlyCloseCashRegister());
+    public ResponseEntity<CashClosure> closeMonthlyCashRegister() {
+        return ResponseEntity.ok(transactionService.closeMonthlyCashRegister());
     }
 }
