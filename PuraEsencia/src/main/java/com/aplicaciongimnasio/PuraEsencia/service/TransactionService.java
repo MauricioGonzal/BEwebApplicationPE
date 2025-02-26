@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
+import com.aplicaciongimnasio.PuraEsencia.model.Membership;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -55,13 +57,19 @@ public class TransactionService {
                 .orElseThrow(() -> new RuntimeException("Payment Method not found"));
         transaction.setPaymentMethod(paymentMethod);
 
-        var membership = membershipRepository.findById(transaction.getMembership().getId())
-                .orElseThrow(() -> new RuntimeException("Membership not found"));
-        transaction.setMembership(membership);
 
         if(!transactionCategory.getName().equals("Egreso")){
-            var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, membership);
-            transaction.setAmount(amount);
+            if(transaction.getMembership() != null){
+                var membership = membershipRepository.findById(transaction.getMembership().getId())
+                        .orElseThrow(() -> new RuntimeException("Membership not found"));
+                transaction.setMembership(membership);
+                var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, membership);
+                transaction.setAmount(amount);
+            }
+            else{
+                var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, null);
+                transaction.setAmount(amount);
+            }
         }
         else{
             transaction.setAmount(0 - transaction.getAmount());
@@ -82,6 +90,8 @@ public class TransactionService {
                 if(!payments.isEmpty()){
                     Payment lastPayment = payments.getLast();
                     if(lastPayment.getDueDate().isAfter(LocalDate.now())){
+                        var membership = membershipRepository.findById(transaction.getMembership().getId())
+                                .orElseThrow(() -> new RuntimeException("Membership not found"));
                         var maxDays = membership.getMaxDays();
                         if(maxDays != null && maxDays != 30){
                             paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays));

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
@@ -31,5 +32,15 @@ public class PriceListController {
     @GetMapping
     public List<PriceList> getAllPriceList() {
         return priceListService.getAllPriceList();
+    }
+
+    @PutMapping("/{id}/updateAmount")
+    public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody Float newAmount) {
+        try {
+            return ResponseEntity.ok(priceListService.updateAmount(id, newAmount));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 }

@@ -52,6 +52,11 @@ public class UserController {
         return userService.getAllByRole(role);
     }
 
+    @GetMapping("/getForSalary")
+    public List<User> getAllForSalary() {
+        return userService.getAllForSalary();
+    }
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         boolean isDeleted = userService.logicDelete(userId);

@@ -160,6 +160,14 @@ public class UserService {
         }
     }
 
+    public List<User> getAllForSalary() {
+            List<Role> roles = Stream.of("TRAINER", "RECEPTIONIST")
+                    .map(Role::valueOf)
+                    .collect(Collectors.toList());
+
+            return userRepository.findAllByRoleInAndIsActive(roles, true);
+    }
+
     public Optional<User> getTrainerByOneClient(Long clientId){
         Optional<User> user = userRepository.findById(clientId);
         return Optional.ofNullable(user.get().getTrainer());
