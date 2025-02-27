@@ -48,8 +48,14 @@ public class TransactionController {
     }
 
     @PostMapping("/dailyClosing")
-    public ResponseEntity<CashClosure> closeDailyCashRegister() {
-        return ResponseEntity.ok(transactionService.closeDailyCashRegister());
+    public ResponseEntity<?> closeDailyCashRegister() {
+        try{
+            return ResponseEntity.ok(transactionService.closeDailyCashRegister());
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
 
     @PostMapping("/monthlyClosing")
