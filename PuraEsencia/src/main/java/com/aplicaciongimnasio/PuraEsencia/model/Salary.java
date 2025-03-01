@@ -26,7 +26,7 @@ public class Salary {
     private User user;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private float amount;
 
     // Fecha de inicio de validez
     @Column(nullable = false)

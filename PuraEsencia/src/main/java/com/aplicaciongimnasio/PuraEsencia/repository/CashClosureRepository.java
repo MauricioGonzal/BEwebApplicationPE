@@ -11,5 +11,5 @@ public interface CashClosureRepository extends JpaRepository<CashClosure, Long> 
     boolean existsByStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
     List<CashClosure> findByClosureType(String closureType);
     List<CashClosure> findByStartDate(LocalDate date);
-
+    List<CashClosure> findByStartDateBetweenAndClosureType(LocalDate start, LocalDate end, String closureType);
 }

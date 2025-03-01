@@ -19,7 +19,7 @@ public class SalaryController {
     private SalaryService salaryService;
 
     @PostMapping
-    public ResponseEntity<Salary> createSalary(@RequestParam Long userId, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Salary> createSalary(@RequestParam Long userId, @RequestParam float amount) {
         Salary salary = salaryService.createSalary(userId, amount);
         return ResponseEntity.ok(salary);
     }
@@ -31,7 +31,7 @@ public class SalaryController {
     }
 
     @PutMapping("/{id}/updateAmount")
-    public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody BigDecimal newAmount) {
+    public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody float newAmount) {
         try {
             return ResponseEntity.ok(salaryService.updateAmount(id, newAmount));
         }

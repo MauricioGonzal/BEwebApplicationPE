@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionCategoryRepository extends JpaRepository<TransactionCategory, Long> {
+    TransactionCategory findByName(String name);
 }

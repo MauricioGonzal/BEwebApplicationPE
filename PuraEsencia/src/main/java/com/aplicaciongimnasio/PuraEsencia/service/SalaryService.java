@@ -26,7 +26,7 @@ public class SalaryService {
     private UserRepository userRepository;
 
     @Transactional
-    public Salary createSalary(Long userId, BigDecimal amount) {
+    public Salary createSalary(Long userId, float amount) {
         var employee = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
@@ -51,7 +51,7 @@ public class SalaryService {
         return salaryRepository.findByValidUntilIsNull();
     }
 
-    public Salary updateAmount(Long id, BigDecimal newAmount) {
+    public Salary updateAmount(Long id, float newAmount) {
         // 1. Buscar el registro actual
         Optional<Salary> existingSalaryOpt = salaryRepository.findById(id);
         if (existingSalaryOpt.isEmpty()) {
