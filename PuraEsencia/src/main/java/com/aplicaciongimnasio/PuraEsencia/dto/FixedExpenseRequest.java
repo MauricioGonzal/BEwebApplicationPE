@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Setter
 public class FixedExpenseRequest {
     private String name;
-    private float totalAmount;
     private float monthlyAmount;
     private LocalDate startDate;
     private Integer remainingInstallments; // Puede ser null si es un gasto indefinido

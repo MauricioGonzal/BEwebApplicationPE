@@ -25,9 +25,6 @@ public class FixedExpense {
     private String name; // Nombre del gasto
 
     @Column
-    private float totalAmount; // Monto total (para gastos en cuotas)
-
-    @Column
     private float monthlyAmount; // Monto a pagar cada mes
 
     @Column(nullable = false)
