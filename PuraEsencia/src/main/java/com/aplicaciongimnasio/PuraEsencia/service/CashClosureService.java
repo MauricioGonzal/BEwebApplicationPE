@@ -46,12 +46,17 @@ public class CashClosureService {
         return cashClosureRepository.findByStartDateBetweenAndClosureType(startDate, endDate, "monthly");
     }
 
-    public Map<String, Object> calculateCashClosure(LocalDate startDate, LocalDate endDate) {
+    public Map<String, Object> calculateCashClosure(Long month) {
 
-        // Obtener el inicio del día (00:00:00)
+        // Obtener el año actual
+        int currentYear = LocalDate.now().getYear();
+
+        // Obtener el primer día del mes a las 00:00:00
+        LocalDate startDate = LocalDate.of(currentYear, month.intValue(), 1);
         LocalDateTime startOfStartDate = startDate.atStartOfDay();
 
-// Obtener el final del día (23:59:59.999999999)
+        // Obtener el último día del mes a las 23:59:59.999999999
+        LocalDate endDate = YearMonth.of(currentYear, month.intValue()).atEndOfMonth();
         LocalDateTime endOfEndDate = endDate.atTime(23, 59, 59, 999999999);
 
         List<TransactionCategory> transactionCategoriesSales = List.of(
@@ -97,6 +102,103 @@ public class CashClosureService {
         response.put("salarios", salarios);
 
         return response;
+    }
+
+    /**
+     * Realiza el cierre de caja sumando los ingresos y marcándolo como cerrado.
+     */
+    public CashClosure closeDailyCashRegister() {
+        LocalDate today = LocalDate.now();
+
+        // Verificar si el cierre ya existe
+        if (cashClosureRepository.existsByStartDate(today)) {
+            throw new RuntimeException("El cierre de caja para hoy ya fue registrado.");
+        }
+
+        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59, 999999999); // Para cubrir todo el día
+
+        TransactionCategory transactionCategory = transactionCategoryRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Transaction> paymentsTransactions = transactionRepository.findByDateBetweenAndTransactionCategory(startOfDay, endOfDay, transactionCategory);
+
+        double totalPayments = Math.abs(paymentsTransactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum());
+
+        List<TransactionCategory> transactionCategories = List.of(
+                transactionCategoryRepository.findById(1L).orElseThrow(() -> new RuntimeException("Transaction category 1 not found")),
+                transactionCategoryRepository.findById(2L).orElseThrow(() -> new RuntimeException("Transaction category 2 not found")),
+                transactionCategoryRepository.findById(4L).orElseThrow(() -> new RuntimeException("Transaction category 3 not found"))
+        );
+
+        List<Transaction> salesTransactions = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfDay, endOfDay, transactionCategories);
+
+        double totalSales = Math.abs(salesTransactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum());
+
+        double discrepancy = totalSales - totalPayments;
+
+        // Guardar cierre de caja
+        CashClosure closure = new CashClosure(null, today, today, totalSales, totalPayments, discrepancy, "daily");
+        return cashClosureRepository.save(closure);
+    }
+
+    public CashClosure closeMonthlyCashRegister(Long month) {
+        // Obtener el año actual
+        int currentYear = LocalDate.now().getYear();
+
+        // Obtener el primer día del mes a las 00:00:00
+        LocalDate firstDayOfMonth = LocalDate.of(currentYear, month.intValue(), 1);
+
+        // Obtener el último día del mes a las 23:59:59.999999999
+        LocalDate lastDayOfMonth = YearMonth.of(currentYear, month.intValue()).atEndOfMonth();
+
+
+        LocalDate today = LocalDate.now();
+
+        // Verificar si el cierre mensual ya existe
+        if (cashClosureRepository.existsByStartDateAndEndDate(firstDayOfMonth, lastDayOfMonth)) {
+            throw new RuntimeException("El cierre de caja para este mes ya fue registrado.");
+        }
+
+
+        LocalDateTime startOfMonth = firstDayOfMonth.atStartOfDay();
+        LocalDateTime endOfMonth = lastDayOfMonth.atTime(23, 59, 59, 999999999); // Para cubrir todo el mes
+
+        // Obtener la categoría de transacción
+        TransactionCategory transactionCategory = transactionCategoryRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Transaction category not found"));
+
+        // Obtener todas las transacciones de pagos para el mes
+        List<Transaction> paymentsTransactions = transactionRepository.findByDateBetweenAndTransactionCategory(startOfMonth, endOfMonth, transactionCategory);
+
+        // Sumar los pagos, asegurándonos de usar BigDecimal
+        double totalPayments = Math.abs(paymentsTransactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum());
+
+        List<TransactionCategory> transactionCategories = List.of(
+                transactionCategoryRepository.findById(1L).orElseThrow(() -> new RuntimeException("Transaction category 1 not found")),
+                transactionCategoryRepository.findById(2L).orElseThrow(() -> new RuntimeException("Transaction category 2 not found")),
+                transactionCategoryRepository.findById(4L).orElseThrow(() -> new RuntimeException("Transaction category 3 not found"))
+        );
+
+        // Obtener todas las transacciones de ventas para el mes
+        List<Transaction> salesTransactions = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfMonth, endOfMonth, transactionCategories);
+
+        double totalSales = Math.abs(salesTransactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum());
+
+        // Calcular la discrepancia
+        double discrepancy = totalSales - totalPayments;
+
+        // Guardar el cierre de caja mensual
+        CashClosure closure = new CashClosure(null, firstDayOfMonth, lastDayOfMonth, totalSales, totalPayments, discrepancy, "monthly");
+        return cashClosureRepository.save(closure);
     }
 
 }

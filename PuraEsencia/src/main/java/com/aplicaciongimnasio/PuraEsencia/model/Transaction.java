@@ -28,10 +28,6 @@ public class Transaction {
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 
-    @ManyToOne
-    @JoinColumn(name = "membership_id")
-    private Membership membership;
-
     private Float amount;
     private LocalDateTime date = LocalDateTime.now();
 

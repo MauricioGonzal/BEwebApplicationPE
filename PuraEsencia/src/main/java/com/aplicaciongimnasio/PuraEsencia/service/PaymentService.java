@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.model.Membership;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
@@ -19,7 +20,7 @@ public class PaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public String registerPayment(Long userId, Float amount, String status, LocalDate paymentDate, LocalDate dueDate) {
+    public String registerPayment(Long userId, Float amount, String status, LocalDate paymentDate, LocalDate dueDate, Membership membership) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -36,6 +37,7 @@ public class PaymentService {
         payment.setPaymentDate(paymentDate);
         payment.setStatus(status);
         payment.setDueDate(dueDate);
+        payment.setMembership(membership);
 
         paymentRepository.save(payment);
         return "Pago registrado correctamente.";
@@ -54,8 +56,7 @@ public class PaymentService {
     }
 
     public Boolean updateDueDate(Long userId, Map<String, String> newDueDate) {
-
-        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")), LocalDate.parse(newDueDate.get("dueDate")).plusMonths(1));
+        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")), LocalDate.parse(newDueDate.get("dueDate")).plusMonths(1), null);
 
         return true;
     }

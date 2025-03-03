@@ -142,7 +142,7 @@ public class UserService {
     public List<User> getAllByRole(String role) {
         if (role.equalsIgnoreCase("CLIENTS")) {
             // Aquí se convierte a un List<Role> a partir de los strings de roles
-            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES", "CLIENT_BOTH")
+            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_BOTH")
                     .map(Role::valueOf)  // Convierte el String en el enum correspondiente
                     .collect(Collectors.toList());
 

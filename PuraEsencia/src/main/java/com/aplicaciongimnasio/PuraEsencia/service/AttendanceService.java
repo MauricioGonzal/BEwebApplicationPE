@@ -1,24 +1,15 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
-import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
-import com.aplicaciongimnasio.PuraEsencia.model.Payment;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
-import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceTypeRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import com.aplicaciongimnasio.PuraEsencia.model.*;
+import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import com.aplicaciongimnasio.PuraEsencia.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AttendanceService {
@@ -37,6 +28,9 @@ public class AttendanceService {
 
     @Autowired
     private AttendanceTypeRepository attendanceTypeRepository;
+
+    @Autowired
+    private MembershipRepository membershipRepository;
 
 
     public String registerAttendance(AttendanceRequest attendanceRequest) {
@@ -68,7 +62,29 @@ public class AttendanceService {
             LocalDate dueDate = lastPayment.get().getDueDate();
             if (dueDate.isBefore(today)) {
                 if(!isOutOfDueDate(user.getId())){
-                    paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1));
+                    Membership membershipGym = membershipRepository.findByName("Mes Completo")
+                            .orElseThrow(() -> new RuntimeException("Membresía 'Mes Completo' no encontrada"));
+                    if(Objects.equals(attendanceType.getName(), "Gimnasio")){
+                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), membershipGym);
+                    }
+                    else{
+                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), null);
+                    }
+                }
+            }
+            else{
+                if(Objects.equals(lastPayment.get().getStatus(), "PENDIENTE") && !Objects.equals(attendanceType.getName(), "Gimnasio")){
+                    List<Attendance> attendancesDue = attendanceRepository.findByUserIdAndDateBetween(user.getId(), lastPayment.get().getPaymentDate(), dueDate);
+                    Membership membership = lastPayment.get().getMembership();
+                    if(membership.getMaxClasses() != null){
+                        if(attendancesDue.size() > membership.getMaxClasses()){
+                            Membership membershipNew = membershipRepository.findClosestMembership(membership.getTransactionCategory(), attendancesDue.size()).orElseThrow(() -> new RuntimeException("Tipo de membresia no encontrada"));
+                            lastPayment.get().setMembership(membershipNew);
+                            paymentRepository.save(lastPayment.get());
+                        }
+                    }
+
+
                 }
             }
         }
@@ -103,7 +119,7 @@ public class AttendanceService {
             if (dueDate.isBefore(today)) {
                 var limitDayToAssist = dueDate.plusDays(7);
                 var lastAttendance = getLastAttendanceByUser(userId);
-                if(lastAttendance == null || (lastAttendance.getDate().isAfter(dueDate) && lastAttendance.getDate().isBefore(limitDayToAssist))){
+                if(lastAttendance != null && (lastAttendance.getDate().isAfter(dueDate) && lastAttendance.getDate().isBefore(limitDayToAssist))){
                     isOutOfDueDate = true;
                 }
             }
@@ -139,6 +155,40 @@ public class AttendanceService {
 
             // Contar las asistencias por fecha
             userAttendances.put(date, userAttendances.getOrDefault(date, 0) + 1);
+        }
+
+        return result;
+    }
+
+    public Map<Long, Map<String, Object>> getAttendancesForAllUsersInCurrentPaymentPeriod() {
+        // Obtener el último pago activo de cada usuario
+        List<Payment> activePayments = paymentRepository.findLatestActivePayments(LocalDate.now());
+
+        // Mapa de resultados: { userId -> { "attendance" -> { "YYYY-MM-DD" -> cantidad de asistencias }, "max_classes" -> maxClases } }
+        Map<Long, Map<String, Object>> result = new HashMap<>();
+
+        for (Payment payment : activePayments) {
+            Long userId = payment.getUser().getId();
+            LocalDate startDate = payment.getPaymentDate();
+            LocalDate endDate = payment.getDueDate();
+            int maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+
+            // Obtener asistencias en el período del pago actual
+            List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
+
+            // Agrupar asistencias por usuario y fecha
+            Map<String, Integer> userAttendances = new HashMap<>();
+            for (Attendance attendance : attendances) {
+                String date = attendance.getDate().toString();
+                userAttendances.put(date, userAttendances.getOrDefault(date, 0) + 1);
+            }
+
+            // Guardar en el mapa final con el máximo de clases
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("attendance", userAttendances);
+            userData.put("max_classes", maxClasses);
+
+            result.put(userId, userData);
         }
 
         return result;

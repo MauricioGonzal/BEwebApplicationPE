@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.TransactionRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
 import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
 import com.aplicaciongimnasio.PuraEsencia.service.TransactionService;
@@ -21,9 +22,9 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
+    public ResponseEntity<?> createTransaction(@RequestBody TransactionRequest transactionRequest) {
         try{
-            return ResponseEntity.ok(transactionService.saveTransaction(transaction));
+            return ResponseEntity.ok(transactionService.saveTransaction(transactionRequest));
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
@@ -47,19 +48,5 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getTotalByDate(transactionsDate));
     }
 
-    @PostMapping("/dailyClosing")
-    public ResponseEntity<?> closeDailyCashRegister() {
-        try{
-            return ResponseEntity.ok(transactionService.closeDailyCashRegister());
-        }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
-        }
 
-    }
-
-    @PostMapping("/monthlyClosing")
-    public ResponseEntity<CashClosure> closeMonthlyCashRegister() {
-        return ResponseEntity.ok(transactionService.closeMonthlyCashRegister());
-    }
 }

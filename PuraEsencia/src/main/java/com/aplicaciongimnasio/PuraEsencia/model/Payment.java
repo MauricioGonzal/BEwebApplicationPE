@@ -37,4 +37,9 @@ public class Payment {
 
     @Column(nullable = false)
     private String status; // ✅ "PAGADO" o "PENDIENTE"
+
+    @ManyToOne
+    @JoinColumn(name = "membership_id", nullable = true) // Puede ser null si no tiene membresía
+    private Membership membership;
+
 }

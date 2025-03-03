@@ -38,10 +38,6 @@ public class User {
     @Column(columnDefinition = "TINYINT(1)") // MySQL
     private Boolean isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "membership_id", nullable = true) // Puede ser null si no tiene membresía
-    private Membership membership;
-
 
 }
 

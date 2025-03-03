@@ -67,7 +67,7 @@ public class AttendanceController {
 
     @GetMapping("/current-month")
     public ResponseEntity<?> getMonthlyAttendances() {
-        var count = attendanceService.getAttendancesForAllUsersInCurrentMonth();
+        var count = attendanceService.getAttendancesForAllUsersInCurrentPaymentPeriod();
         return ResponseEntity.ok(count);
     }
 
