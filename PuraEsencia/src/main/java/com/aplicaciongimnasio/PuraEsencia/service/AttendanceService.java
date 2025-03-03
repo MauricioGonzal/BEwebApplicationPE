@@ -65,10 +65,10 @@ public class AttendanceService {
                     Membership membershipGym = membershipRepository.findByName("Mes Completo")
                             .orElseThrow(() -> new RuntimeException("Membresía 'Mes Completo' no encontrada"));
                     if(Objects.equals(attendanceType.getName(), "Gimnasio")){
-                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), membershipGym);
+                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), membershipGym, null);
                     }
                     else{
-                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), null);
+                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), null, null);
                     }
                 }
             }
@@ -171,7 +171,11 @@ public class AttendanceService {
             Long userId = payment.getUser().getId();
             LocalDate startDate = payment.getPaymentDate();
             LocalDate endDate = payment.getDueDate();
-            int maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+            int maxClasses = 0;
+            if(payment.getMembership().getMaxClasses() != null){
+                maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+            }
+
 
             // Obtener asistencias en el período del pago actual
             List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);

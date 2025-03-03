@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.TransactionRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.TransactionResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import jakarta.transaction.Transactional;
@@ -69,17 +70,20 @@ public class TransactionService {
             }
         }
         else{
+            transaction.setComment(transactionRequest.getComment());
             transaction.setAmount(0 - transactionRequest.getAmount());
         }
+
+        transaction = transactionRepository.save(transaction);
 
         if(transactionRequest.getUser() != null){
             var user = userRepository.findById(transactionRequest.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            transaction.setUser(user);
             List<Payment> overduePayments = paymentService.getPaymentsByStatusAndUserId("PENDIENTE", user.getId());
             if(!overduePayments.isEmpty()){
                 Payment firstOverduePayment = overduePayments.getFirst();
                 firstOverduePayment.setStatus("PAGADO");
+                firstOverduePayment.setTransaction(transaction);
                 paymentRepository.save(firstOverduePayment);
             }
             else{
@@ -91,15 +95,15 @@ public class TransactionService {
                                 .orElseThrow(() -> new RuntimeException("Membership not found"));
                         var maxDays = membership.getMaxDays();
                         if(maxDays != null && maxDays != 30){
-                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays), transactionRequest.getMembership());
+                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays), transactionRequest.getMembership(), transaction);
                         }
                         else{
-                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1), transactionRequest.getMembership());
+                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1), transactionRequest.getMembership(), transaction);
                         }
                     }
                 }
                 else{
-                    paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership());
+                    paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership(), transaction);
                 }
             }
         }
@@ -117,11 +121,11 @@ public class TransactionService {
     /**
      * Obtiene todas las transacciones de un día específico.
      */
-    public List<Transaction> getByDate(LocalDate date) {
+    public List<TransactionResponse> getByDate(LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay(); // 2025-02-21T00:00:00
         LocalDateTime endOfDay = date.atTime(23, 59, 59); // 2025-02-21T23:59:59
 
-        return transactionRepository.findByDateBetween(startOfDay, endOfDay);
+        return transactionRepository.findTransactionsWithPayments(startOfDay, endOfDay);
     }
 
     /**

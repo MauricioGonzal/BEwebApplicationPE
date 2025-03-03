@@ -24,17 +24,6 @@ public class PaymentController {
     @Autowired
     private AttendanceService attendanceService;
 
-    /*@PostMapping
-    public ResponseEntity<String> makePayment(@RequestBody Map<String, Object> request) {
-        Long userId = ((Number) request.get("userId")).longValue();
-        Float amount = request.get("amount").toString();
-        Integer month = (Integer) request.get("month");
-        Integer year = (Integer) request.get("year");
-
-        String response = paymentService.registerPayment(userId, amount, month, year);
-        return ResponseEntity.ok(response);
-    }
-*/
     @GetMapping("/getbystatus/{status}")
     public ResponseEntity<List<Payment>> getByStatus(@PathVariable String status) {
         List<Payment> payments = paymentService.getPaymentsByStatus(status.toUpperCase());

@@ -17,10 +17,6 @@ public class Transaction {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user; // Puede ser null si es una venta sin usuario registrado
-
-    @ManyToOne
     @JoinColumn(name = "transaction_category_id")
     private TransactionCategory transactionCategory;
 

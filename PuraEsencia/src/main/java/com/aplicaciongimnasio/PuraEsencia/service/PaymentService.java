@@ -2,6 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Membership;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
+import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
@@ -20,24 +21,20 @@ public class PaymentService {
     @Autowired
     private UserRepository userRepository;
 
-    public String registerPayment(Long userId, Float amount, String status, LocalDate paymentDate, LocalDate dueDate, Membership membership) {
+    public String registerPayment(Long userId, Float amount, String status, LocalDate paymentDate, LocalDate dueDate, Membership membership, Transaction transaction
+    ) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        /*// Verificar si ya hay un pago para el mes y año
-        List<Payment> existingPayments = paymentRepository.findByUserIdAndMonthAndYear(userId);
-        if (!existingPayments.isEmpty()) {
-            return "El usuario ya tiene un pago registrado para ";
-        }*/
-
-
         Payment payment = new Payment();
         payment.setUser(user);
-        payment.setAmount(amount);
         payment.setPaymentDate(paymentDate);
         payment.setStatus(status);
         payment.setDueDate(dueDate);
         payment.setMembership(membership);
+        if(transaction != null){
+            payment.setTransaction(transaction);
+        }
 
         paymentRepository.save(payment);
         return "Pago registrado correctamente.";
@@ -56,7 +53,7 @@ public class PaymentService {
     }
 
     public Boolean updateDueDate(Long userId, Map<String, String> newDueDate) {
-        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")), LocalDate.parse(newDueDate.get("dueDate")).plusMonths(1), null);
+        registerPayment(userId, 0f, "PENDIENTE", LocalDate.parse(newDueDate.get("dueDate")), LocalDate.parse(newDueDate.get("dueDate")).plusMonths(1), null,null);
 
         return true;
     }

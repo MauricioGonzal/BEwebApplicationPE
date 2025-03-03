@@ -26,9 +26,6 @@ public class Payment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private Float amount; // 💰 Monto pagado
-
     @Column
     private LocalDate paymentDate; // 📅 Fecha de pago
 
@@ -41,5 +38,9 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "membership_id", nullable = true) // Puede ser null si no tiene membresía
     private Membership membership;
+
+    @ManyToOne
+    @JoinColumn(name = "transaction_id", nullable = true) // Puede ser null si no tiene membresía
+    private Transaction transaction;
 
 }

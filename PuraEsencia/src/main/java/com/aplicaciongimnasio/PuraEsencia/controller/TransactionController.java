@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.TransactionRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.TransactionResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
 import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
 import com.aplicaciongimnasio.PuraEsencia.service.TransactionService;
@@ -38,7 +39,7 @@ public class TransactionController {
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<Transaction>> getAllTransactionsOfToday() {
+    public ResponseEntity<List<TransactionResponse>> getAllTransactionsOfToday() {
         return ResponseEntity.ok(transactionService.getByDate(LocalDate.now()));
     }
 
