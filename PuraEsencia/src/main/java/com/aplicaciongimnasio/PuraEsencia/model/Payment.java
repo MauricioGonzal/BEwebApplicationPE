@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "payments")
@@ -27,20 +24,20 @@ public class Payment {
     private User user;
 
     @Column
-    private LocalDate paymentDate; // 📅 Fecha de pago
+    private LocalDate paymentDate;
 
     @Column(nullable = false)
     private LocalDate dueDate;
 
     @Column(nullable = false)
-    private String status; // ✅ "PAGADO" o "PENDIENTE"
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "membership_id", nullable = true) // Puede ser null si no tiene membresía
+    @JoinColumn(name = "membership_id", nullable = true)
     private Membership membership;
 
     @ManyToOne
-    @JoinColumn(name = "transaction_id", nullable = true) // Puede ser null si no tiene membresía
+    @JoinColumn(name = "transaction_id", nullable = true)
     private Transaction transaction;
 
 }

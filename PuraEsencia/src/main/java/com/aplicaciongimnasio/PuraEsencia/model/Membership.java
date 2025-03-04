@@ -19,13 +19,13 @@ public class Membership {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name; // Nombre del plan (Ej: "Solo Gimnasio", "Gimnasio + Clases")
+    private String name;
 
     @Column
-    private Integer maxClasses; // Número de clases asignadas a este plan
+    private Integer maxClasses;
 
     @Column
-    private Integer maxDays; // Número de clases asignadas a este plan
+    private Integer maxDays;
 
     @ManyToOne
     @JoinColumn(name = "transaction_category_id")

@@ -28,14 +28,10 @@ public class Salary {
     @Column(nullable = false)
     private float amount;
 
-    // Fecha de inicio de validez
     @Column(nullable = false)
     private LocalDate validFrom;
 
-    // Fecha hasta cuando fue válido (puede ser null si es el actual)
     private LocalDate validUntil;
-
-    // Indica si el precio sigue activo
     private Boolean isActive;
 }
 

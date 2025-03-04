@@ -26,13 +26,13 @@ public class Attendance {
     private LocalDate date;
 
     @Column(nullable = false)
-    private LocalTime time; // 🕒 Se almacena la hora de asistencia
+    private LocalTime time;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "attendance_type_id", nullable = false) // Relación ManyToOne
+    @JoinColumn(name = "attendance_type_id", nullable = false)
     private AttendanceType attendanceType;
 }
 

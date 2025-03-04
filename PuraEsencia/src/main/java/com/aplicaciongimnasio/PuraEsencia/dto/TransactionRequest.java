@@ -7,7 +7,6 @@ import com.aplicaciongimnasio.PuraEsencia.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class TransactionRequest {

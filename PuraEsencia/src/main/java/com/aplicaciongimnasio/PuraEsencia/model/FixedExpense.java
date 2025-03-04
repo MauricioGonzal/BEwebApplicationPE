@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -22,20 +20,20 @@ public class FixedExpense {
     private Long id;
 
     @Column(nullable = false)
-    private String name; // Nombre del gasto
+    private String name;
 
     @Column
-    private float monthlyAmount; // Monto a pagar cada mes
+    private float monthlyAmount;
 
     @Column(nullable = false)
-    private LocalDate startDate; // Fecha de inicio del gasto
+    private LocalDate startDate;
 
-    private Integer remainingInstallments; // Número de cuotas restantes (NULL si es indefinido)
+    private Integer remainingInstallments;
 
     @Column(nullable = false)
-    private Boolean isActive = true; // Indica si el gasto sigue activo
+    private Boolean isActive = true;
 
     @Column
-    private LocalDate createdAt = LocalDate.now(); // Fecha de creación
+    private LocalDate createdAt = LocalDate.now();
 }
 

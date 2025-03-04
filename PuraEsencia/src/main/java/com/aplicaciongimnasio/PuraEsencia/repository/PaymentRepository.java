@@ -20,13 +20,11 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query("""
     SELECT p FROM Payment p
-    WHERE p.status = 'PAGADO' 
-    AND p.paymentDate <= :currentDate
+    WHERE p.paymentDate <= :currentDate
     AND p.dueDate >= :currentDate
     AND p.paymentDate = (
         SELECT MAX(p2.paymentDate) FROM Payment p2 
         WHERE p2.user.id = p.user.id 
-        AND p2.status = 'PAGADO' 
         AND p2.paymentDate <= :currentDate
     )
 """)

@@ -19,15 +19,14 @@ public class WorkoutLog {
 
     @ManyToOne
     @JoinColumn(name = "session_id")
-    private WorkoutSession session; // Relación con la sesión de entrenamiento
+    private WorkoutSession session;
 
     @ManyToOne
     @JoinColumn(name = "exercise_id")
-    private Exercise exercise; // Relación con el ejercicio
+    private Exercise exercise;
 
     private int repetitions;
     private double weight;
-    private String notes; // Notas del log de ejercicio
+    private String notes;
 
-    // Getters y setters
 }

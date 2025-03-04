@@ -25,11 +25,7 @@ public class WorkoutSession {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user; // Relación con el usuario
+    private User user;
 
-    private Date date; // Fecha de la sesión
-
-    // Otros atributos de la sesión
-
-    // Getters y setters
+    private Date date;
 }

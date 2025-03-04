@@ -39,5 +39,11 @@ public class PaymentController {
     public ResponseEntity<Boolean> updateDueDate(@PathVariable Long userId, @RequestBody Map<String, String> newDueDate){
         return ResponseEntity.ok(paymentService.updateDueDate(userId, newDueDate));
     }
+
+    @GetMapping("/overduePayments/{userId}")
+    public ResponseEntity<List<Payment>> getOverduePaymentsByUserId(@PathVariable Long userId) {
+        List<Payment> payments = paymentService.getOverduePaymentsByUserId(userId);
+        return ResponseEntity.ok(payments);
+    }
 }
 

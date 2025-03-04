@@ -132,11 +132,9 @@ public class TransactionService {
      * Calcula el total de ingresos de un día específico.
      */
     public double getTotalByDate(LocalDate date) {
-        // Convertir LocalDate a LocalDateTime con hora 00:00:00
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(23, 59, 59, 999999999); // Para cubrir todo el día
 
-        // Filtrar las transacciones que ocurren dentro del rango de este día
         List<Transaction> transactions = transactionRepository.findByDateBetween(startOfDay, endOfDay);
 
         return transactions.stream()

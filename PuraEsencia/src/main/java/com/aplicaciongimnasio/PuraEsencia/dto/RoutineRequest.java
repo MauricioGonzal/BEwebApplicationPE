@@ -3,7 +3,6 @@ package com.aplicaciongimnasio.PuraEsencia.dto;
 import com.aplicaciongimnasio.PuraEsencia.model.ExerciseDetails;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 import java.util.Map;
 

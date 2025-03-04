@@ -58,5 +58,9 @@ public class PaymentService {
         return true;
     }
 
+    public List<Payment> getOverduePaymentsByUserId(Long userId) {
+        return paymentRepository.findByStatusAndUserId("PENDIENTE",userId);
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
-import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import lombok.Getter;
 import lombok.Setter;
 

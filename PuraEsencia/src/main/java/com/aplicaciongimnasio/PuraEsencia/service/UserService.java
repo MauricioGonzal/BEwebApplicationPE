@@ -141,20 +141,16 @@ public class UserService {
 
     public List<User> getAllByRole(String role) {
         if (role.equalsIgnoreCase("CLIENTS")) {
-            // Aquí se convierte a un List<Role> a partir de los strings de roles
-            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_BOTH")
+            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES","CLIENT_BOTH")
                     .map(Role::valueOf)  // Convierte el String en el enum correspondiente
                     .collect(Collectors.toList());
 
-            // Llama al repositorio con la lista de roles
             return userRepository.findAllByRoleInAndIsActive(roles, true);
         } else {
             try {
-                // Convierte el role a un enum si no es "CLIENTS"
                 Role userRole = Role.valueOf(role.toUpperCase());
                 return userRepository.findAllByRoleAndIsActive(userRole, true);
             } catch (IllegalArgumentException e) {
-                // Manejo de error si el String no es un valor válido del enum
                 throw new IllegalArgumentException("Role no válido: " + role);
             }
         }
@@ -182,6 +178,5 @@ public class UserService {
         userRepository.save(user);
 
         return true;
-
     }
 }

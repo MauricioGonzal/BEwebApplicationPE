@@ -15,12 +15,10 @@ public class ExerciseService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    // Crear un nuevo ejercicio
     public Exercise createExercise(Exercise exercise) {
         return exerciseRepository.save(exercise);
     }
 
-    // Obtener un ejercicio por ID
     public Exercise getExerciseById(Long id) {
         return exerciseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado con ID: " + id));
@@ -30,7 +28,6 @@ public class ExerciseService {
         return exerciseRepository.findAll();
     }
 
-    // Otros métodos relacionados con ejercicios (si los necesitas)
     @Transactional
     public boolean deleteExerciseById(Long id) {
         Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
@@ -44,7 +41,6 @@ public class ExerciseService {
     public Exercise updateExercise(Long id, Exercise updatedExercise) {
         Exercise exercise = exerciseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado"));
-        // Actualizar los campos del ejercicio
         if (updatedExercise.getName() != null) {
             exercise.setName(updatedExercise.getName());
         }

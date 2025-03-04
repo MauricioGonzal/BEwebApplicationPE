@@ -36,15 +36,12 @@ public class RoutineService {
         routine.setDescription(routineRequest.getDescription());
         routine.setIsCustom(routineRequest.getIsCustom());
 
-        // Asignar el Map<String, List<ExerciseDetails>> a exercisesByDay
         routine.setExercisesByDay(routineRequest.getExercises());
 
-        // Guardar la rutina en la base de datos
         return routineRepository.save(routine);
 
     }
 
-    // Obtener una rutina por ID
     public Routine getRoutineById(Long id) {
         return routineRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada con ID: " + id));
@@ -62,7 +59,6 @@ public class RoutineService {
         Map<Long, Map<Integer, List<RoutineResponse>>> response = new HashMap<>();
 
         for (Routine routine : routines) {
-            // Crear un nuevo Map para cada rutina para evitar que se compartan las listas entre rutinas
             Map<Integer, List<RoutineResponse>> routineItem = new HashMap<>();
 
             if (routine.getExercisesByDay() != null) {
@@ -88,7 +84,6 @@ public class RoutineService {
                 }
             }
 
-            // Asignar el Map de cada rutina a la respuesta
             response.put(routine.getId(), routineItem);
         }
 
@@ -99,7 +94,6 @@ public class RoutineService {
         Routine routine = routineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rutina no encontrada"));
 
-        // Actualizar datos de la rutina
         routine.setName(routineRequest.getTitle());
         routine.setDescription(routineRequest.getDescription());
         routine.setExercisesByDay(routineRequest.getExercises());

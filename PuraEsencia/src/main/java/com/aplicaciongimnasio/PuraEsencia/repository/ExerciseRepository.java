@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
-    // Aquí puedes añadir métodos personalizados si es necesario.
     void deleteById(Long id);
 
 }

@@ -20,22 +20,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // Relación Many-to-One con Routine
     @ManyToOne
-    @JoinColumn(name = "routine_id", nullable = true) // El usuario puede o no tener una rutina
+    @JoinColumn(name = "routine_id", nullable = true)
     private Routine routine;
 
-    // Relación con el entrenador
     @ManyToOne
-    @JoinColumn(name = "trainer_id") // Clave foránea que apunta al entrenador
+    @JoinColumn(name = "trainer_id")
     private User trainer;
 
-    // Relación con ficha de salud
     @OneToOne
-    @JoinColumn(name = "health_record_id") // Clave foránea que apunta al entrenador
+    @JoinColumn(name = "health_record_id")
     private HealthRecord healthRecord;
 
-    @Column(columnDefinition = "TINYINT(1)") // MySQL
+    @Column(columnDefinition = "TINYINT(1)")
     private Boolean isActive;
 
 

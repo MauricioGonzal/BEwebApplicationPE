@@ -1,11 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-
 import com.aplicaciongimnasio.PuraEsencia.model.Membership;
-import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
-import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.repository.MembershipRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.PaymentMethodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

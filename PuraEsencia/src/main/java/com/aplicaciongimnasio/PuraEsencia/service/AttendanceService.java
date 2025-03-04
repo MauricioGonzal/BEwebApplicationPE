@@ -52,7 +52,6 @@ public class AttendanceService {
             }
         }
 
-
         Optional<Payment> lastPayment = paymentRepository.findFirstByUserIdOrderByDueDateDesc(user.getId());
 
         LocalDate today = LocalDate.now();
@@ -83,12 +82,9 @@ public class AttendanceService {
                             paymentRepository.save(lastPayment.get());
                         }
                     }
-
-
                 }
             }
         }
-
         Attendance attendance = new Attendance();
         attendance.setUser(user);
         attendance.setDate(today);
@@ -132,28 +128,21 @@ public class AttendanceService {
     }
 
     public Map<Long, Map<String, Integer>> getAttendancesForAllUsersInCurrentMonth() {
-        // Fecha de inicio y fin del mes actual
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
         LocalDate endOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
 
-        // Obtener todas las asistencias en el rango de fechas para todos los usuarios
         List<Attendance> attendances = attendanceRepository.findByDateBetween(startOfMonth, endOfMonth);
 
-        // Crear un mapa para almacenar las asistencias agrupadas por usuario y fecha
         Map<Long, Map<String, Integer>> result = new HashMap<>();
 
-        // Procesar cada asistencia y agruparlas
         for (Attendance attendance : attendances) {
             Long userId = attendance.getUser().getId();
             String date = attendance.getDate().toString(); // Formatear la fecha a string
 
-            // Si el usuario no está en el mapa, inicializamos su grupo de asistencias
             result.putIfAbsent(userId, new HashMap<>());
 
-            // Obtener el mapa de asistencias para este usuario
             Map<String, Integer> userAttendances = result.get(userId);
 
-            // Contar las asistencias por fecha
             userAttendances.put(date, userAttendances.getOrDefault(date, 0) + 1);
         }
 
@@ -161,10 +150,8 @@ public class AttendanceService {
     }
 
     public Map<Long, Map<String, Object>> getAttendancesForAllUsersInCurrentPaymentPeriod() {
-        // Obtener el último pago activo de cada usuario
         List<Payment> activePayments = paymentRepository.findLatestActivePayments(LocalDate.now());
 
-        // Mapa de resultados: { userId -> { "attendance" -> { "YYYY-MM-DD" -> cantidad de asistencias }, "max_classes" -> maxClases } }
         Map<Long, Map<String, Object>> result = new HashMap<>();
 
         for (Payment payment : activePayments) {
@@ -176,18 +163,14 @@ public class AttendanceService {
                 maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
             }
 
-
-            // Obtener asistencias en el período del pago actual
             List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
 
-            // Agrupar asistencias por usuario y fecha
             Map<String, Integer> userAttendances = new HashMap<>();
             for (Attendance attendance : attendances) {
                 String date = attendance.getDate().toString();
                 userAttendances.put(date, userAttendances.getOrDefault(date, 0) + 1);
             }
 
-            // Guardar en el mapa final con el máximo de clases
             Map<String, Object> userData = new HashMap<>();
             userData.put("attendance", userAttendances);
             userData.put("max_classes", maxClasses);

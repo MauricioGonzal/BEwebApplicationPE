@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,15 +46,11 @@ public class CashClosureService {
     }
 
     public Map<String, Object> calculateCashClosure(Long month) {
-
-        // Obtener el año actual
         int currentYear = LocalDate.now().getYear();
 
-        // Obtener el primer día del mes a las 00:00:00
         LocalDate startDate = LocalDate.of(currentYear, month.intValue(), 1);
         LocalDateTime startOfStartDate = startDate.atStartOfDay();
 
-        // Obtener el último día del mes a las 23:59:59.999999999
         LocalDate endDate = YearMonth.of(currentYear, month.intValue()).atEndOfMonth();
         LocalDateTime endOfEndDate = endDate.atTime(23, 59, 59, 999999999);
 
@@ -70,16 +65,16 @@ public class CashClosureService {
                 transactionCategoryRepository.findByName("Egreso")
         );
 
-        List<Transaction> egresos = transactionRepository.findByDateBetweenAndTransactionCategoryIn (startOfStartDate, endOfEndDate, transactionCategoriesPayments);
+        List<Transaction> expenses = transactionRepository.findByDateBetweenAndTransactionCategoryIn (startOfStartDate, endOfEndDate, transactionCategoriesPayments);
 
         List<FixedExpense> fixedExpenses = fixedExpenseRepository.findByIsActive(true);
-        List<Salary> salarios = salaryRepository.findByIsActive(true);
+        List<Salary> salaries = salaryRepository.findByIsActive(true);
 
-        Float totalIngresos = ingresos.stream()
+        Float totalSales = ingresos.stream()
                 .map(Transaction::getAmount)
                 .reduce(0f, Float::sum);
 
-        Float totalEgresos = Math.abs(egresos.stream()
+        Float totalExpenses = Math.abs(expenses.stream()
                 .map(Transaction::getAmount)
                 .reduce(0f, Float::sum));
 
@@ -87,19 +82,19 @@ public class CashClosureService {
                 .map(FixedExpense::getMonthlyAmount)
                 .reduce(0f, Float::sum);
 
-        Float totalSalarios = salarios.stream()
+        Float totalSalarios = salaries.stream()
                 .map(Salary::getAmount)
                 .reduce(0f, Float::sum);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("totalIngresos", totalIngresos);
-        response.put("totalEgresos", totalEgresos);
+        response.put("totalIngresos", totalSales);
+        response.put("totalEgresos", totalExpenses);
         response.put("totalFixedExpenses", totalFixedExpenses);
         response.put("totalSalarios", totalSalarios);
         response.put("ingresos", ingresos);
-        response.put("egresos", egresos);
+        response.put("egresos", expenses);
         response.put("fixedExpenses", fixedExpenses);
-        response.put("salarios", salarios);
+        response.put("salarios", salaries);
 
         return response;
     }
@@ -110,7 +105,6 @@ public class CashClosureService {
     public CashClosure closeDailyCashRegister() {
         LocalDate today = LocalDate.now();
 
-        // Verificar si el cierre ya existe
         if (cashClosureRepository.existsByStartDate(today)) {
             throw new RuntimeException("El cierre de caja para hoy ya fue registrado.");
         }
@@ -141,41 +135,29 @@ public class CashClosureService {
 
         double discrepancy = totalSales - totalPayments;
 
-        // Guardar cierre de caja
         CashClosure closure = new CashClosure(null, today, today, totalSales, totalPayments, discrepancy, "daily");
         return cashClosureRepository.save(closure);
     }
 
     public CashClosure closeMonthlyCashRegister(Long month) {
-        // Obtener el año actual
         int currentYear = LocalDate.now().getYear();
 
-        // Obtener el primer día del mes a las 00:00:00
         LocalDate firstDayOfMonth = LocalDate.of(currentYear, month.intValue(), 1);
 
-        // Obtener el último día del mes a las 23:59:59.999999999
         LocalDate lastDayOfMonth = YearMonth.of(currentYear, month.intValue()).atEndOfMonth();
 
-
-        LocalDate today = LocalDate.now();
-
-        // Verificar si el cierre mensual ya existe
         if (cashClosureRepository.existsByStartDateAndEndDate(firstDayOfMonth, lastDayOfMonth)) {
             throw new RuntimeException("El cierre de caja para este mes ya fue registrado.");
         }
 
-
         LocalDateTime startOfMonth = firstDayOfMonth.atStartOfDay();
         LocalDateTime endOfMonth = lastDayOfMonth.atTime(23, 59, 59, 999999999); // Para cubrir todo el mes
 
-        // Obtener la categoría de transacción
         TransactionCategory transactionCategory = transactionCategoryRepository.findById(3L)
                 .orElseThrow(() -> new RuntimeException("Transaction category not found"));
 
-        // Obtener todas las transacciones de pagos para el mes
         List<Transaction> paymentsTransactions = transactionRepository.findByDateBetweenAndTransactionCategory(startOfMonth, endOfMonth, transactionCategory);
 
-        // Sumar los pagos, asegurándonos de usar BigDecimal
         double totalPayments = Math.abs(paymentsTransactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum());
@@ -186,17 +168,14 @@ public class CashClosureService {
                 transactionCategoryRepository.findById(4L).orElseThrow(() -> new RuntimeException("Transaction category 3 not found"))
         );
 
-        // Obtener todas las transacciones de ventas para el mes
         List<Transaction> salesTransactions = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfMonth, endOfMonth, transactionCategories);
 
         double totalSales = Math.abs(salesTransactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum());
 
-        // Calcular la discrepancia
         double discrepancy = totalSales - totalPayments;
 
-        // Guardar el cierre de caja mensual
         CashClosure closure = new CashClosure(null, firstDayOfMonth, lastDayOfMonth, totalSales, totalPayments, discrepancy, "monthly");
         return cashClosureRepository.save(closure);
     }

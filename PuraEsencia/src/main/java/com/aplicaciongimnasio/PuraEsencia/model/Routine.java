@@ -22,13 +22,13 @@ public class Routine {
 
     private String description;
 
-    @Column(columnDefinition = "TINYINT(1)") // MySQL
+    @Column(columnDefinition = "TINYINT(1)")
     private Boolean isCustom;
 
     @Column(columnDefinition = "TEXT")
-    private String exercisesJson; // Se guarda en la BD como JSON
+    private String exercisesJson;
 
-    @Transient // No se mapea en la BD, pero se usa en Java
+    @Transient
     private Map<String, List<ExerciseDetails>> exercisesByDay;
 
     @PostLoad
