@@ -143,5 +143,11 @@ public class TransactionService {
     }
 
 
+    public List<Transaction> getUnclosedTransactions() {
+        LocalDate today = LocalDate.now();
+        return transactionRepository.findUnclosedTransactions(today);
+    }
+
+
 
 }

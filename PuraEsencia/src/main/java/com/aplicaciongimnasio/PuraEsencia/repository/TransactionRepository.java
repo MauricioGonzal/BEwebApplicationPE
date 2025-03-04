@@ -19,7 +19,13 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT new com.aplicaciongimnasio.PuraEsencia.dto.TransactionResponse(" +
             "t.transactionCategory, t.paymentMethod, t.amount, t.date, t.comment, p) " +
             "FROM Transaction t LEFT JOIN Payment p ON p.transaction.id = t.id " +
-            "WHERE t.date BETWEEN :startOfDay AND :endOfDay")
+            "WHERE  t.date BETWEEN :startOfDay AND :endOfDay "+
+            "AND NOT EXISTS (SELECT c FROM CashClosure c WHERE c.closureType = 'daily' AND FUNCTION('DATE', t.date) BETWEEN c.startDate AND c.endDate)")
     List<TransactionResponse> findTransactionsWithPayments(@Param("startOfDay") LocalDateTime startOfDay,
                                                            @Param("endOfDay") LocalDateTime endOfDay);
+
+
+    @Query("SELECT t FROM Transaction t WHERE DATE(t.date) = :today " +
+            "AND NOT EXISTS (SELECT c FROM CashClosure c WHERE c.closureType = 'daily' AND :today BETWEEN c.startDate AND c.endDate)")
+    List<Transaction> findUnclosedTransactions(@Param("today") LocalDate today);
 }

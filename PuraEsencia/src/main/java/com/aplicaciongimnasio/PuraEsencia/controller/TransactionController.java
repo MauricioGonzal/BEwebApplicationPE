@@ -49,5 +49,11 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getTotalByDate(transactionsDate));
     }
 
+    @GetMapping("/pending")
+    public ResponseEntity<List<Transaction>> getPendingTransactions() {
+        List<Transaction> transactions = transactionService.getUnclosedTransactions();
+        return ResponseEntity.ok(transactions);
+    }
+
 
 }

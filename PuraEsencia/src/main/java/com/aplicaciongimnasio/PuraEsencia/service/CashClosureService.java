@@ -55,14 +55,14 @@ public class CashClosureService {
         LocalDateTime endOfEndDate = endDate.atTime(23, 59, 59, 999999999);
 
         List<TransactionCategory> transactionCategoriesSales = List.of(
-                transactionCategoryRepository.findByName("Musculacion"),
-                transactionCategoryRepository.findByName("Clases"),
-                transactionCategoryRepository.findByName("Producto")
+                transactionCategoryRepository.findByName("Musculacion").orElseThrow(() -> new RuntimeException("Transaction category not found")),
+                transactionCategoryRepository.findByName("Clases").orElseThrow(() -> new RuntimeException("Transaction category not found")),
+                transactionCategoryRepository.findByName("Producto").orElseThrow(() -> new RuntimeException("Transaction category not found"))
         );
-        List<Transaction> ingresos = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfStartDate, endOfEndDate, transactionCategoriesSales);
+        List<Transaction> sales = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfStartDate, endOfEndDate, transactionCategoriesSales);
 
         List<TransactionCategory> transactionCategoriesPayments = List.of(
-                transactionCategoryRepository.findByName("Egreso")
+                transactionCategoryRepository.findByName("Egreso").orElseThrow(() -> new RuntimeException("Transaction category not found"))
         );
 
         List<Transaction> expenses = transactionRepository.findByDateBetweenAndTransactionCategoryIn (startOfStartDate, endOfEndDate, transactionCategoriesPayments);
@@ -70,7 +70,7 @@ public class CashClosureService {
         List<FixedExpense> fixedExpenses = fixedExpenseRepository.findByIsActive(true);
         List<Salary> salaries = salaryRepository.findByIsActive(true);
 
-        Float totalSales = ingresos.stream()
+        Float totalSales = sales.stream()
                 .map(Transaction::getAmount)
                 .reduce(0f, Float::sum);
 
@@ -91,7 +91,7 @@ public class CashClosureService {
         response.put("totalEgresos", totalExpenses);
         response.put("totalFixedExpenses", totalFixedExpenses);
         response.put("totalSalarios", totalSalarios);
-        response.put("ingresos", ingresos);
+        response.put("ingresos", sales);
         response.put("egresos", expenses);
         response.put("fixedExpenses", fixedExpenses);
         response.put("salarios", salaries);
@@ -112,7 +112,7 @@ public class CashClosureService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59, 999999999); // Para cubrir todo el día
 
-        TransactionCategory transactionCategory = transactionCategoryRepository.findById(3L)
+        TransactionCategory transactionCategory = transactionCategoryRepository.findByName("Egreso")
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<Transaction> paymentsTransactions = transactionRepository.findByDateBetweenAndTransactionCategory(startOfDay, endOfDay, transactionCategory);
@@ -122,9 +122,9 @@ public class CashClosureService {
                 .sum());
 
         List<TransactionCategory> transactionCategories = List.of(
-                transactionCategoryRepository.findById(1L).orElseThrow(() -> new RuntimeException("Transaction category 1 not found")),
-                transactionCategoryRepository.findById(2L).orElseThrow(() -> new RuntimeException("Transaction category 2 not found")),
-                transactionCategoryRepository.findById(4L).orElseThrow(() -> new RuntimeException("Transaction category 3 not found"))
+                transactionCategoryRepository.findByName("Musculación").orElseThrow(() -> new RuntimeException("Transaction category musculación not found")),
+                transactionCategoryRepository.findByName("Producto").orElseThrow(() -> new RuntimeException("Transaction category producto not found")),
+                transactionCategoryRepository.findByName("Clases").orElseThrow(() -> new RuntimeException("Transaction category clases not found"))
         );
 
         List<Transaction> salesTransactions = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfDay, endOfDay, transactionCategories);
