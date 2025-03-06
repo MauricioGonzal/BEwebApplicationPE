@@ -1,9 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Membership;
-import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
-import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
+import com.aplicaciongimnasio.PuraEsencia.model.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +13,6 @@ public class TransactionRequest {
     private Float amount;
     private Membership membership;
     private String comment;
+    private Product product;
+    private Integer quantity;
 }

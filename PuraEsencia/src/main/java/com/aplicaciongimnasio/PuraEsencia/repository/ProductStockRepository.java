@@ -12,5 +12,6 @@ import java.util.List;
 public interface ProductStockRepository extends JpaRepository<ProductStock, Long> {
     ProductStock findByProduct(Product product);
     List<ProductStock> findByIsActive(Boolean isActive);
+    ProductStock findByIsActiveAndProduct(Boolean isActive, Product product);
 
 }

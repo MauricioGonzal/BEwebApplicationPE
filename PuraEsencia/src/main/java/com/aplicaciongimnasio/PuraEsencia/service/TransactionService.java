@@ -41,6 +41,12 @@ public class TransactionService {
     @Autowired
     private MembershipRepository membershipRepository;
 
+    @Autowired
+    private SaleRepository saleRepository;
+
+    @Autowired
+    private ProductStockRepository productStockRepository;
+
     /**
      * Registra una nueva transacción en la caja.
      */
@@ -66,7 +72,7 @@ public class TransactionService {
             }
             else{
                 var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, null);
-                transaction.setAmount(amount);
+                transaction.setAmount(amount * transactionRequest.getQuantity());
             }
         }
         else{
@@ -75,6 +81,22 @@ public class TransactionService {
         }
 
         transaction = transactionRepository.save(transaction);
+
+        if(transactionCategory.getName().equals("Producto")){
+            ProductStock productStock = productStockRepository.findByIsActiveAndProduct(true, transactionRequest.getProduct());
+
+            if(transactionRequest.getQuantity() > productStock.getStock()){
+                throw new RuntimeException("No hay suficiente stock para realizar la venta");
+            }
+            Sale sale = new Sale();
+            sale.setTransaction(transaction);
+            sale.setProduct(transactionRequest.getProduct());
+            sale.setQuantity(transactionRequest.getQuantity());
+            sale = saleRepository.save(sale);
+
+            productStock.setStock(productStock.getStock() - sale.getQuantity());
+            productStockRepository.save(productStock);
+        }
 
         if(transactionRequest.getUser() != null){
             var user = userRepository.findById(transactionRequest.getUser().getId())
@@ -125,7 +147,7 @@ public class TransactionService {
         LocalDateTime startOfDay = date.atStartOfDay(); // 2025-02-21T00:00:00
         LocalDateTime endOfDay = date.atTime(23, 59, 59); // 2025-02-21T23:59:59
 
-        return transactionRepository.findTransactionsWithPayments(startOfDay, endOfDay);
+        return transactionRepository.findTransactionsWithPaymentsAndSales(startOfDay, endOfDay);
     }
 
     /**

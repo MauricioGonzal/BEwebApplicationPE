@@ -2,6 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.dto;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
+import com.aplicaciongimnasio.PuraEsencia.model.Sale;
 import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +22,5 @@ public class TransactionResponse {
     private LocalDateTime date = LocalDateTime.now();
     private String comment;
     private Payment payment;
+    private Sale sale;
 }

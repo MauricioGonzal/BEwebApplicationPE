@@ -17,12 +17,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByDateBetweenAndTransactionCategory(LocalDateTime startOfDay, LocalDateTime endOfDay, TransactionCategory transactionCategory);
     List<Transaction> findByDateBetweenAndTransactionCategoryIn(LocalDateTime startDate, LocalDateTime endDate, List<TransactionCategory> transactionCategories);
     @Query("SELECT new com.aplicaciongimnasio.PuraEsencia.dto.TransactionResponse(" +
-            "t.transactionCategory, t.paymentMethod, t.amount, t.date, t.comment, p) " +
-            "FROM Transaction t LEFT JOIN Payment p ON p.transaction.id = t.id " +
-            "WHERE  t.date BETWEEN :startOfDay AND :endOfDay "+
-            "AND NOT EXISTS (SELECT c FROM CashClosure c WHERE c.closureType = 'daily' AND FUNCTION('DATE', t.date) BETWEEN c.startDate AND c.endDate)")
-    List<TransactionResponse> findTransactionsWithPayments(@Param("startOfDay") LocalDateTime startOfDay,
-                                                           @Param("endOfDay") LocalDateTime endOfDay);
+            "t.transactionCategory, t.paymentMethod, t.amount, t.date, t.comment, p, s) " +
+            "FROM Transaction t " +
+            "LEFT JOIN Payment p ON p.transaction.id = t.id " +
+            "LEFT JOIN Sale s ON s.transaction.id = t.id " +  // Agregar JOIN con Sales
+            "WHERE t.date BETWEEN :startOfDay AND :endOfDay " +
+            "AND NOT EXISTS (SELECT c FROM CashClosure c WHERE c.closureType = 'daily' " +
+            "AND FUNCTION('DATE', t.date) BETWEEN c.startDate AND c.endDate)")
+    List<TransactionResponse> findTransactionsWithPaymentsAndSales(@Param("startOfDay") LocalDateTime startOfDay,
+                                                                   @Param("endOfDay") LocalDateTime endOfDay);
+
 
     @Query("SELECT t FROM Transaction t WHERE DATE(t.date) = :today " +
             "AND NOT EXISTS (SELECT c FROM CashClosure c WHERE c.closureType = 'daily' AND :today BETWEEN c.startDate AND c.endDate)")
