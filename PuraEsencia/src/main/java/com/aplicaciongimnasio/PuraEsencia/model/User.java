@@ -1,6 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.model;
 
-import com.aplicaciongimnasio.PuraEsencia.security.Role;
+import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +34,5 @@ public class User {
 
     @Column(columnDefinition = "TINYINT(1)")
     private Boolean isActive;
-
-
 }
 

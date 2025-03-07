@@ -3,7 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
-import com.aplicaciongimnasio.PuraEsencia.security.Role;
+import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

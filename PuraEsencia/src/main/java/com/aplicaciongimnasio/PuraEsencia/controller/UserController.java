@@ -4,14 +4,12 @@ import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ChangePasswordRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
-import com.aplicaciongimnasio.PuraEsencia.security.Role;
 import com.aplicaciongimnasio.PuraEsencia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

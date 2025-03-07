@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.security;
 
+import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

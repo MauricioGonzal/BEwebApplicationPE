@@ -1,4 +1,4 @@
-package com.aplicaciongimnasio.PuraEsencia.security;
+package com.aplicaciongimnasio.PuraEsencia.model.enums;
 
 public enum Role {
     CLIENT_GYM,

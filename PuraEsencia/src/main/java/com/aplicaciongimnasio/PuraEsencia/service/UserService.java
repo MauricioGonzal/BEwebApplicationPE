@@ -6,7 +6,7 @@ import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
-import com.aplicaciongimnasio.PuraEsencia.security.Role;
+import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
