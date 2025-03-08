@@ -120,6 +120,9 @@ public class AttendanceService {
                 }
             }
         }
+        else{
+            isOutOfDueDate=true;
+        }
         return isOutOfDueDate;
     }
 
@@ -159,7 +162,7 @@ public class AttendanceService {
             LocalDate startDate = payment.getPaymentDate();
             LocalDate endDate = payment.getDueDate();
             int maxClasses = 0;
-            if(payment.getMembership().getMaxClasses() != null){
+            if(payment.getMembership() != null && payment.getMembership().getMaxClasses() != null){
                 maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
             }
 

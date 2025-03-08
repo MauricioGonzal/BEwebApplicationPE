@@ -106,6 +106,7 @@ public class TransactionService {
                 Payment firstOverduePayment = overduePayments.getFirst();
                 firstOverduePayment.setStatus("PAGADO");
                 firstOverduePayment.setTransaction(transaction);
+                firstOverduePayment.setMembership(transactionRequest.getMembership());
                 paymentRepository.save(firstOverduePayment);
             }
             else{
