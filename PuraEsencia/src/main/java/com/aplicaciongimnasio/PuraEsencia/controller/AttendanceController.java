@@ -76,4 +76,10 @@ public class AttendanceController {
         List<Attendance> attendances = attendanceService.getAttendancesForCurrentMonth(userId);
         return ResponseEntity.ok(attendances);
     }
+
+    @GetMapping("/{userId}/leftattendances")
+    public ResponseEntity<Integer> getLeftAttendancesByUser(@PathVariable Long userId) {
+        Integer leftAttendances = attendanceService.getLeftAttendances(userId);
+        return ResponseEntity.ok(leftAttendances);
+    }
 }

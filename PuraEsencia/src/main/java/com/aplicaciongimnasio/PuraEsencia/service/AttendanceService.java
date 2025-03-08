@@ -181,6 +181,26 @@ public class AttendanceService {
         return result;
     }
 
+    public Integer getLeftAttendances(Long userId) {
+        Payment activePayment = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), userId);
+
+        if(activePayment != null){
+            LocalDate startDate = activePayment.getPaymentDate();
+            LocalDate endDate = activePayment.getDueDate();
+            int maxClasses = 0;
+            if(activePayment.getMembership().getMaxClasses() != null){
+                maxClasses = activePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+            }
+
+            List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
+
+            return maxClasses - attendances.size();
+        }
+
+        return 0;
+
+    }
+
     public List<Attendance> getAttendancesForCurrentMonth(Long userId) {
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
         LocalDate endOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
