@@ -41,5 +41,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
         AND p2.paymentDate <= :currentDate
     )
 """)
-    Payment findLatestActivePaymentsByUser(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
+    List<Payment> findLatestActivePaymentsByUser(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
 }

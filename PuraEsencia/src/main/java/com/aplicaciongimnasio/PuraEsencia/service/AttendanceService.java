@@ -185,14 +185,15 @@ public class AttendanceService {
     }
 
     public Integer getLeftAttendances(Long userId) {
-        Payment activePayment = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), userId);
+        List<Payment> activePayment = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), userId);
 
         if(activePayment != null){
-            LocalDate startDate = activePayment.getPaymentDate();
-            LocalDate endDate = activePayment.getDueDate();
+            Payment firstActivePayment = activePayment.get(0);
+            LocalDate startDate = firstActivePayment.getPaymentDate();
+            LocalDate endDate = firstActivePayment.getDueDate();
             int maxClasses = 0;
-            if(activePayment.getMembership().getMaxClasses() != null){
-                maxClasses = activePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+            if(firstActivePayment.getMembership().getMaxClasses() != null){
+                maxClasses = firstActivePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
             }
 
             List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
