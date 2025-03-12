@@ -41,6 +41,5 @@ public class PriceList {
 
     private LocalDate validUntil;
 
-    private Boolean isActive;
-
+    private Boolean isActive=true;
 }

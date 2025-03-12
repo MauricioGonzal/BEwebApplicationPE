@@ -1,12 +1,14 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.ProductRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.ProductResponse;
+import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
+import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.Product;
 import com.aplicaciongimnasio.PuraEsencia.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,4 +24,21 @@ public class ProductController {
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
+
+    @PostMapping("/create")
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
+    }
+
+    @GetMapping("/price-and-stock")
+    public ResponseEntity<List<ProductResponse>> getAllPriceAndStock(){
+        return ResponseEntity.ok(productService.getAllPriceAndStock());
+    }
+
+    @PostMapping("/create-product-stock-price")
+    public ResponseEntity<?> createProductStockPrice(@RequestBody ProductRequest productRequest){
+        Boolean result = productService.createProductStockPrice(productRequest);
+        return ResponseEntity.ok(result);
+    }
+
 }
