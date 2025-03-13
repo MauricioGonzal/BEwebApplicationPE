@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("SELECT new com.aplicaciongimnasio.PuraEsencia.dto.ProductResponse(p, pl, ps) FROM Product p JOIN PriceList pl ON pl.product.id = p.id JOIN ProductStock ps ON ps.product.id = p.id")
+    @Query("SELECT new com.aplicaciongimnasio.PuraEsencia.dto.ProductResponse(p, pl, ps) FROM Product p JOIN PriceList pl ON pl.product.id = p.id JOIN ProductStock ps ON ps.product.id = p.id WHERE pl.isActive = true")
     List<ProductResponse> getAllPriceAndStock();
 }

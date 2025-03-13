@@ -2,7 +2,6 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
-import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceRepository;
 import com.aplicaciongimnasio.PuraEsencia.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
