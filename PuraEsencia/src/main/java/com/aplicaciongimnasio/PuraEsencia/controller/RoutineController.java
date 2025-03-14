@@ -27,7 +27,6 @@ public class RoutineController {
 
     @PostMapping
     public ResponseEntity<Routine> createRoutine(@RequestBody RoutineRequest routineRequest) throws JsonProcessingException {
-        System.out.println("holaaaaaa" + routineRequest);
         Routine routine = routineService.createRoutine(routineRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(routine);
     }
@@ -51,10 +50,8 @@ public class RoutineController {
     public ResponseEntity<Routine> updateRoutine(
             @PathVariable Long id,
             @RequestBody RoutineRequest routineRequest) {
-
         Routine updatedRoutine = routineService.updateRoutine(id, routineRequest);
         return ResponseEntity.ok(updatedRoutine);
     }
-
 
 }

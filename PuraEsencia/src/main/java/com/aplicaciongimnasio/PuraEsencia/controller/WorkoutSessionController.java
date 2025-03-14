@@ -67,8 +67,6 @@ public class WorkoutSessionController {
         return ResponseEntity.noContent().build();
     }
 
-
-
     @PostMapping
     public ResponseEntity<?> saveWorkoutSession(@RequestBody WorkoutSessionRequest request) {
         WorkoutSession session = workoutSessionService.saveWorkoutSession(request);

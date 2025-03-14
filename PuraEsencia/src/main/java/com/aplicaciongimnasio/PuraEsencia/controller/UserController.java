@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,12 +22,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        try {
-            return ResponseEntity.ok(userService.createUser(user));
-        }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
     @GetMapping("/{email}")

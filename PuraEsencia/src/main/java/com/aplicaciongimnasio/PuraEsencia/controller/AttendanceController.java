@@ -5,10 +5,13 @@ import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
 import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceRepository;
 import com.aplicaciongimnasio.PuraEsencia.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,18 +27,22 @@ public class AttendanceController {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @PostMapping
-    public ResponseEntity<String> markAttendance(@RequestBody AttendanceRequest request) {
-        Long userId =  request.getUserId();
-        if (userId == null) {
-            return ResponseEntity.badRequest().body("Falta userId");
-        }
+    public ResponseEntity<?> markAttendance(@RequestBody AttendanceRequest request) {
         String responseMessage = attendanceService.registerAttendance(request);
+
+        // Enviar el mensaje al topic del usuario con el ID
+        String userTopic = "/topic/attendance/" + request.getUserId();
+        messagingTemplate.convertAndSend(userTopic, responseMessage);
+
         return ResponseEntity.ok(responseMessage);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Attendance>> getUserAttendance(@PathVariable Long userId) {
+    public ResponseEntity<?> getUserAttendance(@PathVariable Long userId) {
         List<Attendance> attendances = attendanceService.getAttendanceByUser(userId);
         return ResponseEntity.ok(attendances);
     }

@@ -21,12 +21,7 @@ public class ProductStockController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createProductStock(@RequestBody ProductStock productStock) {
-        try {
-            return ResponseEntity.ok(productStockService.createProductStock(productStock));
-        }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(productStockService.createProductStock(productStock));
     }
 
     @PutMapping("/update/{id}")

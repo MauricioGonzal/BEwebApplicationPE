@@ -21,12 +21,7 @@ public class PriceListController {
 
     @PostMapping
     public ResponseEntity<?> createPrice(@RequestBody PriceList priceList) {
-        try {
             return ResponseEntity.ok(priceListService.createPrice(priceList));
-        }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
-        }
     }
 
     @GetMapping
@@ -36,11 +31,6 @@ public class PriceListController {
 
     @PutMapping("/{id}/updateAmount")
     public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody Float newAmount) {
-        try {
             return ResponseEntity.ok(priceListService.updateAmount(id, newAmount));
-        }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Collections.singletonMap("error", e.getMessage()));
-        }
     }
 }
