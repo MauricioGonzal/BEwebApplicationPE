@@ -30,6 +30,8 @@ public class FixedExpense {
 
     private Integer remainingInstallments;
 
+    private Integer totalInstallments;
+
     @Column(nullable = false)
     private Boolean isActive = true;
 

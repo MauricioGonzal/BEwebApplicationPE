@@ -152,6 +152,10 @@ public class TransactionService {
         LocalDateTime startOfDay = date.atStartOfDay(); // 2025-02-21T00:00:00
         LocalDateTime endOfDay = date.atTime(23, 59, 59); // 2025-02-21T23:59:59
 
+        if (isTransactionWithinCashClosure()) {
+            return List.of();
+        }
+
         return transactionRepository.findTransactionsWithPaymentsAndSales(startOfDay, endOfDay);
     }
 

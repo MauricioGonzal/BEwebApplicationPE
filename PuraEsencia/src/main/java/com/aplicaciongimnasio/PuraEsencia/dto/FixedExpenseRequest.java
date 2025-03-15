@@ -10,5 +10,5 @@ public class FixedExpenseRequest {
     private String name;
     private float monthlyAmount;
     private LocalDate startDate;
-    private Integer remainingInstallments;
+    private Integer totalInstallments;
 }

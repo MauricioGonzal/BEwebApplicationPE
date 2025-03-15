@@ -67,7 +67,7 @@ public class CashClosureService {
 
         List<Transaction> expenses = transactionRepository.findByDateBetweenAndTransactionCategoryIn (startOfStartDate, endOfEndDate, transactionCategoriesPayments);
 
-        List<FixedExpense> fixedExpenses = fixedExpenseRepository.findByIsActive(true);
+        List<FixedExpense> fixedExpenses = fixedExpenseRepository.findByIsActiveAndRemainingInstallmentsGreaterThan(true,0);
         List<Salary> salaries = salaryRepository.findByIsActive(true);
 
         Float totalSales = sales.stream()
@@ -135,7 +135,7 @@ public class CashClosureService {
 
         double discrepancy = totalSales - totalPayments;
 
-        CashClosure closure = new CashClosure(null, today, today, totalSales, totalPayments, discrepancy, "daily");
+        CashClosure closure = new CashClosure(null, today, today, totalSales, totalPayments, null,null,discrepancy, "daily");
         return cashClosureRepository.save(closure);
     }
 
@@ -174,9 +174,23 @@ public class CashClosureService {
                 .mapToDouble(Transaction::getAmount)
                 .sum());
 
-        double discrepancy = totalSales - totalPayments;
+        List<FixedExpense> fixedExpenses = fixedExpenseRepository.findByIsActiveAndRemainingInstallmentsGreaterThan(true, 0);
+        List<Salary> salaries = salaryRepository.findByIsActive(true);
 
-        CashClosure closure = new CashClosure(null, firstDayOfMonth, lastDayOfMonth, totalSales, totalPayments, discrepancy, "monthly");
+        double totalFixedExpenses = fixedExpenses.stream()
+                .mapToDouble(fe -> {
+                    fe.setRemainingInstallments(fe.getRemainingInstallments() -1);
+                    return fe.getMonthlyAmount();
+                })
+                .sum();
+
+        double totalSalaries = salaries.stream()
+                .mapToDouble(Salary::getAmount)
+                .sum();
+
+        double discrepancy = totalSales - (totalPayments + totalFixedExpenses + totalSalaries);
+
+        CashClosure closure = new CashClosure(null, firstDayOfMonth, lastDayOfMonth, totalSales, totalPayments, totalFixedExpenses, totalSalaries, discrepancy, "monthly");
         return cashClosureRepository.save(closure);
     }
 

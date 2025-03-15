@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FixedExpenseRepository extends JpaRepository<FixedExpense, Long> {
     List<FixedExpense> findByIsActive(Boolean isActive);
+    List<FixedExpense> findByIsActiveAndRemainingInstallmentsGreaterThan(Boolean isActive, Integer remainingInstallments);
 }

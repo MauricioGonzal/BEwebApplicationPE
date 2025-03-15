@@ -30,6 +30,12 @@ public class CashClosure {
     private Double totalPayments;
 
     @Column(nullable = false)
+    private Double totalFixedExpenses;
+
+    @Column()
+    private Double totalSalaries;
+
+    @Column()
     private Double discrepancy;
 
     @Column(nullable = false)

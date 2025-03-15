@@ -64,7 +64,7 @@ public class UserController {
         if (isDeleted) {
             return ResponseEntity.ok("Usuario eliminado exitosamente");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            throw new RuntimeException("Usuario no encontrado");
         }
     }
 

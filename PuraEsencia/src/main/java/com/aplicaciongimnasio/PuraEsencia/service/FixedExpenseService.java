@@ -20,7 +20,8 @@ public class FixedExpenseService {
         expense.setName(request.getName());
         expense.setMonthlyAmount(request.getMonthlyAmount());
         expense.setStartDate(request.getStartDate());
-        expense.setRemainingInstallments(request.getRemainingInstallments());
+        expense.setTotalInstallments(request.getTotalInstallments());
+        expense.setRemainingInstallments(request.getTotalInstallments());
         expense.setIsActive(true);
 
         return fixedExpenseRepository.save(expense);
@@ -36,7 +37,8 @@ public class FixedExpenseService {
                     expense.setName(fixedExpenseRequest.getName());
                     expense.setMonthlyAmount(fixedExpenseRequest.getMonthlyAmount());
                     expense.setStartDate(fixedExpenseRequest.getStartDate());
-                    expense.setRemainingInstallments(fixedExpenseRequest.getRemainingInstallments());
+                    expense.setTotalInstallments(fixedExpenseRequest.getTotalInstallments());
+                    expense.setRemainingInstallments(fixedExpenseRequest.getTotalInstallments() - (expense.getTotalInstallments() - expense.getRemainingInstallments()));
 
                     return fixedExpenseRepository.save(expense);
                 });
