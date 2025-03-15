@@ -153,7 +153,7 @@ public class CashClosureService {
         LocalDateTime startOfMonth = firstDayOfMonth.atStartOfDay();
         LocalDateTime endOfMonth = lastDayOfMonth.atTime(23, 59, 59, 999999999); // Para cubrir todo el mes
 
-        TransactionCategory transactionCategory = transactionCategoryRepository.findById(3L)
+        TransactionCategory transactionCategory = transactionCategoryRepository.findByName("Egreso")
                 .orElseThrow(() -> new RuntimeException("Transaction category not found"));
 
         List<Transaction> paymentsTransactions = transactionRepository.findByDateBetweenAndTransactionCategory(startOfMonth, endOfMonth, transactionCategory);
@@ -163,9 +163,9 @@ public class CashClosureService {
                 .sum());
 
         List<TransactionCategory> transactionCategories = List.of(
-                transactionCategoryRepository.findById(1L).orElseThrow(() -> new RuntimeException("Transaction category 1 not found")),
-                transactionCategoryRepository.findById(2L).orElseThrow(() -> new RuntimeException("Transaction category 2 not found")),
-                transactionCategoryRepository.findById(4L).orElseThrow(() -> new RuntimeException("Transaction category 3 not found"))
+                transactionCategoryRepository.findByName("Musculación").orElseThrow(() -> new RuntimeException("Transaction category musculación not found")),
+                transactionCategoryRepository.findByName("Producto").orElseThrow(() -> new RuntimeException("Transaction category producto not found")),
+                transactionCategoryRepository.findByName("Clases").orElseThrow(() -> new RuntimeException("Transaction category clases not found"))
         );
 
         List<Transaction> salesTransactions = transactionRepository.findByDateBetweenAndTransactionCategoryIn(startOfMonth, endOfMonth, transactionCategories);

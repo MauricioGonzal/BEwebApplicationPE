@@ -156,6 +156,15 @@ public class UserService {
         }
     }
 
+    public List<User> getAllGymUsers() {
+            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_BOTH")
+                    .map(Role::valueOf)  // Convierte el String en el enum correspondiente
+                    .collect(Collectors.toList());
+
+            return userRepository.findAllByRoleInAndIsActive(roles, true);
+
+    }
+
     public List<User> getAllForSalary() {
             List<Role> roles = Stream.of("TRAINER", "RECEPTIONIST")
                     .map(Role::valueOf)

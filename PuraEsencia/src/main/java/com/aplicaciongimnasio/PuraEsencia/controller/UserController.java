@@ -8,6 +8,7 @@ import com.aplicaciongimnasio.PuraEsencia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
@@ -42,6 +46,11 @@ public class UserController {
     @GetMapping("/getAllByRole/{role}")
     public List<User> getAllByRole(@PathVariable String role) {
         return userService.getAllByRole(role);
+    }
+
+    @GetMapping("/getAllGymUsers")
+    public List<User> getAllGymUsers() {
+        return userService.getAllGymUsers();
     }
 
     @GetMapping("/getForSalary")
@@ -82,7 +91,13 @@ public class UserController {
 
     @PutMapping("/assign-routine")
     public ResponseEntity<User> assignRoutineToUser(@RequestBody AssignRoutineRequest assignRoutineRequest) {
-        return ResponseEntity.ok(userService.assignRoutineToUser(assignRoutineRequest));
+        var response =ResponseEntity.ok(userService.assignRoutineToUser(assignRoutineRequest));
+
+        // Enviar el mensaje al topic del usuario con el ID
+        String userTopic = "/topic/assign-routine/" + assignRoutineRequest.getUserId();
+        messagingTemplate.convertAndSend(userTopic, response);
+
+        return response;
     }
 
     @GetMapping("/{userId}/routine")
