@@ -4,6 +4,7 @@ import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface CashClosureRepository extends JpaRepository<CashClosure, Long> {
     boolean existsByStartDate(LocalDate date);
@@ -11,4 +12,5 @@ public interface CashClosureRepository extends JpaRepository<CashClosure, Long> 
     List<CashClosure> findByClosureType(String closureType);
     List<CashClosure> findByStartDate(LocalDate date);
     List<CashClosure> findByStartDateBetweenAndClosureType(LocalDate start, LocalDate end, String closureType);
+    List<CashClosure> findByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate startDate, LocalDate endDate);
 }

@@ -53,6 +53,10 @@ public class TransactionService {
 
     @Transactional
     public Transaction saveTransaction(TransactionRequest transactionRequest) {
+        if (isTransactionWithinCashClosure()) {
+            throw new IllegalStateException("Caja cerrada. No se pueden crear transacciones");
+        }
+
         Transaction transaction = new Transaction();
         var transactionCategory = transactionCategoryRepository.findById(transactionRequest.getTransactionCategory().getId())
                 .orElseThrow(() -> new RuntimeException("Transaction Category not found"));
@@ -165,12 +169,14 @@ public class TransactionService {
                 .sum();
     }
 
-
     public List<Transaction> getUnclosedTransactions() {
         LocalDate today = LocalDate.now();
         return transactionRepository.findUnclosedTransactions(today);
     }
 
-
+    public boolean isTransactionWithinCashClosure() {
+        LocalDate today = LocalDateTime.now().toLocalDate();
+        return !cashClosureRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(today, today).isEmpty();
+    }
 
 }

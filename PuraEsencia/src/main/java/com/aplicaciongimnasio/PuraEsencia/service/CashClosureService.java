@@ -180,4 +180,10 @@ public class CashClosureService {
         return cashClosureRepository.save(closure);
     }
 
+    public Boolean delete(Long id){
+        CashClosure cashClosure = cashClosureRepository.findById(id).orElseThrow(() -> new RuntimeException("Cierre id: " + id + " no encontrado"));
+        cashClosureRepository.delete(cashClosure);
+        return true;
+    }
+
 }

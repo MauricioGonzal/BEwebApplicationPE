@@ -57,4 +57,14 @@ public class CashClosureController {
         return ResponseEntity.ok(cashClosureService.closeMonthlyCashRegister(month));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        boolean isRemoved = cashClosureService.delete(id);
+        if (isRemoved) {
+            return ResponseEntity.ok("Producto eliminado con éxito");
+        } else {
+            return ResponseEntity.status(404).body("Producto no encontrado");
+        }
+    }
+
 }
