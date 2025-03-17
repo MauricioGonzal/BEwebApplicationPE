@@ -29,6 +29,11 @@ public class PriceListController {
         return priceListService.getAllPriceList();
     }
 
+    @GetMapping("/payments")
+    public List<PriceList> getAllForPayments() {
+        return priceListService.getAllForPayments();
+    }
+
     @PutMapping("/{id}/updateAmount")
     public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody Float newAmount) {
             return ResponseEntity.ok(priceListService.updateAmount(id, newAmount));

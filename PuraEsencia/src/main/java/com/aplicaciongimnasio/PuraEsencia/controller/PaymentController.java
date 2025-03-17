@@ -3,13 +3,10 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.service.AttendanceService;
 import com.aplicaciongimnasio.PuraEsencia.service.PaymentService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 

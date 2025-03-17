@@ -27,6 +27,10 @@ public class PriceListService {
         return priceListRepository.findAll();
     }
 
+    public List<PriceList> getAllForPayments() {
+        return priceListRepository.findByMembershipIsNotNullAndIsActive(true);
+    }
+
     public Float getAmountForTransaction(TransactionCategory transactionCategory, PaymentMethod paymentMethod, Membership membership) {
         return priceListRepository.findByTransactionCategoryAndPaymentMethodAndMembershipAndIsActive(transactionCategory, paymentMethod, membership, true)
                 .map(PriceList::getAmount)

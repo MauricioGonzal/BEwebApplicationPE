@@ -22,4 +22,9 @@ public class TransactionCategoryController {
     public List<TransactionCategory> getAllTransactionCategory() {
         return transactionCategoryService.getAllTransactionCategory();
     }
+
+    @GetMapping("/payments")
+    public List<TransactionCategory> getAllTransactionCategoryForPayments() {
+        return transactionCategoryService.getAllTransactionCategoryForPayments();
+    }
 }

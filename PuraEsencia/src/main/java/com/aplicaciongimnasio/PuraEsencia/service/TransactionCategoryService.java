@@ -16,4 +16,8 @@ public class TransactionCategoryService {
     public List<TransactionCategory> getAllTransactionCategory() {
         return transactionCategoryRepository.findAll();
     }
+
+    public List<TransactionCategory> getAllTransactionCategoryForPayments() {
+        return transactionCategoryRepository.findByRoleAcceptedIsNotNull();
+    }
 }
