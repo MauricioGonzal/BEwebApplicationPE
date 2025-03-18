@@ -1,7 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
-import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +15,4 @@ public class ProductRequest {
     private Integer stock;
     private Float amount;
     private PaymentMethod paymentMethod;
-    private TransactionCategory transactionCategory;
 }

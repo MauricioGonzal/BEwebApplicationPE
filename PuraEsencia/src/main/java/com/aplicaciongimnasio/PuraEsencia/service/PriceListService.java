@@ -17,7 +17,7 @@ public class PriceListService {
 
     public PriceList createPrice(PriceList priceList) {
         if(getActive(priceList.getTransactionCategory(), priceList.getPaymentMethod(), priceList.getMembership()).isPresent()){
-            throw new RuntimeException("Price already exists for transactionCategory: " + priceList.getTransactionCategory().getName() + " and paymentMethod: " + priceList.getPaymentMethod().getName()+ " and membership: " + priceList.getMembership().getName());
+            throw new RuntimeException("Ya existe un precio para " + priceList.getTransactionCategory().getName() + " ,  " + priceList.getPaymentMethod().getName()+ " y membresia: " + priceList.getMembership().getName());
         }
 
         return priceListRepository.save(priceList);

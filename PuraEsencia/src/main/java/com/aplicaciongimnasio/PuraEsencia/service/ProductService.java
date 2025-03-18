@@ -8,11 +8,13 @@ import com.aplicaciongimnasio.PuraEsencia.model.ProductStock;
 import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductStockRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.TransactionCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductService {
@@ -22,6 +24,9 @@ public class ProductService {
 
     @Autowired
     private ProductStockRepository productStockRepository;
+
+    @Autowired
+    private TransactionCategoryRepository transactionCategoryRepository;
 
     @Autowired
     private PriceListRepository priceListRepository;
@@ -39,6 +44,11 @@ public class ProductService {
     }
 
     public Boolean createProductStockPrice(ProductRequest productRequest) {
+        List<Object> existences = priceListRepository.getExistencesOfSameProduct(productRequest.getName(), productRequest.getPaymentMethod());
+        if(!existences.isEmpty()){
+            throw new RuntimeException("Ya existe un precio para un producto con el mismo nombre y medio de pago");
+        }
+
         Product product = new Product();
         product.setName(productRequest.getName());
         Product productSaved = productRepository.save(product);
@@ -47,13 +57,14 @@ public class ProductService {
         productStock.setStock(productRequest.getStock());
         productStock.setProduct(productSaved);
 
-        ProductStock productStockSaved = productStockRepository.save(productStock);
+        productStockRepository.save(productStock);
 
         PriceList priceList = new PriceList();
         priceList.setProduct(productSaved);
         priceList.setAmount(productRequest.getAmount());
         priceList.setPaymentMethod(productRequest.getPaymentMethod());
-        priceList.setTransactionCategory(productRequest.getTransactionCategory());
+        priceList.setTransactionCategory(transactionCategoryRepository.findByName("Producto")
+                .orElseThrow(() -> new RuntimeException("Tipo de asistencia no encontrado")));
         priceList.setValidFrom(LocalDate.now());
         priceListRepository.save(priceList);
 

@@ -2,8 +2,6 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.ProductRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ProductResponse;
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
-import com.aplicaciongimnasio.PuraEsencia.model.Payment;
 import com.aplicaciongimnasio.PuraEsencia.model.Product;
 import com.aplicaciongimnasio.PuraEsencia.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
