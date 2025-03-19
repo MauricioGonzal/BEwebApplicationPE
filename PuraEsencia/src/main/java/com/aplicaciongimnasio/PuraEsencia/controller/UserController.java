@@ -43,6 +43,11 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping
+    public List<User> getAll(){
+        return userService.getAll();
+    }
+
     @GetMapping("/getAllByRole/{role}")
     public List<User> getAllByRole(@PathVariable String role) {
         return userService.getAllByRole(role);

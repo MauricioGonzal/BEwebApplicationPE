@@ -165,6 +165,11 @@ public class UserService {
 
     }
 
+    public List<User> getAll() {
+        return userRepository.findByIsActive(true);
+
+    }
+
     public List<User> getAllForSalary() {
             List<Role> roles = Stream.of("TRAINER", "RECEPTIONIST")
                     .map(Role::valueOf)
