@@ -1,7 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.model.ClassType;
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.repository.ClassTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,5 +15,9 @@ public class ClassTypeService {
 
     public List<ClassType> getAll() {
         return classTypeRepository.findAll();
+    }
+
+    public ClassType create(ClassType classType){
+        return classTypeRepository.save(classType);
     }
 }

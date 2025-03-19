@@ -6,5 +6,6 @@ public enum Role {
     RECEPTIONIST,
     ADMIN,
     CLIENT_CLASSES,
-    CLIENT_BOTH
+    CLIENT_BOTH,
+    TEACHER
 }
