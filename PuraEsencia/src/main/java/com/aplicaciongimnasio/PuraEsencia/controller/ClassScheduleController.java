@@ -1,8 +1,10 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.ClassSessionRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.ClassSchedule;
 import com.aplicaciongimnasio.PuraEsencia.model.ClassSession;
+import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.service.ClassScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,4 +56,6 @@ public class ClassScheduleController {
     public ResponseEntity<List<ClassSession>> getSessionsBySchedule(@PathVariable Long scheduleId) {
         return ResponseEntity.ok(scheduleService.getSessionsBySchedule(scheduleId));
     }
+
+
 }

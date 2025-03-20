@@ -49,6 +49,7 @@ public class ClassScheduleService {
         classSession.setEndTime(classSessionRequest.getEndTime());
         classSession.setStartTime(classSessionRequest.getStartTime());
         classSession.setDayOfWeek(classSessionRequest.getDayOfWeek());
+        classSession.setTeacher(classSessionRequest.getTeacher());
         return sessionRepository.save(classSession);
     }
 

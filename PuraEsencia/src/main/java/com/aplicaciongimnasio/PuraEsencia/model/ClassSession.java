@@ -34,7 +34,8 @@ public class ClassSession {
     @JoinColumn(name = "class_type_id", nullable = false)
     private ClassType classType;
 
-    /*private Long instructorId;
-    private Integer maxCapacity;*/
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private User teacher;
 }
 

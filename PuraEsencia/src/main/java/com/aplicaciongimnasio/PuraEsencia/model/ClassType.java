@@ -12,8 +12,4 @@ public class ClassType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private User teacher;
 }
