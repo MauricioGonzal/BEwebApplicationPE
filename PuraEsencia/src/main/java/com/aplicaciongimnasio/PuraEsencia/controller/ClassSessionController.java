@@ -22,7 +22,7 @@ public class ClassSessionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClassSession> updateRoutine(
+    public ResponseEntity<ClassSession> updateSession(
             @PathVariable Long id,
             @RequestBody ClassSession classSession) {
         ClassSession updatedSession = classSessionService.update(id, classSession);

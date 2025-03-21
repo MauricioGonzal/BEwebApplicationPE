@@ -24,4 +24,9 @@ public class ClassTypeController {
     public ClassType create(@RequestBody ClassType classType){
         return classTypeService.create(classType);
     }
+
+    @DeleteMapping("/{id}")
+    public Boolean delete(@PathVariable Long id){
+        return classTypeService.delete(id);
+    }
 }
