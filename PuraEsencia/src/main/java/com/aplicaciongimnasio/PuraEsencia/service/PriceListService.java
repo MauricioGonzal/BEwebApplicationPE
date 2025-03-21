@@ -66,4 +66,13 @@ public class PriceListService {
         return priceListRepository.save(newPriceList);
     }
 
+    public Boolean logicDelete(Long id) {
+        PriceList priceList = priceListRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Stock no encontrado con ID: " + id));
+
+        priceList.setIsActive(false);
+        priceListRepository.save(priceList);
+        return true;
+    }
+
 }

@@ -9,6 +9,7 @@ import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductStockRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.TransactionCategoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,12 @@ import java.util.Objects;
 
 @Service
 public class ProductService {
+
+    @Autowired
+    private ProductStockService productStockService;
+
+    @Autowired
+    private PriceListService priceListService;
 
     @Autowired
     private ProductRepository productRepository;
@@ -32,7 +39,7 @@ public class ProductService {
     private PriceListRepository priceListRepository;
 
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findByIsActive(true);
     }
 
     public Product createProduct(Product product) {
@@ -68,6 +75,22 @@ public class ProductService {
         priceList.setValidFrom(LocalDate.now());
         priceListRepository.save(priceList);
 
+        return true;
+    }
+
+    public Boolean deleteProductWithStockAndPrice(ProductResponse productResponse){
+        priceListService.logicDelete(productResponse.getPriceList().getId());
+        productStockService.logicDelete(productResponse.getProductStock().getId());
+        logicDelete(productResponse.getProduct().getId());
+        return true;
+    }
+
+    public Boolean logicDelete(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
+
+        product.setIsActive(false);
+        productRepository.save(product);
         return true;
     }
 }

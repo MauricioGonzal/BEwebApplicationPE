@@ -39,4 +39,9 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/delete-product-stock-price")
+    public Boolean logicDelete(@RequestBody ProductResponse productResponse){
+        return productService.deleteProductWithStockAndPrice(productResponse);
+    }
+
 }
