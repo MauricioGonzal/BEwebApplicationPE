@@ -31,5 +31,10 @@ public class SalaryController {
     public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody float newAmount) {
         return ResponseEntity.ok(salaryService.updateAmount(id, newAmount));
     }
+
+    @DeleteMapping("/{id}")
+    public Boolean delete(@PathVariable Long id){
+        return salaryService.delete(id);
+    }
 }
 

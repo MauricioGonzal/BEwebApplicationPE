@@ -1,5 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.model.ClassSession;
+import com.aplicaciongimnasio.PuraEsencia.model.ClassType;
 import com.aplicaciongimnasio.PuraEsencia.model.Salary;
 import com.aplicaciongimnasio.PuraEsencia.repository.SalaryRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
@@ -64,6 +66,14 @@ public class SalaryService {
         newSalary.setValidUntil(null); // No tiene fecha de fin porque es el actual
 
         return salaryRepository.save(newSalary);
+    }
+
+    public Boolean delete(Long id){
+        Salary salary = salaryRepository.findById(id).orElseThrow(() -> new RuntimeException("El salario no se encuentra"));
+        salary.setIsActive(false);
+        salary.setValidUntil(LocalDate.now());
+        salaryRepository.save(salary);
+        return true;
     }
 }
 

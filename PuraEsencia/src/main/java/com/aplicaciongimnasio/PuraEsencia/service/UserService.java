@@ -175,7 +175,7 @@ public class UserService {
                     .map(Role::valueOf)
                     .collect(Collectors.toList());
 
-            return userRepository.findAllByRoleInAndIsActive(roles, true);
+            return userRepository.findActiveUsersWithoutSalaries(roles);
     }
 
     public Optional<User> getTrainerByOneClient(Long clientId){
