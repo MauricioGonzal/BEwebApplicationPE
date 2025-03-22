@@ -34,5 +34,9 @@ public class Attendance {
     @ManyToOne
     @JoinColumn(name = "attendance_type_id", nullable = false)
     private AttendanceType attendanceType;
+
+    @ManyToOne
+    @JoinColumn(name = "class_type_id")
+    private ClassType classType;
 }
 

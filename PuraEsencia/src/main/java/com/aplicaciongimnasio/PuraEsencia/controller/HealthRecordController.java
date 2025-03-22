@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.HealthRecord;
 import com.aplicaciongimnasio.PuraEsencia.service.HealthRecordService;
 import org.springframework.beans.factory.annotation.Autowired;

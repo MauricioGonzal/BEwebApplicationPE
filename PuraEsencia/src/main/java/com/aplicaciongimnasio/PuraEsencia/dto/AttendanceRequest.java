@@ -8,4 +8,5 @@ import lombok.Setter;
 public class AttendanceRequest {
     private Long userId;
     private Long attendanceTypeId;
+    private Long classTypeId;
 }

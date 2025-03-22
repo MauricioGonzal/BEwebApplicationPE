@@ -1,10 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
-import com.aplicaciongimnasio.PuraEsencia.model.FixedExpense;
-import com.aplicaciongimnasio.PuraEsencia.model.Product;
 import com.aplicaciongimnasio.PuraEsencia.model.ProductStock;
-import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductStockRepository;
 import org.springframework.beans.factory.annotation.Autowired;

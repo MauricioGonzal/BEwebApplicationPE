@@ -32,6 +32,9 @@ public class AttendanceService {
     @Autowired
     private MembershipRepository membershipRepository;
 
+    @Autowired
+    private ClassTypeRepository classTypeRepository;
+
 
     public String registerAttendance(AttendanceRequest attendanceRequest) {
         User user = userRepository.findById(attendanceRequest.getUserId())
@@ -41,6 +44,13 @@ public class AttendanceService {
 
         AttendanceType attendanceType = attendanceTypeRepository.findById(attendanceTypeId)
                 .orElseThrow(() -> new RuntimeException("Tipo de asistencia no encontrado"));
+
+        ClassType classType = null;
+        if(attendanceRequest.getClassTypeId() != null){
+            classType = classTypeRepository.findById(attendanceRequest.getClassTypeId())
+                    .orElseThrow(() -> new RuntimeException("Clase no encontrado"));
+        }
+
 
         if(attendanceType == null){
             Role role = user.getRole();
@@ -90,6 +100,7 @@ public class AttendanceService {
         attendance.setDate(today);
         attendance.setTime(now);
         attendance.setAttendanceType(attendanceType);
+        attendance.setClassType(classType);
         attendanceRepository.save(attendance);
 
         return "Asistencia registrada: " + today + " a las " + now;

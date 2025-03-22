@@ -1,7 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.FixedExpenseRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.FixedExpense;
 import com.aplicaciongimnasio.PuraEsencia.repository.FixedExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;

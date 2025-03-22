@@ -9,13 +9,11 @@ import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ProductStockRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.TransactionCategoryRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ProductService {

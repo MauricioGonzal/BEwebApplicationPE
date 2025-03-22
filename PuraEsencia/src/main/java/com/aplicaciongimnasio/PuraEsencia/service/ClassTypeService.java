@@ -19,7 +19,7 @@ public class ClassTypeService {
     ClassSessionRepository classSessionRepository;
 
     public List<ClassType> getAll() {
-        return classTypeRepository.findAll();
+        return classTypeRepository.findByIsActive(true);
     }
 
     public ClassType create(ClassType classType){

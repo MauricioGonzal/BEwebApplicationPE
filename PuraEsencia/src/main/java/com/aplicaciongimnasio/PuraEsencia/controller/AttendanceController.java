@@ -5,13 +5,11 @@ import com.aplicaciongimnasio.PuraEsencia.model.Attendance;
 import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceRepository;
 import com.aplicaciongimnasio.PuraEsencia.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

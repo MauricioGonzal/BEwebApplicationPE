@@ -1,7 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Membership;
-import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
 import com.aplicaciongimnasio.PuraEsencia.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

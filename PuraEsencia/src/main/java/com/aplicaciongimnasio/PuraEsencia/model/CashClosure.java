@@ -29,13 +29,13 @@ public class CashClosure {
     @Column(nullable = false)
     private Double totalPayments;
 
-    @Column(nullable = false)
+    @Column
     private Double totalFixedExpenses;
 
-    @Column()
+    @Column
     private Double totalSalaries;
 
-    @Column()
+    @Column(nullable = false)
     private Double discrepancy;
 
     @Column(nullable = false)

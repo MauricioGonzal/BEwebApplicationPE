@@ -4,7 +4,6 @@ import com.aplicaciongimnasio.PuraEsencia.model.CashClosure;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface CashClosureRepository extends JpaRepository<CashClosure, Long> {
     boolean existsByStartDate(LocalDate date);

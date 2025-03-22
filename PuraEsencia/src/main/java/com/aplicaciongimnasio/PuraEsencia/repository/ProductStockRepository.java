@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.repository;
 
-import com.aplicaciongimnasio.PuraEsencia.model.FixedExpense;
 import com.aplicaciongimnasio.PuraEsencia.model.Product;
 import com.aplicaciongimnasio.PuraEsencia.model.ProductStock;
 import org.springframework.data.jpa.repository.JpaRepository;

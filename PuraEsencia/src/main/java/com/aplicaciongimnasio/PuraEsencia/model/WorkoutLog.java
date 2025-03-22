@@ -24,7 +24,8 @@ public class WorkoutLog {
     @ManyToOne
     @JoinColumn(name = "exercise_id")
     private Exercise exercise;
-
+    
+    private int series;
     private int repetitions;
     private double weight;
     private String notes;
