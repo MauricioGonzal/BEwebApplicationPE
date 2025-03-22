@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutSessionRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.model.WorkoutSession;
@@ -75,8 +76,8 @@ public class WorkoutSessionController {
 
     // Endpoint para obtener las sesiones de entrenamiento de un usuario
     @GetMapping("/{userId}")
-    public ResponseEntity<List<WorkoutSession>> getWorkoutSessions(@PathVariable Long userId) {
-        List<WorkoutSession> sessions = workoutSessionService.getSessionsByUserId(userId);
+    public ResponseEntity<List<WorkoutResponse>> getWorkoutSessions(@PathVariable Long userId) {
+        List<WorkoutResponse> sessions = workoutSessionService.getSessionsByUserId(userId);
         if (sessions.isEmpty()) {
             return ResponseEntity.noContent().build(); // Si no hay sesiones, devuelve un código 204
         }

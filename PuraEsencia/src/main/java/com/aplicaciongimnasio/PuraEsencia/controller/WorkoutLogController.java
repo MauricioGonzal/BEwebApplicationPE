@@ -36,7 +36,7 @@ public class WorkoutLogController {
             @PathVariable Long exerciseId,
             @RequestBody WorkoutLog logRequest) {
 
-        WorkoutSession session = workoutSessionRepository.findById(sessionId)
+        /*WorkoutSession session = workoutSessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sesión no encontrada"));
 
         Exercise exercise = exerciseRepository.findById(exerciseId)
@@ -50,7 +50,8 @@ public class WorkoutLogController {
         log.setNotes(logRequest.getNotes());
 
         WorkoutLog savedLog = workoutLogRepository.save(log);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedLog);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedLog);*/
+        throw new RuntimeException("hola");
     }
 
     // 🔹 Obtener todos los registros de una sesión

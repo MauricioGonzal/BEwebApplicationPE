@@ -1,20 +1,14 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutSessionRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
-import com.aplicaciongimnasio.PuraEsencia.model.WorkoutLog;
-import com.aplicaciongimnasio.PuraEsencia.model.WorkoutSession;
-import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.WorkoutLogRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.WorkoutSessionRepository;
+import com.aplicaciongimnasio.PuraEsencia.model.*;
+import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class WorkoutSessionService {
@@ -24,6 +18,9 @@ public class WorkoutSessionService {
 
     @Autowired
     private WorkoutLogRepository workoutLogRepository;
+
+    @Autowired
+    private WorkoutSetRepository workoutSetRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -43,27 +40,67 @@ public class WorkoutSessionService {
         var id = workoutSessionRepository.save(session);
         System.out.println(id);
 
-        List<WorkoutLog> logs = request.getLogs().stream().map(logRequest -> {
-            Exercise exercise = exerciseRepository.findById(logRequest.getExerciseId())
-                    .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado"));
+        WorkoutLog log = new WorkoutLog();
+        log.setSession(session);
+        Exercise exercise = exerciseRepository.findById(request.getExerciseId())
+                .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado"));
+        log.setExercise(exercise);
+        log.setNotes(request.getNote());
 
-            WorkoutLog log = new WorkoutLog();
-            log.setSession(session);
-            log.setExercise(exercise);
-            log.setRepetitions(logRequest.getRepetitions());
-            log.setWeight(logRequest.getWeight());
-            log.setNotes(logRequest.getNotes());
+        WorkoutLog workoutLog = workoutLogRepository.save(log);
 
-            workoutLogRepository.save(log);
+        //guardar sets
 
-            return log;
+        List<WorkoutSet> sets = request.getSets().stream().map(logRequest -> {
+
+            WorkoutSet workoutSet = new WorkoutSet();
+
+            workoutSet.setRepetitions(logRequest.getRepetitions());
+
+            workoutSet.setWorkoutLog(workoutLog);
+
+            workoutSet.setWeight(logRequest.getWeight());
+
+            workoutSetRepository.save(workoutSet);
+
+            return workoutSet;
         }).toList();
 
         return id;
     }
 
-    public List<WorkoutSession> getSessionsByUserId(Long userId) {
-        return workoutSessionRepository.findByUserId(userId);
+    public List<WorkoutResponse> getSessionsByUserId(Long userId) {
+        return getWorkoutResponses(userId);
+    }
+
+    @Transactional
+    public List<WorkoutResponse> getWorkoutResponses(Long userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Object[]> results = workoutSessionRepository.findSessionLogAndSets(user);
+        Map<WorkoutLog, WorkoutResponse> logToResponseMap = new HashMap<>();
+
+        for (Object[] result : results) {
+            WorkoutSession session = (WorkoutSession) result[0];
+            WorkoutLog log = (WorkoutLog) result[1];
+            WorkoutSet set = (WorkoutSet) result[2];
+
+            // Crear una nueva respuesta si no existe en el mapa
+            WorkoutResponse response = logToResponseMap.computeIfAbsent(log, k -> {
+                WorkoutResponse newResponse = new WorkoutResponse();
+                newResponse.setWorkoutSession(session);
+                newResponse.setWorkoutLog(log);
+                newResponse.setSets(new ArrayList<>());
+                return newResponse;
+            });
+
+            // Añadir el WorkoutSet a la lista de sets
+            response.getSets().add(set);
+        }
+
+        // Convertir el mapa en una lista
+        return new ArrayList<>(logToResponseMap.values());
     }
 }
 

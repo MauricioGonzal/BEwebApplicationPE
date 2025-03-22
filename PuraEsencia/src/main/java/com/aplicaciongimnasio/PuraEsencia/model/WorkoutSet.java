@@ -6,28 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "workout_logs")
+@Table(name = "workout_sets")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkoutLog {
+public class WorkoutSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "session_id")
-    private WorkoutSession session;
+    @JoinColumn(name = "workout_log_id", nullable = false)
+    private WorkoutLog workoutLog;
 
-    @ManyToOne
-    @JoinColumn(name = "exercise_id")
-    private Exercise exercise;
-
-    private String notes;
-
+    private int repetitions;
+    private double weight;
 }
