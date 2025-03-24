@@ -2,7 +2,6 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.EditRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
-import com.aplicaciongimnasio.PuraEsencia.dto.RoutineResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.service.ExerciseService;
@@ -43,10 +42,10 @@ public class RoutineController {
         return routineService.getRoutineByEmail(email);
     }
 
-    /*@GetMapping("/nocustom")
-    public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom() {
+    @GetMapping("/nocustom")
+    public List<RoutineSet> getRoutinesByCustom() {
         return routineService.getRoutinesByCustom(false);
-    }*/
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Routine> updateRoutine(
@@ -54,6 +53,18 @@ public class RoutineController {
             @RequestBody EditRoutineRequest routineRequest) {
         Routine updatedRoutine = routineService.updateRoutine(id, routineRequest);
         return ResponseEntity.ok(updatedRoutine);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteRoutineById(@PathVariable Long id) {
+        boolean isDeleted = routineService.deleteById(id);
+        return ResponseEntity.ok("Rutina eliminada exitosamente");
+
+    }
+
+    @GetMapping("/routine-set/{id}")
+    public List<RoutineSet> getRoutineSetsByRoutine(@PathVariable Long id) {
+        return routineService.getRoutineSetByRoutine(id);
     }
 
 }

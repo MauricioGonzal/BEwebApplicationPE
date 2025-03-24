@@ -18,4 +18,6 @@ public interface RoutineSetRepository extends JpaRepository<RoutineSet, Long> {
     @Transactional
     @Query("DELETE FROM RoutineSet rs WHERE rs.routine = :routine")
     void deleteByRoutine(@Param("routine") Routine routine);
+    @Query("Select rs from RoutineSet rs where rs.routine.isCustom = :isCustom")
+    List<RoutineSet> getAllFromNoCustomRoutine(@Param("isCustom") Boolean isCustom);
 }

@@ -9,6 +9,7 @@ import com.aplicaciongimnasio.PuraEsencia.repository.RoutineSetRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -76,11 +77,19 @@ public class RoutineService {
     }
 
 
-    /*public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom(Boolean custom) {
-
+    public List<RoutineSet> getRoutinesByCustom(Boolean custom) {
+        var response = routineSetRepository.getAllFromNoCustomRoutine(custom);
 
         return response;
-    }*/
+    }
+
+    public List<RoutineSet> getRoutineSetByRoutine(Long id) {
+        Routine routine = routineRepository.findById(id).orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
+
+        var response = routineSetRepository.findByRoutine(routine);
+
+        return response;
+    }
 
     public Routine updateRoutine(Long id, EditRoutineRequest routineRequest) {
         Routine routine = routineRepository.findById(id)
@@ -103,6 +112,15 @@ public class RoutineService {
         }
 
         return routineRepository.save(routine);
+    }
+
+    @Transactional
+    public boolean deleteById(Long id) {
+        Routine routine = routineRepository.findById(id).orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
+
+        routineSetRepository.deleteByRoutine(routine);
+        routineRepository.deleteById(id);
+        return true;
     }
 
 
