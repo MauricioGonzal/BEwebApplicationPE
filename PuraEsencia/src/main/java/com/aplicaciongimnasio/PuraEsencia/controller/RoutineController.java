@@ -1,8 +1,10 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.EditRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
+import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.service.ExerciseService;
 import com.aplicaciongimnasio.PuraEsencia.service.RoutineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +34,7 @@ public class RoutineController {
     }
 
     @GetMapping("/id/{id}")
-    public Routine getRoutineById(@PathVariable Long id) {
+    public List<RoutineSet> getRoutineById(@PathVariable Long id) {
         return routineService.getRoutineById(id);
     }
 
@@ -41,15 +43,15 @@ public class RoutineController {
         return routineService.getRoutineByEmail(email);
     }
 
-    @GetMapping("/nocustom")
+    /*@GetMapping("/nocustom")
     public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom() {
         return routineService.getRoutinesByCustom(false);
-    }
+    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<Routine> updateRoutine(
             @PathVariable Long id,
-            @RequestBody RoutineRequest routineRequest) {
+            @RequestBody EditRoutineRequest routineRequest) {
         Routine updatedRoutine = routineService.updateRoutine(id, routineRequest);
         return ResponseEntity.ok(updatedRoutine);
     }

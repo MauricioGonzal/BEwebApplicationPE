@@ -3,8 +3,10 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.HealthRecord;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
+import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.RoutineSetRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import jakarta.transaction.Transactional;
@@ -24,6 +26,9 @@ public class UserService {
 
     @Autowired
     private RoutineRepository routineRepository;
+
+    @Autowired
+    private RoutineSetRepository routineSetRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -114,11 +119,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Routine getUserRoutine(Long userId) {
+    public List<RoutineSet> getUserRoutine(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return user.getRoutine();
+        List<RoutineSet> routineSets = routineSetRepository.findByRoutine(user.getRoutine());
+
+        return routineSets;
     }
 
     public void assignClientToTrainer(Long clientId, Long trainerId) {

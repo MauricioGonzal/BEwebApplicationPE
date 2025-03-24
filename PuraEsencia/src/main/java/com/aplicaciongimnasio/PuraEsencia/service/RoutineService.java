@@ -1,15 +1,14 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.EditRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
-import com.aplicaciongimnasio.PuraEsencia.dto.RoutineResponse;
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
-import com.aplicaciongimnasio.PuraEsencia.model.ExerciseDetails;
-import com.aplicaciongimnasio.PuraEsencia.model.Routine;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
+import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.RoutineSetRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,22 +28,45 @@ public class RoutineService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoutineSetRepository routineSetRepository;
+
 
     public Routine createRoutine(RoutineRequest routineRequest) throws JsonProcessingException {
         Routine routine = new Routine();
         routine.setName(routineRequest.getTitle());
         routine.setDescription(routineRequest.getDescription());
         routine.setIsCustom(routineRequest.getIsCustom());
+        routine = routineRepository.save(routine);
+        // Crear un objeto ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        routine.setExercisesByDay(routineRequest.getExercises());
-
-        return routineRepository.save(routine);
+        // Convertir el List<Long> a JSON
+        var exercises = routineRequest.getExercises();
+        for (Map.Entry<String, List<ExerciseDetails>> entry : exercises.entrySet()) {
+            for (ExerciseDetails item : entry.getValue()) {
+                RoutineSet routineSet = new RoutineSet();
+                routineSet.setRoutine(routine);
+                String json = objectMapper.writeValueAsString(item.getExerciseIds());
+                routineSet.setExerciseIds(json);
+                routineSet.setDayNumber(Integer.parseInt(entry.getKey()));
+                routineSet.setRest(item.getRest());
+                routineSet.setRepetitions(item.getRepetitions());
+                routineSet.setSeries(item.getSeries());
+                routineSetRepository.save(routineSet);
+            }
+            System.out.println("Clave: " + entry.getKey() + ", Valor: " + entry.getValue());
+        }
+        return routine;
 
     }
 
-    public Routine getRoutineById(Long id) {
-        return routineRepository.findById(id)
+    public List<RoutineSet> getRoutineById(Long id) {
+        Routine routine = routineRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada con ID: " + id));
+        List<RoutineSet> routineSets = routineSetRepository.findByRoutine(routine);
+
+        return routineSets;
     }
 
     public Routine getRoutineByEmail(String email) {
@@ -54,49 +76,31 @@ public class RoutineService {
     }
 
 
-    public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom(Boolean custom) {
-        List<Routine> routines = routineRepository.findAllByIsCustom(custom);
-        Map<Long, Map<Integer, List<RoutineResponse>>> response = new HashMap<>();
+    /*public Map<Long, Map<Integer, List<RoutineResponse>>> getRoutinesByCustom(Boolean custom) {
 
-        for (Routine routine : routines) {
-            Map<Integer, List<RoutineResponse>> routineItem = new HashMap<>();
-
-            if (routine.getExercisesByDay() != null) {
-                for (Map.Entry<String, List<ExerciseDetails>> entry : routine.getExercisesByDay().entrySet()) {
-                    Integer day = Integer.parseInt(entry.getKey()); // Convertir el día a número
-                    List<ExerciseDetails> exerciseDetailsList = entry.getValue();
-                    List<RoutineResponse> exerciseResponses = new ArrayList<>();
-
-                    for (ExerciseDetails details : exerciseDetailsList) {
-                        List<Exercise> exerciseList = new ArrayList<>();
-                        for (Long exerciseId : details.getExerciseIds()) {
-                            exerciseRepository.findById(exerciseId).ifPresent(exerciseList::add);
-                        }
-                        exerciseResponses.add(new RoutineResponse(
-                                exerciseList,
-                                details.getSeries(),
-                                details.getRepetitions(),
-                                details.getRest()
-                        ));
-                    }
-
-                    routineItem.computeIfAbsent(day, k -> new ArrayList<>()).addAll(exerciseResponses);
-                }
-            }
-
-            response.put(routine.getId(), routineItem);
-        }
 
         return response;
-    }
+    }*/
 
-    public Routine updateRoutine(Long id, RoutineRequest routineRequest) {
+    public Routine updateRoutine(Long id, EditRoutineRequest routineRequest) {
         Routine routine = routineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rutina no encontrada"));
 
         routine.setName(routineRequest.getTitle());
         routine.setDescription(routineRequest.getDescription());
-        routine.setExercisesByDay(routineRequest.getExercises());
+
+        routineSetRepository.deleteByRoutine(routine);
+
+        for (RoutineSet item : routineRequest.getExercises()) {
+            RoutineSet routineSet = new RoutineSet();
+            routineSet.setRoutine(routine);
+            routineSet.setExerciseIds(item.getExerciseIds());
+            routineSet.setRest(item.getRest());
+            routineSet.setRepetitions(item.getRepetitions());
+            routineSet.setSeries(item.getSeries());
+            routineSet.setDayNumber(item.getDayNumber());
+            routineSetRepository.save(routineSet);
+        }
 
         return routineRepository.save(routine);
     }

@@ -3,6 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ChangePasswordRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
+import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +106,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/routine")
-    public ResponseEntity<Routine> getUserRoutine(@PathVariable Long userId) {
+    public ResponseEntity<List<RoutineSet>> getUserRoutine(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserRoutine(userId));
     }
 
