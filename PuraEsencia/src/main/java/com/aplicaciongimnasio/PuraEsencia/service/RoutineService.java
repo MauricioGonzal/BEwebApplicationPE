@@ -95,7 +95,7 @@ public class RoutineService {
         Routine routine = routineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rutina no encontrada"));
 
-        routine.setName(routineRequest.getTitle());
+        routine.setName(routineRequest.getName());
         routine.setDescription(routineRequest.getDescription());
 
         routineSetRepository.deleteByRoutine(routine);

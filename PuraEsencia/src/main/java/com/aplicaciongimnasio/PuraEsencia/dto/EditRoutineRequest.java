@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditRoutineRequest {
-    private String title;
+    private String name;
     private String description;
     private Boolean isCustom;
     private List<RoutineSet> exercises;  // JSON de IDs de ejercicios (combinados)
