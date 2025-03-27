@@ -27,6 +27,12 @@ public class PaymentController {
         return ResponseEntity.ok(payments);
     }
 
+    @GetMapping("/getbystatus/transaction/{status}")
+    public ResponseEntity<List<Map<String, ?>>> getByStatusWithTransaction(@PathVariable String status) {
+        List<Map<String, ?>> payments = paymentService.getPaymentsWithTransactionByStatus(status.toUpperCase());
+        return ResponseEntity.ok(payments);
+    }
+
     @GetMapping("/isOutDueDate/{userId}")
     public ResponseEntity<Boolean> isOutDueDate(@PathVariable Long userId) {
         return ResponseEntity.ok(attendanceService.isOutOfDueDate(userId));

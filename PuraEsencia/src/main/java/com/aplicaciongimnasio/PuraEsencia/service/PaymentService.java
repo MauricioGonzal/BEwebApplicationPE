@@ -62,5 +62,9 @@ public class PaymentService {
         return paymentRepository.findByStatusAndUserId("PENDIENTE",userId);
     }
 
+    public List<Map<String, ?>> getPaymentsWithTransactionByStatus(String status) {
+        return paymentRepository.findWithTransactionByStatus(status);
+    }
+
 
 }

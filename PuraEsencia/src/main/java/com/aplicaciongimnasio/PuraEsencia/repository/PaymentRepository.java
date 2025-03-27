@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -42,4 +43,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     )
 """)
     List<Payment> findLatestActivePaymentsByUser(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
+
+    @Query("SELECT p as payment, t as transaction FROM Payment p JOIN Transaction t ON p.transaction = t WHERE p.status = :status")
+    List<Map<String, ?>> findWithTransactionByStatus(@Param("status") String status);
+
 }

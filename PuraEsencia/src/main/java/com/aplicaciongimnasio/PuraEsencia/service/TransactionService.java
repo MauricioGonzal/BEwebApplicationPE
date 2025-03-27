@@ -102,6 +102,10 @@ public class TransactionService {
             productStockRepository.save(productStock);
         }
 
+        var membership = membershipRepository.findById(transactionRequest.getMembership().getId())
+                .orElseThrow(() -> new RuntimeException("Membership not found"));
+        var maxDays = membership.getMaxDays();
+
         if(transactionRequest.getUser() != null){
             var user = userRepository.findById(transactionRequest.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -118,9 +122,7 @@ public class TransactionService {
                 if(!payments.isEmpty()){
                     Payment lastPayment = payments.getLast();
                     if(lastPayment.getDueDate().isAfter(LocalDate.now())){
-                        var membership = membershipRepository.findById(transactionRequest.getMembership().getId())
-                                .orElseThrow(() -> new RuntimeException("Membership not found"));
-                        var maxDays = membership.getMaxDays();
+
                         if(maxDays != null && maxDays != 30){
                             paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays), transactionRequest.getMembership(), transaction);
                         }
@@ -130,7 +132,12 @@ public class TransactionService {
                     }
                 }
                 else{
-                    paymentService.registerPayment(user.getId(), transaction.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership(), transaction);
+                    if(maxDays != null && maxDays != 30){
+                        paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusDays(maxDays), transactionRequest.getMembership(), transaction);
+                    }
+                    else{
+                        paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership(), transaction);
+                    }
                 }
             }
         }
