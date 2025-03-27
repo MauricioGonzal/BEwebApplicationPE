@@ -18,7 +18,7 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column
@@ -30,5 +30,7 @@ public class Membership {
     @ManyToOne
     @JoinColumn(name = "transaction_category_id")
     private TransactionCategory transactionCategory;
+
+    private Boolean isActive=true;
 }
 

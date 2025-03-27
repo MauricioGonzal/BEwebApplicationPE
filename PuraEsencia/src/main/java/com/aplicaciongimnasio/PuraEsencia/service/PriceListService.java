@@ -71,6 +71,7 @@ public class PriceListService {
                 .orElseThrow(() -> new RuntimeException("Stock no encontrado con ID: " + id));
 
         priceList.setIsActive(false);
+        priceList.setValidUntil(LocalDate.now());
         priceListRepository.save(priceList);
         return true;
     }
