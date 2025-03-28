@@ -89,6 +89,7 @@ public class ProductService {
 
         // Recorrer todos los precios en el mapa 'prices'
         for (Map.Entry<Long, Float> entry : productRequest.getPrices().entrySet()) {
+            if(entry.getValue() == null) continue;
             Long paymentMethodId = entry.getKey();
             Float amount = entry.getValue();
 

@@ -17,10 +17,10 @@ public interface PriceListRepository extends JpaRepository<PriceList, Long> {
     @Query("select pl.amount from Product p JOIN ProductStock ps ON ps.product = p JOIN PriceList pl ON pl.product = p WHERE p.name = :name AND pl.paymentMethod = :paymentMethod AND pl.isActive = TRUE")
     List<Object> getExistencesOfSameProduct(@Param("name") String name, @Param("paymentMethod") PaymentMethod paymentMethod);
 
-    @Query("SELECT pl FROM PriceList pl LEFT JOIN FETCH pl.membership m WHERE pl.isActive = true")
+    @Query("SELECT pl FROM PriceList pl JOIN FETCH pl.membership m WHERE pl.isActive = true")
     List<PriceList> findActivePriceListsWithMembership();
 
-    @Query("SELECT pl FROM PriceList pl LEFT JOIN FETCH pl.product p LEFT JOIN FETCH ProductStock ps ON ps.product = p WHERE pl.isActive = true")
+    @Query("SELECT pl FROM PriceList pl LEFT JOIN FETCH pl.product p JOIN FETCH ProductStock ps ON ps.product = p WHERE pl.isActive = true")
     List<PriceList> findActivePriceListsWithProductAndStock();
 
     List<PriceList> findByMembership(Membership membership);

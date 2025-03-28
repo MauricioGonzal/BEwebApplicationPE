@@ -37,7 +37,7 @@ public class PriceList {
     private Float amount;
 
     @Column(nullable = false)
-    private LocalDate validFrom;
+    private LocalDate validFrom= LocalDate.now();
 
     private LocalDate validUntil;
 

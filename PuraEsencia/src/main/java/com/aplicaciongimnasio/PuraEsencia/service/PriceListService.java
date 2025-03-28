@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -64,6 +66,30 @@ public class PriceListService {
         newPriceList.setValidUntil(null); // No tiene fecha de fin porque es el actual
 
         return priceListRepository.save(newPriceList);
+    }
+
+    public Boolean updatePriceLists(Map<String, Float> priceListsToEdit){
+            for (Map.Entry<String, Float> entry : priceListsToEdit.entrySet()) {
+                Long priceListId;
+                try {
+                    priceListId = Long.parseLong(entry.getKey()); // Convertir String a Long
+                } catch (NumberFormatException e) {
+                    throw new RuntimeException("ID de PriceList inválido: " + entry.getKey(), e);
+                }
+                Float amount = entry.getValue();
+                PriceList priceList = priceListRepository.findById(priceListId).orElseThrow(() -> new RuntimeException("Precio no encontrado"));
+                priceList.setValidUntil(LocalDate.now());
+                priceList.setIsActive(false);
+                priceListRepository.save(priceList);
+
+                PriceList newPriceList = new PriceList();
+                newPriceList.setTransactionCategory(priceList.getTransactionCategory());
+                newPriceList.setPaymentMethod(priceList.getPaymentMethod());
+                newPriceList.setAmount(amount);
+                newPriceList.setProduct(priceList.getProduct());
+                priceListRepository.save(newPriceList);
+            }
+        return true;
     }
 
     public Boolean logicDelete(Long id) {

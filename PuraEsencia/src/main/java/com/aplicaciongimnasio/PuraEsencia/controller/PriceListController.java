@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
@@ -33,5 +34,10 @@ public class PriceListController {
     @PutMapping("/{id}/updateAmount")
     public ResponseEntity<?> updateAmount(@PathVariable Long id, @RequestBody Float newAmount) {
             return ResponseEntity.ok(priceListService.updateAmount(id, newAmount));
+    }
+
+    @PutMapping("/updatePriceLists")
+    public ResponseEntity<?> updatePriceLists(@RequestBody Map<String, Float> priceListsToEdit) {
+        return ResponseEntity.ok(priceListService.updatePriceLists(priceListsToEdit));
     }
 }

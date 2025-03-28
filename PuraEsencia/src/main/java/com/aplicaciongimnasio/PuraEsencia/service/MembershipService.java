@@ -83,6 +83,7 @@ public class MembershipService {
         membership = membershipRepository.save(membership);
 
         for (Map.Entry<Long, Float> entry : membershipRequest.getPrices().entrySet()) {
+            if(entry.getValue() == null) continue;
             PaymentMethod pm = paymentMethodRepository.findById(entry.getKey()).orElseThrow(() -> new RuntimeException("Payment Method not found"));
             List<Object> existences = priceListRepository.getExistencesOfSameProduct(membershipRequest.getName(), pm);
 
@@ -98,12 +99,6 @@ public class MembershipService {
             priceList.setValidFrom(LocalDate.now());
             priceListRepository.save(priceList);
         }
-
-
-
-
-
-
 
         return true;
     }
@@ -127,18 +122,12 @@ public class MembershipService {
 
     @Transactional
     public MembershipResponse update(Long id, Map<String, Object> membershipRequest) {
-        //var newData = (LinkedHashMap<String, ?>) membershipRequest.get("data");
-        //var membershipResponse = (LinkedHashMap<String, ?>) membershipRequest.get("membershipResponse");
-
         // Obtener la membresía existente
         Membership membership = membershipRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("La membresía no existe"));
-
         // Obtener los datos de la categoría de transacción
         LinkedHashMap<String, Object> transactionCategoryData = (LinkedHashMap<String, Object>) membershipRequest.get("transactionCategory");
         TransactionCategory transactionCategory = objectMapper.convertValue(transactionCategoryData, TransactionCategory.class);
-
-
 
         // Crear la nueva membresía
         Membership membershipToSave = new Membership();
