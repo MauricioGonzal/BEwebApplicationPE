@@ -1,8 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
 import com.aplicaciongimnasio.PuraEsencia.model.WorkoutLog;
-import com.aplicaciongimnasio.PuraEsencia.model.WorkoutSession;
 import com.aplicaciongimnasio.PuraEsencia.repository.ExerciseRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.WorkoutLogRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.WorkoutSessionRepository;

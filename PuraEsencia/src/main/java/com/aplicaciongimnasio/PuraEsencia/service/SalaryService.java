@@ -1,7 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.model.ClassSession;
-import com.aplicaciongimnasio.PuraEsencia.model.ClassType;
 import com.aplicaciongimnasio.PuraEsencia.model.Salary;
 import com.aplicaciongimnasio.PuraEsencia.repository.SalaryRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;

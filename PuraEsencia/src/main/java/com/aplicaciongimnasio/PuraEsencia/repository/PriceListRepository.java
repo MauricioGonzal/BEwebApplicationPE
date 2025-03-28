@@ -1,9 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.repository;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Membership;
-import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
-import com.aplicaciongimnasio.PuraEsencia.model.PriceList;
-import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
+import com.aplicaciongimnasio.PuraEsencia.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +16,15 @@ public interface PriceListRepository extends JpaRepository<PriceList, Long> {
 
     @Query("select pl.amount from Product p JOIN ProductStock ps ON ps.product = p JOIN PriceList pl ON pl.product = p WHERE p.name = :name AND pl.paymentMethod = :paymentMethod AND pl.isActive = TRUE")
     List<Object> getExistencesOfSameProduct(@Param("name") String name, @Param("paymentMethod") PaymentMethod paymentMethod);
+
+    @Query("SELECT pl FROM PriceList pl LEFT JOIN FETCH pl.membership m WHERE pl.isActive = true")
+    List<PriceList> findActivePriceListsWithMembership();
+
+    @Query("SELECT pl FROM PriceList pl LEFT JOIN FETCH pl.product p LEFT JOIN FETCH ProductStock ps ON ps.product = p WHERE pl.isActive = true")
+    List<PriceList> findActivePriceListsWithProductAndStock();
+
+    List<PriceList> findByMembership(Membership membership);
+
+    List<PriceList> findByProduct(Product product);
+
 }

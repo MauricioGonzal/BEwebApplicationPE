@@ -2,10 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.MembershipRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
-import com.aplicaciongimnasio.PuraEsencia.dto.ProductRequest;
-import com.aplicaciongimnasio.PuraEsencia.dto.ProductResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.Membership;
-import com.aplicaciongimnasio.PuraEsencia.model.ProductStock;
 import com.aplicaciongimnasio.PuraEsencia.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

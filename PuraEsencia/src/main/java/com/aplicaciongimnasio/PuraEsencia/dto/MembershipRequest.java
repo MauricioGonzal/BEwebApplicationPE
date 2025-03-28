@@ -1,13 +1,12 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
-import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
 import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -18,6 +17,5 @@ public class MembershipRequest {
     private Integer maxClasses;
     private Integer maxDays;
     private TransactionCategory transactionCategory;
-    private PaymentMethod paymentMethod;
-    private Float amount;
+    private Map<Long, Float> prices;
 }

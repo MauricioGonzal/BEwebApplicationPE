@@ -2,7 +2,6 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ChangePasswordRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.service.UserService;

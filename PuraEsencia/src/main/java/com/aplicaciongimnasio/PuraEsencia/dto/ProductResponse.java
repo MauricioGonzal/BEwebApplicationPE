@@ -8,12 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductResponse {
     private Product product;
-    private PriceList priceList;
+    private List<PriceList> priceList;
     private ProductStock productStock;
 }

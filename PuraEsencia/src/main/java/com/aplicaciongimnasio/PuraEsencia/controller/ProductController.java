@@ -30,7 +30,7 @@ public class ProductController {
 
     @GetMapping("/price-and-stock")
     public ResponseEntity<List<ProductResponse>> getAllPriceAndStock(){
-        return ResponseEntity.ok(productService.getAllPriceAndStock());
+        return ResponseEntity.ok(productService.getAllProductsAndPriceLists());
     }
 
     @PostMapping("/create-product-stock-price")
