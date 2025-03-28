@@ -32,7 +32,7 @@ public class ExerciseController {
         return exerciseService.getAllExercises();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteExercise(@PathVariable Long id) {
         boolean isDeleted = exerciseService.deleteExerciseById(id);
         if (isDeleted) {
@@ -42,7 +42,7 @@ public class ExerciseController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Exercise> updateExercise(@PathVariable Long id, @RequestBody Exercise updatedExercise) {
         Exercise exercise = exerciseService.updateExercise(id, updatedExercise);
         return ResponseEntity.ok(exercise);

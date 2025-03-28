@@ -117,11 +117,34 @@ public class RoutineService {
     @Transactional
     public boolean deleteById(Long id) {
         Routine routine = routineRepository.findById(id).orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
+        List<User> users = userRepository.findByRoutine(routine);
+        if(!routine.getIsCustom()){
+            if(!users.isEmpty()) throw new RuntimeException("Error al eliminar. La rutina seleccionada esta asociada a uno o más usuarios");
+        }
+        else{
+            if(users.size() != 1) throw new RuntimeException("ERROR. Contactar con soporte.");
+            User user = users.getFirst();
+            user.setRoutine(null);
+            userRepository.save(user);
+        }
 
         routineSetRepository.deleteByRoutine(routine);
         routineRepository.deleteById(id);
         return true;
     }
+
+    @Transactional
+    public boolean unassignRoutineToUser(Long id) {
+        Routine routine = routineRepository.findById(id).orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
+        List<User> users = userRepository.findByRoutine(routine);
+        if(users.size() != 1) throw new RuntimeException("ERROR. Contactar con soporte.");
+        User user = users.getFirst();
+        user.setRoutine(null);
+        userRepository.save(user);
+        return true;
+    }
+
+
 
 
 }

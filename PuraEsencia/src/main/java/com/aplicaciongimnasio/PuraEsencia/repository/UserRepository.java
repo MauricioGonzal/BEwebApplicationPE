@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.repository;
 
+import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteById(Long id);
     List<User> findAllByRoleAndIsActive(Role role, boolean isActive);
     List<User> findByIsActive(Boolean isActive);
+    List<User> findByRoutine(Routine routine);
 
 }

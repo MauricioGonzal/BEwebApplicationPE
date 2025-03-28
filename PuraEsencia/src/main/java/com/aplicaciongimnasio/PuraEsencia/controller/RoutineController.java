@@ -58,7 +58,12 @@ public class RoutineController {
     public ResponseEntity<String> deleteRoutineById(@PathVariable Long id) {
         boolean isDeleted = routineService.deleteById(id);
         return ResponseEntity.ok("Rutina eliminada exitosamente");
+    }
 
+    @PutMapping("/unassign/{id}")
+    public ResponseEntity<String> unassignToUser(@PathVariable Long id) {
+        boolean isUnassign = routineService.unassignRoutineToUser(id);
+        return ResponseEntity.ok("Rutina desasignada exitosamente");
     }
 
     @GetMapping("/routine-set/{id}")

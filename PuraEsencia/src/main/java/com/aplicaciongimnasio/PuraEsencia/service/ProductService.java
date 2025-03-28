@@ -1,13 +1,11 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.ProductRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ProductResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;

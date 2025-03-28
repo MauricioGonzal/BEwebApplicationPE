@@ -47,6 +47,9 @@ public class ExerciseService {
         if (updatedExercise.getDescription() != null) {
             exercise.setDescription(updatedExercise.getDescription());
         }
+        if (updatedExercise.getUrl() != null) {
+            exercise.setUrl(updatedExercise.getUrl());
+        }
         return exerciseRepository.save(exercise);
     }
 }
