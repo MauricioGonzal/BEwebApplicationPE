@@ -2,6 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ChangePasswordRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.UserRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.service.UserService;
@@ -26,6 +27,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.createUser(user));
+    }
+
+    @PostMapping("/byAdmin")
+    public ResponseEntity<?> createUserByAdmin(@RequestBody UserRequest userRequest) {
+        return ResponseEntity.ok(userService.createUserByAdmin(userRequest));
     }
 
     @GetMapping("/{email}")

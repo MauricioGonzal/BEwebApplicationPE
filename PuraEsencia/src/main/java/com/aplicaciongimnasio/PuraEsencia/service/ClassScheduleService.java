@@ -46,10 +46,10 @@ public class ClassScheduleService {
         return scheduleRepository.findById(id);
     }
 
-    public ClassSchedule getByAdmin(Long adminId){
+    public ClassSchedule getByUser(Long adminId){
         User user = userRepository.findById(adminId).orElseThrow(() -> new RuntimeException("ERROR!. Contactar con soporte."));
 
-        List<ClassSchedule> classSchedules = scheduleRepository.getByAdmin(user);
+        List<ClassSchedule> classSchedules = scheduleRepository.getByUser(user);
         if(classSchedules.size() > 1) throw new RuntimeException("Error. Existen mas de una grilla para el gimnasio registrado.");
         else if(classSchedules.isEmpty()) return null;
         return classSchedules.getFirst();

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/schedules")
+@RequestMapping("/api/schedule")
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
 public class ClassScheduleController {
 
@@ -61,9 +61,9 @@ public class ClassScheduleController {
     }
 
     // Agregar una sesión de clase a una grilla
-    @GetMapping("/getByAdmin/{adminId}")
-    public ResponseEntity <ClassSchedule> getByAdmin(@PathVariable Long adminId) {
-        return ResponseEntity.ok(scheduleService.getByAdmin(adminId));
+    @GetMapping("/getByUser/{userId}")
+    public ResponseEntity <ClassSchedule> getByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(scheduleService.getByUser(userId));
     }
 
 

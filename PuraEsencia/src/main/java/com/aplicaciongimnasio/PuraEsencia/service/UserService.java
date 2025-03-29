@@ -1,10 +1,9 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.HealthRecord;
-import com.aplicaciongimnasio.PuraEsencia.model.Routine;
-import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
+import com.aplicaciongimnasio.PuraEsencia.dto.UserRequest;
+import com.aplicaciongimnasio.PuraEsencia.model.*;
+import com.aplicaciongimnasio.PuraEsencia.repository.GymRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.RoutineSetRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
@@ -31,6 +30,9 @@ public class UserService {
     private RoutineSetRepository routineSetRepository;
 
     @Autowired
+    private GymRepository gymRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
@@ -44,6 +46,23 @@ public class UserService {
 
         user.setIsActive(true);
 
+        return userRepository.save(user);
+    }
+
+    public User createUserByAdmin(UserRequest userRequest) {
+        if(userRepository.findByEmail(userRequest.getEmail()).isPresent()){
+            throw new IllegalArgumentException("El correo ya está registrado.");
+        }
+        User admin = userRepository.findById(userRequest.getAdminId()).orElseThrow(()-> new RuntimeException("ERROR. Contactar con soporte."));
+
+        String encryptedPassword = passwordEncoder.encode(userRequest.getPassword());
+
+        User user = new User();
+        user.setPassword(encryptedPassword);
+        user.setEmail(userRequest.getEmail());
+        user.setFullName(userRequest.getFullName());
+        user.setRole(userRequest.getRole());
+        user.setGym(admin.getGym());
 
         return userRepository.save(user);
     }

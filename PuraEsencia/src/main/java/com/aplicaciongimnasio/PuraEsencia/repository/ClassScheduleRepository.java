@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Long> {
     @Query("SELECT cs FROM ClassSchedule cs JOIN Gym g ON cs.gym = g JOIN User u ON u.gym = g WHERE u = :user")
-    List<ClassSchedule> getByAdmin(User user);
+    List<ClassSchedule> getByUser(User user);
 }

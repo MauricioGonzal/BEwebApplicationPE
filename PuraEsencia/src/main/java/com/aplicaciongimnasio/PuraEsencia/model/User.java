@@ -33,7 +33,7 @@ public class User {
     private HealthRecord healthRecord;
 
     @Column(columnDefinition = "TINYINT(1)")
-    private Boolean isActive;
+    private Boolean isActive=true;
 
     @ManyToOne
     @JoinColumn(name = "gym_id")
