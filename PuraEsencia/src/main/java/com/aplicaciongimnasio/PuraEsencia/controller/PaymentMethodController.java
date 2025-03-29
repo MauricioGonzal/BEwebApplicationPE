@@ -1,12 +1,11 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.TransactionCategoryRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
+import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import com.aplicaciongimnasio.PuraEsencia.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,10 @@ public class PaymentMethodController {
     @GetMapping
     public List<PaymentMethod> getAllPaymentMethod() {
         return paymentMethodService.getAllPaymentMethod();
+    }
+
+    @PostMapping
+    public PaymentMethod createPaymentMethod(@RequestBody PaymentMethod paymentMethod) {
+        return paymentMethodService.createPaymentMethod(paymentMethod);
     }
 }
