@@ -3,8 +3,10 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.ClassSessionRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.ClassSchedule;
 import com.aplicaciongimnasio.PuraEsencia.model.ClassSession;
+import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.ClassScheduleRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.ClassSessionRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,19 @@ public class ClassScheduleService {
     private ClassScheduleRepository scheduleRepository;
     @Autowired
     private ClassSessionRepository sessionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // Crear una nueva grilla semanal
     public ClassSchedule createSchedule(ClassSchedule schedule) {
         return scheduleRepository.save(schedule);
+    }
+
+    public ClassSchedule createScheduleByUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("ERROR!. Contactar con soporte."));
+        ClassSchedule classSchedule = new ClassSchedule();
+        classSchedule.setGym(user.getGym());
+        return scheduleRepository.save(classSchedule);
     }
 
     // Obtener todas las grillas de horarios
@@ -33,6 +44,15 @@ public class ClassScheduleService {
     // Obtener una grilla por ID
     public Optional<ClassSchedule> getScheduleById(Long id) {
         return scheduleRepository.findById(id);
+    }
+
+    public ClassSchedule getByAdmin(Long adminId){
+        User user = userRepository.findById(adminId).orElseThrow(() -> new RuntimeException("ERROR!. Contactar con soporte."));
+
+        List<ClassSchedule> classSchedules = scheduleRepository.getByAdmin(user);
+        if(classSchedules.size() > 1) throw new RuntimeException("Error. Existen mas de una grilla para el gimnasio registrado.");
+        else if(classSchedules.isEmpty()) return null;
+        return classSchedules.getFirst();
     }
 
     // Crear una nueva sesión de clase dentro de un horario

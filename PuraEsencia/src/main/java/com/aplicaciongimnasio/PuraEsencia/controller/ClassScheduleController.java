@@ -25,6 +25,11 @@ public class ClassScheduleController {
         return ResponseEntity.ok(scheduleService.createSchedule(schedule));
     }
 
+    @PostMapping("/createByUser/{userId}")
+    public ResponseEntity<ClassSchedule> createScheduleByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(scheduleService.createScheduleByUser(userId));
+    }
+
     // Obtener todas las grillas
     @GetMapping
     public ResponseEntity<List<ClassSchedule>> getAllSchedules() {
@@ -53,6 +58,12 @@ public class ClassScheduleController {
     @GetMapping("/{scheduleId}/sessions")
     public ResponseEntity<List<ClassSession>> getSessionsBySchedule(@PathVariable Long scheduleId) {
         return ResponseEntity.ok(scheduleService.getSessionsBySchedule(scheduleId));
+    }
+
+    // Agregar una sesión de clase a una grilla
+    @GetMapping("/getByAdmin/{adminId}")
+    public ResponseEntity <ClassSchedule> getByAdmin(@PathVariable Long adminId) {
+        return ResponseEntity.ok(scheduleService.getByAdmin(adminId));
     }
 
 

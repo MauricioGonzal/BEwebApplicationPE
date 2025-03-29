@@ -34,5 +34,9 @@ public class User {
 
     @Column(columnDefinition = "TINYINT(1)")
     private Boolean isActive;
+
+    @ManyToOne
+    @JoinColumn(name = "gym_id")
+    private Gym gym;
 }
 

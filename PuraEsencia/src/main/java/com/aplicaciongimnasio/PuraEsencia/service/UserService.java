@@ -37,11 +37,13 @@ public class UserService {
         if(userRepository.findByEmail(user.getEmail()).isPresent()){
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
+
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
 
         user.setPassword(encryptedPassword);
 
         user.setIsActive(true);
+
 
         return userRepository.save(user);
     }
