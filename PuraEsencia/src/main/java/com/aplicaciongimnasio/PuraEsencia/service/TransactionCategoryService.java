@@ -24,13 +24,17 @@ public class TransactionCategoryService {
     }
 
     public TransactionCategory createTransactionCategory(TransactionCategoryRequest transactionCategoryRequest){
-        Role role = Role.valueOf(transactionCategoryRequest.getRoleAccepted().toUpperCase());
+
         if(transactionCategoryRepository.findByName(transactionCategoryRequest.getName()).isPresent()){
             throw new RuntimeException("Ya existe una categoria con ese nombre");
         }
         TransactionCategory transactionCategory = new TransactionCategory();
+        if(transactionCategoryRequest.getRoleAccepted() != null){
+            Role role = Role.valueOf(transactionCategoryRequest.getRoleAccepted().toUpperCase());
+            transactionCategory.setRoleAccepted(role);
+        }
+
         transactionCategory.setName(transactionCategoryRequest.getName());
-        transactionCategory.setRoleAccepted(role);
         return transactionCategoryRepository.save(transactionCategory);
     }
 }

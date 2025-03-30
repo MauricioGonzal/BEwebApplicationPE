@@ -71,7 +71,7 @@ public class RoutineService {
     }
 
     public Routine getRoutineByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailAndIsActive(email, true)
                 .map(User::getRoutine) // Obtener la rutina asociada
                 .orElseThrow(() -> new RuntimeException("Usuario o rutina no encontrada"));
     }

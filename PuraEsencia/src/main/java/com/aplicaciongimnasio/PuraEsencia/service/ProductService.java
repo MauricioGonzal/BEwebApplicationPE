@@ -106,7 +106,7 @@ public class ProductService {
             priceList.setAmount(amount);
             priceList.setPaymentMethod(paymentMethod);
             priceList.setTransactionCategory(transactionCategoryRepository.findByName("Producto")
-                    .orElseThrow(() -> new RuntimeException("Tipo de asistencia no encontrado")));
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada")));
             priceList.setValidFrom(LocalDate.now());
             priceListRepository.save(priceList);
 

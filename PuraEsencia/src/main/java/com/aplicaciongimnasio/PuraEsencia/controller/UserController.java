@@ -58,6 +58,11 @@ public class UserController {
         return userService.getAllByRole(role);
     }
 
+    @GetMapping("/getAllForAssistance")
+    public List<User> getAllForAssistance() {
+        return userService.getAllForAssistance();
+    }
+
     @GetMapping("/getAllGymUsers")
     public List<User> getAllGymUsers() {
         return userService.getAllGymUsers();

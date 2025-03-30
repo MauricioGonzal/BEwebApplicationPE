@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,7 +37,7 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
-        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+        if(userRepository.findByEmailAndIsActive(user.getEmail(), true).isPresent()){
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
@@ -50,7 +51,7 @@ public class UserService {
     }
 
     public User createUserByAdmin(UserRequest userRequest) {
-        if(userRepository.findByEmail(userRequest.getEmail()).isPresent()){
+        if(userRepository.findByEmailAndIsActive(userRequest.getEmail(), true).isPresent()){
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
         User admin = userRepository.findById(userRequest.getAdminId()).orElseThrow(()-> new RuntimeException("ERROR. Contactar con soporte."));
@@ -61,7 +62,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
         user.setEmail(userRequest.getEmail());
         user.setFullName(userRequest.getFullName());
-        user.setRole(userRequest.getRole());
+        if(!Objects.equals(userRequest.getRole().toString(), "CLIENT")) user.setRole(Role.valueOf(userRequest.getRole()));
         user.setGym(admin.getGym());
 
         return userRepository.save(user);
@@ -78,7 +79,7 @@ public class UserService {
     }
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailAndIsActive(email, true);
     }
 
     public Optional<User> findById(Long id) {
@@ -96,7 +97,7 @@ public class UserService {
     }
 
     public User updateUser(String email, User updatedUser) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailAndIsActive(email, true)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         if (updatedUser.getRoutine() != null) {
             user.setFullName(updatedUser.getFullName());
@@ -131,7 +132,6 @@ public class UserService {
         Routine routine = routineRepository.findById(assignRoutineRequest.getRoutineId())
                 .orElseThrow(() -> new RuntimeException("Rutina no encontrada"));
 
-        System.out.println(assignRoutineRequest);
         User trainer = userRepository.findById(assignRoutineRequest.getTrainerId())
                 .orElseThrow(() -> new RuntimeException("Trainer no encontrado"));
 
@@ -170,10 +170,10 @@ public class UserService {
     public List<User> getAllByRole(String role) {
         if (role.equalsIgnoreCase("CLIENTS")) {
             List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES","CLIENT_BOTH")
-                    .map(Role::valueOf)  // Convierte el String en el enum correspondiente
+                    .map(Role::valueOf)
                     .collect(Collectors.toList());
 
-            return userRepository.findAllByRoleInAndIsActive(roles, true);
+            return userRepository.findAllByRoleInAndIsActiveOrRoleIsNull(roles, true);
         } else {
             try {
                 Role userRole = Role.valueOf(role.toUpperCase());
@@ -182,6 +182,14 @@ public class UserService {
                 throw new IllegalArgumentException("Role no válido: " + role);
             }
         }
+    }
+
+    public List<User> getAllForAssistance() {
+        List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES","CLIENT_BOTH")
+                    .map(Role::valueOf)
+                    .collect(Collectors.toList());
+
+        return userRepository.findAllForAssistance(roles);
     }
 
     public List<User> getAllGymUsers() {

@@ -40,26 +40,13 @@ public class AttendanceService {
         User user = userRepository.findById(attendanceRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Long attendanceTypeId = attendanceRequest.getAttendanceTypeId();
-
-        AttendanceType attendanceType = attendanceTypeRepository.findById(attendanceTypeId)
-                .orElseThrow(() -> new RuntimeException("Tipo de asistencia no encontrado"));
+        List<AttendanceType> attendanceTypeList = attendanceTypeRepository.findByRoleAccepted(Role.valueOf(attendanceRequest.getRole()));
+        if(attendanceTypeList.size() != 1) throw new RuntimeException("Error con tipo de asistencia");
 
         ClassType classType = null;
         if(attendanceRequest.getClassTypeId() != null){
             classType = classTypeRepository.findById(attendanceRequest.getClassTypeId())
                     .orElseThrow(() -> new RuntimeException("Clase no encontrado"));
-        }
-
-
-        if(attendanceType == null){
-            Role role = user.getRole();
-            if (role == Role.valueOf("CLIENT_GYM")) {
-                attendanceType = attendanceTypeRepository.getById(1L);
-            }
-            else if(role == Role.valueOf("CLIENT_CLASSES")){
-                attendanceType = attendanceTypeRepository.getById(2L);
-            }
         }
 
         Optional<Payment> lastPayment = paymentRepository.findFirstByUserIdOrderByDueDateDesc(user.getId());
@@ -71,27 +58,7 @@ public class AttendanceService {
             LocalDate dueDate = lastPayment.get().getDueDate();
             if (dueDate.isBefore(today)) {
                 if(!isOutOfDueDate(user.getId())){
-                    Membership membershipGym = membershipRepository.findByName("Mes Completo")
-                            .orElseThrow(() -> new RuntimeException("Membresía 'Mes Completo' no encontrada"));
-                    if(Objects.equals(attendanceType.getName(), "Gimnasio")){
-                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), membershipGym, null);
-                    }
-                    else{
-                        paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), null, null);
-                    }
-                }
-            }
-            else{
-                if(Objects.equals(lastPayment.get().getStatus(), "PENDIENTE") && !Objects.equals(attendanceType.getName(), "Gimnasio")){
-                    List<Attendance> attendancesDue = attendanceRepository.findByUserIdAndDateBetween(user.getId(), lastPayment.get().getPaymentDate(), dueDate);
-                    Membership membership = lastPayment.get().getMembership();
-                    if(membership.getMaxClasses() != null){
-                        if(attendancesDue.size() > membership.getMaxClasses()){
-                            Membership membershipNew = membershipRepository.findClosestMembership(membership.getTransactionCategory(), attendancesDue.size()).orElseThrow(() -> new RuntimeException("Tipo de membresia no encontrada"));
-                            lastPayment.get().setMembership(membershipNew);
-                            paymentRepository.save(lastPayment.get());
-                        }
-                    }
+                    paymentService.registerPayment(user.getId(), 0f, "PENDIENTE", dueDate, dueDate.plusMonths(1), null, null);
                 }
             }
         }
@@ -99,7 +66,7 @@ public class AttendanceService {
         attendance.setUser(user);
         attendance.setDate(today);
         attendance.setTime(now);
-        attendance.setAttendanceType(attendanceType);
+        attendance.setAttendanceType(attendanceTypeList.getFirst());
         attendance.setClassType(classType);
         attendanceRepository.save(attendance);
 
@@ -126,7 +93,7 @@ public class AttendanceService {
             if (dueDate.isBefore(today)) {
                 var limitDayToAssist = dueDate.plusDays(7);
                 var lastAttendance = getLastAttendanceByUser(userId);
-                if(lastAttendance != null && (lastAttendance.getDate().isAfter(dueDate) && lastAttendance.getDate().isBefore(limitDayToAssist))){
+                if(lastAttendance == null || ((lastAttendance.getDate().isAfter(dueDate) && lastAttendance.getDate().isBefore(limitDayToAssist)))){
                     isOutOfDueDate = true;
                 }
             }

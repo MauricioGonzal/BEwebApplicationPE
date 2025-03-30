@@ -6,6 +6,7 @@ import com.aplicaciongimnasio.PuraEsencia.model.Transaction;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -21,11 +22,11 @@ public class PaymentService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public String registerPayment(Long userId, Float amount, String status, LocalDate paymentDate, LocalDate dueDate, Membership membership, Transaction transaction
     ) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
         Payment payment = new Payment();
         payment.setUser(user);
         payment.setPaymentDate(paymentDate);
@@ -34,9 +35,13 @@ public class PaymentService {
         payment.setMembership(membership);
         if(transaction != null){
             payment.setTransaction(transaction);
+            if(user.getRole() == null){
+                user.setRole(transaction.getTransactionCategory().getRoleAccepted());
+            }
         }
 
         paymentRepository.save(payment);
+
         return "Pago registrado correctamente.";
     }
 

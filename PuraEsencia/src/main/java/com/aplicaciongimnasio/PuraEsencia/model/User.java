@@ -21,7 +21,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "routine_id", nullable = true)
+    @JoinColumn(name = "routine_id")
     private Routine routine;
 
     @ManyToOne

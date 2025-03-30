@@ -39,7 +39,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest loginRequest) {
-        Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
+        Optional<User> user = userRepository.findByEmailAndIsActive(loginRequest.getEmail(), true);
         if (user.isEmpty()) throw new RuntimeException("Usuario o contraseña incorrectos.");
 
         Authentication authentication;
@@ -51,7 +51,7 @@ public class AuthController {
             throw new RuntimeException("Usuario o contraseña incorrectos.");
         }
 
-        EnumSet<Role> excludedRoles = EnumSet.of(Role.ADMIN, Role.TRAINER, Role.RECEPTIONIST);
+        EnumSet<Role> excludedRoles = EnumSet.of(Role.SUPER_ADMIN, Role.ADMIN, Role.TRAINER, Role.RECEPTIONIST);
         if (!excludedRoles.contains(user.get().getRole())) {
             List<Payment> payments = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), user.get().getId());
             if (payments.isEmpty()) throw new RuntimeException("Ingreso Inválido.");

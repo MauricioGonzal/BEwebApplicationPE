@@ -13,9 +13,13 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailAndIsActive(String email, Boolean isActive);
     List<User> findByTrainerIdAndRole(Long trainerId, Role role);
     List<User> findAllByRoleInAndIsActive(List<Role> roles, boolean isActive);
+    @Query("SELECT u FROM User u WHERE (u.role IN :roles OR u.role IS NULL) AND u.isActive = :isActive")
+    List<User> findAllByRoleInAndIsActiveOrRoleIsNull(@Param("roles") List<Role> roles, @Param("isActive") boolean isActive);
+    @Query("SELECT DISTINCT u FROM User u JOIN Payment p ON p.user = u WHERE (u.role IN :roles) AND u.isActive = true")
+    List<User> findAllForAssistance(@Param("roles") List<Role> roles);
     @Query("SELECT u FROM User u LEFT JOIN Salary s ON u = s.user WHERE u.role IN :roles AND u.isActive = true AND s.id IS NULL")
     List<User> findActiveUsersWithoutSalaries(@Param("roles") List<Role> roles);
     Optional<User> findById(Long id);
