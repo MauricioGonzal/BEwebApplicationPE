@@ -156,7 +156,7 @@ public class MembershipService {
             // Obtener el PaymentMethod correspondiente
             PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
                     .orElseThrow(() -> new RuntimeException("El método de pago no existe"));
-            List<Membership> existingMembership = membershipRepository.findMembership(paymentMethod, transactionCategory, id);
+            List<Membership> existingMembership = membershipRepository.findMembership(paymentMethod, transactionCategory, id, (Integer) membershipRequest.get("maxDays"), ((Integer) membershipRequest.get("maxClasses")));
             if (!existingMembership.isEmpty()) {
                 throw new RuntimeException("Ya existe una membresía con esas características");
             }

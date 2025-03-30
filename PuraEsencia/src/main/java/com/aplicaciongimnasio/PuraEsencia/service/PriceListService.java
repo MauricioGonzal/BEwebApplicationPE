@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
+import com.aplicaciongimnasio.PuraEsencia.dto.PriceListEditRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,28 +69,44 @@ public class PriceListService {
         return priceListRepository.save(newPriceList);
     }
 
-    public Boolean updatePriceLists(Map<String, Float> priceListsToEdit){
-            for (Map.Entry<String, Float> entry : priceListsToEdit.entrySet()) {
-                Long priceListId;
-                try {
-                    priceListId = Long.parseLong(entry.getKey()); // Convertir String a Long
-                } catch (NumberFormatException e) {
-                    throw new RuntimeException("ID de PriceList inválido: " + entry.getKey(), e);
-                }
-                Float amount = entry.getValue();
-                PriceList priceList = priceListRepository.findById(priceListId).orElseThrow(() -> new RuntimeException("Precio no encontrado"));
+    public Boolean updatePriceLists(List<PriceListEditRequest> priceListsToEdit){
+        PriceList priceList = null;
+        for(PriceListEditRequest priceListEditRequest : priceListsToEdit){
+            if(priceListEditRequest.getId() != null){
+                Float amount = priceListEditRequest.getAmount();
+
+                Long priceListId = priceListEditRequest.getId();
+
+                priceList = priceListRepository.findById(priceListId).orElseThrow(() -> new RuntimeException("Precio no encontrado"));
                 priceList.setValidUntil(LocalDate.now());
                 priceList.setIsActive(false);
                 priceListRepository.save(priceList);
+                if(amount == 0) continue;
+                PriceList priceListEdited = new PriceList();
+                priceListEdited.setTransactionCategory(priceList.getTransactionCategory());
+                priceListEdited.setPaymentMethod(priceList.getPaymentMethod());
+                priceListEdited.setAmount(amount);
+                priceListEdited.setProduct(priceList.getProduct());
+                priceListRepository.save(priceListEdited);
+            }
 
+        }
+
+        if(priceList == null) throw new RuntimeException("Error. Contacta con soporte.");
+
+        for(PriceListEditRequest priceListEditRequest : priceListsToEdit) {
+            if(priceListEditRequest.getId() == null){
                 PriceList newPriceList = new PriceList();
-                newPriceList.setTransactionCategory(priceList.getTransactionCategory());
-                newPriceList.setPaymentMethod(priceList.getPaymentMethod());
-                newPriceList.setAmount(amount);
                 newPriceList.setProduct(priceList.getProduct());
+                newPriceList.setTransactionCategory(priceList.getTransactionCategory());
+                newPriceList.setAmount(priceListEditRequest.getAmount());
+                newPriceList.setPaymentMethod(priceListEditRequest.getPaymentMethod());
                 priceListRepository.save(newPriceList);
             }
-        return true;
+
+        }
+
+            return true;
     }
 
     public Boolean logicDelete(Long id) {

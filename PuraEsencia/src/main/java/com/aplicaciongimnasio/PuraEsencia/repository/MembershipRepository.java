@@ -37,9 +37,13 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
             "WHERE pl.isActive = true " +
             "AND pl.paymentMethod = :paymentMethod " +
             "AND m.transactionCategory = :transactionCategory " +
-            "AND m.id != :id")
+            "AND m.id != :id " +
+            "AND m.maxDays = :maxDays " +
+            "AND m.maxClasses = :maxClasses")
     List<Membership> findMembership(@Param("paymentMethod") PaymentMethod paymentMethod,
                                     @Param("transactionCategory") TransactionCategory transactionCategory,
-                                    @Param("id") Long id);
+                                    @Param("id") Long id,
+                                    @Param("maxDays") Integer maxDays,
+                                    @Param("maxClasses") Integer maxClasses);
 
 }

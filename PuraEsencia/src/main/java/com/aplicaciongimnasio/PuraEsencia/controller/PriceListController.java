@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.PriceListEditRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.PriceList;
 import com.aplicaciongimnasio.PuraEsencia.service.PriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class PriceListController {
     }
 
     @PutMapping("/updatePriceLists")
-    public ResponseEntity<?> updatePriceLists(@RequestBody Map<String, Float> priceListsToEdit) {
+    public ResponseEntity<?> updatePriceLists(@RequestBody List<PriceListEditRequest> priceListsToEdit) {
         return ResponseEntity.ok(priceListService.updatePriceLists(priceListsToEdit));
     }
 }
