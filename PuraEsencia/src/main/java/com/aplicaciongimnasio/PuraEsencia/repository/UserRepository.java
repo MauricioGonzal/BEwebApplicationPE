@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailAndIsActive(String email, Boolean isActive);
-    List<User> findByTrainerIdAndRole(Long trainerId, Role role);
+    List<User> findByTrainerId(Long trainerId);
     List<User> findAllByRoleInAndIsActive(List<Role> roles, boolean isActive);
     @Query("SELECT u FROM User u WHERE (u.role IN :roles OR u.role IS NULL) AND u.isActive = :isActive")
     List<User> findAllByRoleInAndIsActiveOrRoleIsNull(@Param("roles") List<Role> roles, @Param("isActive") boolean isActive);

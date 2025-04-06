@@ -16,5 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class MembershipResponse {
     private Membership membership;
+    private List<Membership> membershipsAssociated;
     private List<PriceList> priceLists;
 }

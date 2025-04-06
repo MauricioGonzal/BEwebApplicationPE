@@ -31,6 +31,14 @@ public class Membership {
     @JoinColumn(name = "transaction_category_id")
     private TransactionCategory transactionCategory;
 
+    @ManyToOne
+    @JoinColumn(name = "area_id")
+    private Area area;
+
+    @ManyToOne
+    @JoinColumn(name = "membership_type_id")
+    private MembershipType membershipType;
+
     private Boolean isActive=true;
 }
 

@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.PriceListEditRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,9 +17,9 @@ public class PriceListService {
     PriceListRepository priceListRepository;
 
     public PriceList createPrice(PriceList priceList) {
-        if(getActive(priceList.getTransactionCategory(), priceList.getPaymentMethod(), priceList.getMembership()).isPresent()){
+        /*if(getActive(priceList.getTransactionCategory(), priceList.getPaymentMethod(), priceList.getMembership()).isPresent()){
             throw new RuntimeException("Ya existe un precio para " + priceList.getTransactionCategory().getName() + " ,  " + priceList.getPaymentMethod().getName()+ " y membresia: " + priceList.getMembership().getName());
-        }
+        }*/
 
         return priceListRepository.save(priceList);
     }
@@ -34,14 +32,14 @@ public class PriceListService {
         return priceListRepository.findByMembershipIsNotNullAndIsActive(true);
     }
 
-    public Float getAmountForTransaction(TransactionCategory transactionCategory, PaymentMethod paymentMethod, Membership membership) {
-        return priceListRepository.findByTransactionCategoryAndPaymentMethodAndMembershipAndIsActive(transactionCategory, paymentMethod, membership, true)
+    public Float getAmountForTransaction(Product product, PaymentMethod paymentMethod, Membership membership) {
+        return priceListRepository.findByProductAndPaymentMethodAndMembershipAndIsActive(product, paymentMethod, membership, true)
                 .map(PriceList::getAmount)
-                .orElseThrow(() -> new RuntimeException("No price found for transactionCategory: " + transactionCategory.getName() + " and paymentMethod: " + paymentMethod.getName()));
+                .orElseThrow(() -> new RuntimeException("No price found for paymentMethod: " + paymentMethod.getName() + "and" + product == null ? product.getName() : membership.getName()));
     }
 
-    public Optional<PriceList> getActive(TransactionCategory transactionCategory, PaymentMethod paymentMethod, Membership membership) {
-        return priceListRepository.findByTransactionCategoryAndPaymentMethodAndMembershipAndIsActive(transactionCategory, paymentMethod, membership, true);
+    public Optional<PriceList> getActive(Product product, PaymentMethod paymentMethod, Membership membership) {
+        return priceListRepository.findByProductAndPaymentMethodAndMembershipAndIsActive(product, paymentMethod, membership, true);
     }
 
     public PriceList updateAmount(Long id, Float newAmount){

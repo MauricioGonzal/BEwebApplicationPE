@@ -3,10 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.MembershipRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
-import com.aplicaciongimnasio.PuraEsencia.repository.MembershipRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.PaymentMethodRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.PriceListRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.TransactionCategoryRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,9 @@ public class MembershipService {
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
 
+    @Autowired
+    private MembershipItemRepository membershipItemRepository;
+
     public List<Membership> getAllMemberships() {
         return membershipRepository.findByIsActive(true);
     }
@@ -61,7 +61,8 @@ public class MembershipService {
         for (Map.Entry<Membership, List<PriceList>> entry : membershipPriceListMap.entrySet()) {
             Membership membership = entry.getKey();
             List<PriceList> activePriceLists = entry.getValue();
-            responses.add(new MembershipResponse(membership, activePriceLists));
+            List<Membership> membershipAssociated = membershipRepository.getAssociatedMemberships(membership);
+            responses.add(new MembershipResponse(membership, membershipAssociated, activePriceLists));
         }
 
         return responses;
@@ -79,8 +80,23 @@ public class MembershipService {
         membership.setName(membershipRequest.getName());
         membership.setMaxClasses(membershipRequest.getMaxClasses());
         membership.setMaxDays(membershipRequest.getMaxDays());
-        membership.setTransactionCategory(membershipRequest.getTransactionCategory());
+        //membership.setTransactionCategory(membershipRequest.getTransactionCategory());
+        membership.setMembershipType(membership.getMembershipType());
+        membership.setArea(membershipRequest.getArea());
+        membership.setMembershipType(membershipRequest.getMembershipType());
+
         membership = membershipRepository.save(membership);
+
+        var combinedMembershipIds = membershipRequest.getCombinedMembershipIds();
+        if(membershipRequest.getCombinedMembershipIds() != null && !membershipRequest.getCombinedMembershipIds().isEmpty()){
+            for(Long membershipIdToAssociate : combinedMembershipIds){
+                Membership membershipToAssociate = membershipRepository.findById(membershipIdToAssociate).orElseThrow(() -> new RuntimeException("No se encuentra la membresia que se quiere combinar"));
+                MembershipItem membershipItem = new MembershipItem();
+                membershipItem.setMembershipPrincipal(membership);
+                membershipItem.setMembershipAssociated(membershipToAssociate);
+                membershipItemRepository.save(membershipItem);
+            }
+        }
 
         for (Map.Entry<Long, Float> entry : membershipRequest.getPrices().entrySet()) {
             if(entry.getValue() == null) continue;
@@ -95,7 +111,7 @@ public class MembershipService {
             priceList.setMembership(membership);
             priceList.setAmount(entry.getValue());
             priceList.setPaymentMethod(pm);
-            priceList.setTransactionCategory(membershipRequest.getTransactionCategory());
+            //priceList.setTransactionCategory(membershipRequest.getTransactionCategory());
             priceList.setValidFrom(LocalDate.now());
             priceListRepository.save(priceList);
         }
@@ -182,7 +198,7 @@ public class MembershipService {
         }
 
         // Retornar la respuesta con la nueva membresía y sus precios
-        return new MembershipResponse(newMembership, newPriceLists);
+        return new MembershipResponse(newMembership, List.of(),newPriceLists);
     }
 
 

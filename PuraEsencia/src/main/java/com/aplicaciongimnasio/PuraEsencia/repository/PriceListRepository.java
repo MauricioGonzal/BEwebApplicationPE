@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PriceListRepository extends JpaRepository<PriceList, Long> {
-    Optional<PriceList> findByTransactionCategoryAndPaymentMethodAndMembershipAndIsActive(TransactionCategory transactionCategory, PaymentMethod paymentMethod, Membership membership, Boolean isActive);
+    Optional<PriceList> findByProductAndPaymentMethodAndMembershipAndIsActive(Product product, PaymentMethod paymentMethod, Membership membership, Boolean isActive);
     List<PriceList> findByMembershipIsNotNullAndIsActive(Boolean isActive);
 
     @Query("select pl.amount from Product p JOIN ProductStock ps ON ps.product = p JOIN PriceList pl ON pl.product = p WHERE p.name = :name AND pl.paymentMethod = :paymentMethod AND pl.isActive = TRUE")

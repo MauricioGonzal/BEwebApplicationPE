@@ -3,16 +3,15 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.UserRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
-import com.aplicaciongimnasio.PuraEsencia.repository.GymRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.RoutineRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.RoutineSetRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
+import com.aplicaciongimnasio.PuraEsencia.repository.*;
 import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +33,21 @@ public class UserService {
     private GymRepository gymRepository;
 
     @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private MembershipRepository membershipRepository;
+
+    @Autowired
+    private MembershipItemRepository membershipItemRepository;
+
+    @Autowired
+    private MembershipTypeRepository membershipTypeRepository;
+
+    @Autowired
+    private AreaRepository areaRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
@@ -46,6 +60,8 @@ public class UserService {
         user.setPassword(encryptedPassword);
 
         user.setIsActive(true);
+
+
 
         return userRepository.save(user);
     }
@@ -62,7 +78,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
         user.setEmail(userRequest.getEmail());
         user.setFullName(userRequest.getFullName());
-        if(!Objects.equals(userRequest.getRole().toString(), "CLIENT")) user.setRole(Role.valueOf(userRequest.getRole()));
+        user.setRole(Role.valueOf(userRequest.getRole()));
         user.setGym(admin.getGym());
 
         return userRepository.save(user);
@@ -164,42 +180,27 @@ public class UserService {
     }
 
     public List<User> getClientsByTrainerId(Long trainerId) {
-        return userRepository.findByTrainerIdAndRole(trainerId, Role.CLIENT_GYM);
+        return userRepository.findByTrainerId(trainerId);
     }
 
     public List<User> getAllByRole(String role) {
-        if (role.equalsIgnoreCase("CLIENTS")) {
-            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES","CLIENT_BOTH")
-                    .map(Role::valueOf)
-                    .collect(Collectors.toList());
-
-            return userRepository.findAllByRoleInAndIsActiveOrRoleIsNull(roles, true);
-        } else {
-            try {
-                Role userRole = Role.valueOf(role.toUpperCase());
-                return userRepository.findAllByRoleAndIsActive(userRole, true);
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Role no válido: " + role);
-            }
+        try {
+            Role userRole = Role.valueOf(role.toUpperCase());
+            return userRepository.findAllByRoleAndIsActive(userRole, true);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Role no válido: " + role);
         }
     }
 
     public List<User> getAllForAssistance() {
-        List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_CLASSES","CLIENT_BOTH")
+        List<Role> roles = Stream.of("CLIENT")
                     .map(Role::valueOf)
                     .collect(Collectors.toList());
 
         return userRepository.findAllForAssistance(roles);
     }
 
-    public List<User> getAllGymUsers() {
-            List<Role> roles = Stream.of("CLIENT_GYM", "CLIENT_BOTH")
-                    .map(Role::valueOf)  // Convierte el String en el enum correspondiente
-                    .collect(Collectors.toList());
 
-            return userRepository.findAllByRoleInAndIsActive(roles, true);
-
-    }
 
     public List<User> getAll() {
         return userRepository.findByIsActive(true);
@@ -229,4 +230,38 @@ public class UserService {
 
         return true;
     }
+
+    public List<User> getAllGymUsers() {
+        List<Payment> paymentList = paymentRepository.findActualPayment(LocalDate.now());
+        List<User> users = new ArrayList<>();
+
+        Area area = areaRepository.findByName("Musculacion");
+        if(area == null) throw new RuntimeException("ERROR. Contactar a soporte");
+
+        for(Payment payment: paymentList){
+            List<MembershipItem> associatedMemberships = membershipItemRepository.findByMembershipPrincipal(payment.getMembership());
+            if(!associatedMemberships.isEmpty()){
+                associatedMemberships.stream()
+                        .map(MembershipItem::getMembershipAssociated)
+                        .filter(Objects::nonNull) // Por si acaso hay alguno null
+                        .forEach(associated -> {
+                          if(associated.getArea() == area){
+                              users.add(payment.getUser());
+                              return;
+                          }
+                        }
+                        );
+            }
+            else{
+                if(payment.getMembership().getArea() == area){
+                    users.add(payment.getUser());
+                }
+            }
+        }
+
+    return users;
+
+
+    }
+
 }

@@ -71,11 +71,11 @@ public class TransactionService {
             if(transactionRequest.getMembership() != null){
                 var membership = membershipRepository.findById(transactionRequest.getMembership().getId())
                         .orElseThrow(() -> new RuntimeException("Membership not found"));
-                var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, membership);
+                var amount = priceListService.getAmountForTransaction(null, paymentMethod, membership);
                 transaction.setAmount(amount);
             }
             else{
-                var amount = priceListService.getAmountForTransaction(transactionCategory, paymentMethod, null);
+                var amount = priceListService.getAmountForTransaction(transactionRequest.getProduct(), paymentMethod, null);
                 transaction.setAmount(amount * transactionRequest.getQuantity());
             }
         }

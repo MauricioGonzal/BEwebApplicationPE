@@ -46,4 +46,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
                                     @Param("maxDays") Integer maxDays,
                                     @Param("maxClasses") Integer maxClasses);
 
+    @Query("SELECT m FROM Membership m JOIN MembershipItem mi ON mi.membershipAssociated = m WHERE mi.membershipPrincipal = :principalMembership")
+    List<Membership> getAssociatedMemberships(@Param("principalMembership") Membership principalMembership);
+
 }
