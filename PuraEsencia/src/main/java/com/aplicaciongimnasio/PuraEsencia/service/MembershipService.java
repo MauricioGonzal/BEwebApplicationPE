@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -42,6 +43,35 @@ public class MembershipService {
 
     public List<MembershipResponse> getAllMembershipsAndPriceLists() {
         List<PriceList> priceLists = priceListRepository.findActivePriceListsWithMembership();
+
+        // Crear un mapa que asocie cada Membership con su lista de PriceLists
+        Map<Membership, List<PriceList>> membershipPriceListMap = new HashMap<>();
+
+        // Agrupar las PriceLists por Membership
+        for (PriceList priceList : priceLists) {
+            Membership membership = priceList.getMembership();  // Obtener la Membership asociada
+
+            // Si la Membership ya está en el mapa, agregamos el PriceList, sino, la creamos
+            membershipPriceListMap
+                    .computeIfAbsent(membership, k -> new ArrayList<>())
+                    .add(priceList);
+        }
+
+        // Crear los MembershipResponse con la lista de PriceLists
+        List<MembershipResponse> responses = new ArrayList<>();
+        for (Map.Entry<Membership, List<PriceList>> entry : membershipPriceListMap.entrySet()) {
+            Membership membership = entry.getKey();
+            List<PriceList> activePriceLists = entry.getValue();
+            List<Membership> membershipAssociated = membershipRepository.getAssociatedMemberships(membership);
+            responses.add(new MembershipResponse(membership, membershipAssociated, activePriceLists));
+        }
+
+        return responses;
+
+    }
+
+    public List<MembershipResponse> getAllSimpleMembershipsAndPriceLists() {
+        List<PriceList> priceLists = priceListRepository.findActivePriceListsWithSimpleMembership();
 
         // Crear un mapa que asocie cada Membership con su lista de PriceLists
         Map<Membership, List<PriceList>> membershipPriceListMap = new HashMap<>();
@@ -119,6 +149,7 @@ public class MembershipService {
         return true;
     }
 
+    @Transactional
     public Boolean deleteMembershipWithPrice(MembershipResponse membershipResponse){
         for (PriceList priceList : membershipResponse.getPriceLists()) {
             priceListService.logicDelete(priceList.getId());
@@ -133,73 +164,113 @@ public class MembershipService {
 
         membership.setIsActive(false);
         membershipRepository.save(membership);
+
+        if(Objects.equals(membership.getMembershipType().getName(), "Simple")){
+            //Buscamos si en alguna membresia combinada existe esta membresia
+            List<MembershipItem> associated = membershipItemRepository.findByMembershipAssociatedAndIsActive(membership, true);
+            if(!associated.isEmpty())  throw new RuntimeException("Esta membresia esta asociada a una membresia combinada. No se puede eliminar.");
+        }
+        List<MembershipItem> membershipList = membershipItemRepository.findByMembershipPrincipalAndIsActive(membership, true);
+
+        for(MembershipItem membershipItem : membershipList){
+            membershipItem.setIsActive(false);
+            membershipItemRepository.save(membershipItem);
+        }
         return true;
     }
 
     @Transactional
-    public MembershipResponse update(Long id, Map<String, Object> membershipRequest) {
+    public MembershipResponse update(Long id, @RequestBody MembershipRequest membershipRequest) {
         // Obtener la membresía existente
-        Membership membership = membershipRepository.findById(id)
+        Membership existingMembership = membershipRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("La membresía no existe"));
-        // Obtener los datos de la categoría de transacción
-        LinkedHashMap<String, Object> transactionCategoryData = (LinkedHashMap<String, Object>) membershipRequest.get("transactionCategory");
-        TransactionCategory transactionCategory = objectMapper.convertValue(transactionCategoryData, TransactionCategory.class);
+
+        List<MembershipItem> existingMembershipItems = membershipItemRepository.findByMembershipPrincipalAndIsActive(existingMembership, true);
+        existingMembershipItems.forEach(mi -> {
+            membershipItemRepository.delete(mi);
+        });
+
+        TransactionCategory transactionCategory = membershipRequest.getTransactionCategory();
+        MembershipType membershipType = membershipRequest.getMembershipType();
 
         // Crear la nueva membresía
         Membership membershipToSave = new Membership();
-        membershipToSave.setName((String) membershipRequest.get("name"));
+        membershipToSave.setName(membershipRequest.getName());
         membershipToSave.setTransactionCategory(transactionCategory);
-        membershipToSave.setMaxDays((Integer) membershipRequest.get("maxDays"));
-        membershipToSave.setMaxClasses((Integer) membershipRequest.get("maxClasses"));
+        membershipToSave.setMembershipType(membershipType);
+        membershipToSave.setMaxDays(membershipRequest.getMaxDays());
+        membershipToSave.setMaxClasses(membershipRequest.getMaxClasses());
+        membershipToSave.setIsActive(true);
         Membership newMembership = membershipRepository.save(membershipToSave);
 
-        // Desactivar la membresía actual
-        membership.setIsActive(false);
-        membershipRepository.save(membership);
-
-        // Obtener los precios de la solicitud
-        Map<String, Object> prices = (Map<String, Object>) membershipRequest.get("prices");
-
-        List<PriceList> newPriceLists = new ArrayList<>();
-        for (Map.Entry<String, Object> entry : prices.entrySet()) {
-            // Verificar si ya existe una membresía con las mismas características
-            if(entry.getValue() == "" || entry.getValue() == null) continue;
-            Float amount = Float.parseFloat(entry.getValue().toString());  // Monto
-
-
-            Long paymentMethodId = Long.parseLong(entry.getKey());  // ID de paymentMethod
-
-            // Obtener el PaymentMethod correspondiente
-            PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
-                    .orElseThrow(() -> new RuntimeException("El método de pago no existe"));
-            List<Membership> existingMembership = membershipRepository.findMembership(paymentMethod, transactionCategory, id, (Integer) membershipRequest.get("maxDays"), ((Integer) membershipRequest.get("maxClasses")));
-            if (!existingMembership.isEmpty()) {
-                throw new RuntimeException("Ya existe una membresía con esas características");
+        // Si es combinada, se agregan las membresías combinadas
+        if ("Combinada".equalsIgnoreCase(membershipType.getName())) {
+            List<Long> combinedIds = membershipRequest.getCombinedMembershipIds();
+            if (combinedIds != null && !combinedIds.isEmpty()) {
+                List<Membership> combinedMemberships = membershipRepository.findAllById(combinedIds);
+                for(Membership membership : combinedMemberships){
+                    MembershipItem membershipItem = new MembershipItem();
+                    membershipItem.setMembershipPrincipal(newMembership);
+                    membershipItem.setMembershipAssociated(membership);
+                    membershipItemRepository.save(membershipItem);
+                }
             }
-            // Crear un nuevo PriceList por cada paymentMethod y amount
-            PriceList newPriceList = new PriceList();
-            newPriceList.setTransactionCategory(transactionCategory);
-            newPriceList.setPaymentMethod(paymentMethod);
-            newPriceList.setMembership(newMembership);
-            newPriceList.setAmount(amount);
-            newPriceList.setValidFrom(LocalDate.now());
-            newPriceList.setIsActive(true);
-            newPriceList.setValidUntil(null);  // No tiene fecha de fin porque es el precio actual
-
-            newPriceList = priceListRepository.save(newPriceList);
-            newPriceLists.add(newPriceList);
         }
 
-        List<PriceList> priceListsToDeactivate = priceListRepository.findByMembership(membership);
-        for(PriceList pl : priceListsToDeactivate){
+
+        // Desactivar la membresía anterior
+        existingMembership.setIsActive(false);
+        membershipRepository.save(existingMembership);
+
+        // Crear los nuevos precios
+        Map<Long, Float> prices = membershipRequest.getPrices();
+        List<PriceList> newPriceLists = new ArrayList<>();
+
+        for (Map.Entry<Long, Float> entry : prices.entrySet()) {
+            Float amount = entry.getValue();
+            if (amount == null) continue;
+
+            Long paymentMethodId = entry.getKey();
+
+            PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId)
+                    .orElseThrow(() -> new RuntimeException("El método de pago no existe"));
+
+            // Verificar duplicado
+            List<Membership> existing = membershipRepository.findMembership(
+                    paymentMethod,
+                    transactionCategory,
+                    id,
+                    membershipRequest.getMaxDays(),
+                    membershipRequest.getMaxClasses()
+            );
+
+            if (!existing.isEmpty()) {
+                throw new RuntimeException("Ya existe una membresía con esas características");
+            }
+
+            PriceList priceList = new PriceList();
+            priceList.setTransactionCategory(transactionCategory);
+            priceList.setPaymentMethod(paymentMethod);
+            priceList.setMembership(newMembership);
+            priceList.setAmount(amount);
+            priceList.setValidFrom(LocalDate.now());
+            priceList.setIsActive(true);
+            priceList.setValidUntil(null);
+
+            newPriceLists.add(priceListRepository.save(priceList));
+        }
+
+        // Desactivar precios anteriores
+        List<PriceList> oldPriceLists = priceListRepository.findByMembership(existingMembership);
+        for (PriceList pl : oldPriceLists) {
             pl.setIsActive(false);
             pl.setValidUntil(LocalDate.now());
             priceListRepository.save(pl);
         }
 
-        // Retornar la respuesta con la nueva membresía y sus precios
-        return new MembershipResponse(newMembership, List.of(),newPriceLists);
+        return new MembershipResponse(newMembership, List.of(), newPriceLists);
     }
+
 
 
 }

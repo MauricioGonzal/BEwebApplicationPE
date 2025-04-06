@@ -23,4 +23,6 @@ public class MembershipItem {
     @ManyToOne
     @JoinColumn(name = "membership_associated_id")
     private Membership membershipAssociated;
+
+    private Boolean isActive=true;
 }

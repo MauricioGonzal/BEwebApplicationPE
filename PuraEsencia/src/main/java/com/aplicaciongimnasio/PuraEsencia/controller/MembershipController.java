@@ -29,6 +29,11 @@ public class MembershipController {
         return membershipService.getAllMembershipsAndPriceLists();
     }
 
+    @GetMapping("/priceList/simples")
+    public List<MembershipResponse> getAllSimpleMembershipsAndPriceList() {
+        return membershipService.getAllSimpleMembershipsAndPriceLists();
+    }
+
     @GetMapping("/{id}")
     public Membership getById(@PathVariable Long id) {
         return membershipService.getById(id);
@@ -51,8 +56,8 @@ public class MembershipController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<MembershipResponse> update(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
-        MembershipResponse membershipResponse = membershipService.update(id, requestBody);
+    public ResponseEntity<MembershipResponse> update(@PathVariable Long id, @RequestBody MembershipRequest membershipRequest) {
+        MembershipResponse membershipResponse = membershipService.update(id, membershipRequest);
         return ResponseEntity.ok(membershipResponse);
     }
 

@@ -20,6 +20,9 @@ public interface PriceListRepository extends JpaRepository<PriceList, Long> {
     @Query("SELECT pl FROM PriceList pl JOIN FETCH pl.membership m WHERE pl.isActive = true")
     List<PriceList> findActivePriceListsWithMembership();
 
+    @Query("SELECT pl FROM PriceList pl JOIN FETCH pl.membership m WHERE pl.isActive = true AND m.membershipType.id = 1")
+    List<PriceList> findActivePriceListsWithSimpleMembership();
+
     @Query("SELECT pl FROM PriceList pl LEFT JOIN FETCH pl.product p JOIN FETCH ProductStock ps ON ps.product = p WHERE pl.isActive = true")
     List<PriceList> findActivePriceListsWithProductAndStock();
 

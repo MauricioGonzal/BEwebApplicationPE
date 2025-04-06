@@ -239,7 +239,7 @@ public class UserService {
         if(area == null) throw new RuntimeException("ERROR. Contactar a soporte");
 
         for(Payment payment: paymentList){
-            List<MembershipItem> associatedMemberships = membershipItemRepository.findByMembershipPrincipal(payment.getMembership());
+            List<MembershipItem> associatedMemberships = membershipItemRepository.findByMembershipPrincipalAndIsActive(payment.getMembership(), true);
             if(!associatedMemberships.isEmpty()){
                 associatedMemberships.stream()
                         .map(MembershipItem::getMembershipAssociated)
