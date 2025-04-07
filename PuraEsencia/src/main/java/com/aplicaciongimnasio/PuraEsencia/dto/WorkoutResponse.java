@@ -14,6 +14,6 @@ import java.util.List;
 @Setter
 public  class WorkoutResponse {
     private WorkoutSession workoutSession;
-    private WorkoutLog workoutLog;
+    private WorkoutLogResponse workoutLogResponse;
     private List<WorkoutSet> sets;
 }

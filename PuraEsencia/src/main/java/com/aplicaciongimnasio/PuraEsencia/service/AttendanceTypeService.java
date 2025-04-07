@@ -21,11 +21,9 @@ public class AttendanceTypeService {
 
     public AttendanceType create (AttendanceTypeRequest attendanceTypeRequest){
         if(!attendanceTypeRepository.findByName(attendanceTypeRequest.getName()).isEmpty()) throw new RuntimeException("Ya existe un tipo de asistencia con ese nombre");
-        Role role = Role.valueOf(attendanceTypeRequest.getRoleAccepted().toUpperCase());
 
         AttendanceType attendanceType = new AttendanceType();
         attendanceType.setName(attendanceTypeRequest.getName());
-        attendanceType.setRoleAccepted(role);
 
         return attendanceTypeRepository.save(attendanceType);
     }

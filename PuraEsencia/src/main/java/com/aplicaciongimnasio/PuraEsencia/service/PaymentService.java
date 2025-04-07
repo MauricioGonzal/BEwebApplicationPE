@@ -35,9 +35,6 @@ public class PaymentService {
         payment.setMembership(membership);
         if(transaction != null){
             payment.setTransaction(transaction);
-            if(user.getRole() == null){
-                user.setRole(transaction.getTransactionCategory().getRoleAccepted());
-            }
         }
 
         paymentRepository.save(payment);

@@ -56,7 +56,6 @@ public class AuthController {
             List<Payment> payments = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), user.get().getId());
             if (payments.isEmpty()) throw new RuntimeException("Ingreso Inválido.");
             else if(payments.getFirst().getMembership() != null){
-                user.get().setRole(payments.getFirst().getMembership().getTransactionCategory().getRoleAccepted());
                 userRepository.save(user.get());
             }
         }

@@ -29,10 +29,6 @@ public class TransactionCategoryService {
             throw new RuntimeException("Ya existe una categoria con ese nombre");
         }
         TransactionCategory transactionCategory = new TransactionCategory();
-        if(transactionCategoryRequest.getRoleAccepted() != null){
-            Role role = Role.valueOf(transactionCategoryRequest.getRoleAccepted().toUpperCase());
-            transactionCategory.setRoleAccepted(role);
-        }
 
         transactionCategory.setName(transactionCategoryRequest.getName());
         return transactionCategoryRepository.save(transactionCategory);

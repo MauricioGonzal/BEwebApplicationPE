@@ -1,9 +1,13 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
+import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutLogResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.WorkoutSessionRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +32,9 @@ public class WorkoutSessionService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
+    @Autowired
+    private RoutineSetRepository routineSetRepository;
+
     @Transactional
     public WorkoutSession saveWorkoutSession(WorkoutSessionRequest request) {
         User user = userRepository.findById(request.getUserId())
@@ -42,9 +49,9 @@ public class WorkoutSessionService {
 
         WorkoutLog log = new WorkoutLog();
         log.setSession(session);
-        Exercise exercise = exerciseRepository.findById(request.getExerciseId())
-                .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado"));
-        log.setExercise(exercise);
+        RoutineSet routineSet = routineSetRepository.findById(request.getExerciseId())
+                .orElseThrow(() -> new RuntimeException("Set no encontrado"));
+        log.setRoutineSet(routineSet);
         log.setNotes(request.getNote());
 
         WorkoutLog workoutLog = workoutLogRepository.save(log);
@@ -88,11 +95,29 @@ public class WorkoutSessionService {
 
             // Crear una nueva respuesta si no existe en el mapa
             WorkoutResponse response = logToResponseMap.computeIfAbsent(log, k -> {
-                WorkoutResponse newResponse = new WorkoutResponse();
-                newResponse.setWorkoutSession(session);
-                newResponse.setWorkoutLog(log);
-                newResponse.setSets(new ArrayList<>());
-                return newResponse;
+                WorkoutLogResponse workoutLogResponse = new WorkoutLogResponse();
+                workoutLogResponse.setSession(log.getSession());
+                List<Exercise> exerciseList = new ArrayList<>();
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                String json = log.getRoutineSet().getExerciseIds(); // por ejemplo: "[1,2,3]"
+                try {
+                    List<Long> exerciseIds = objectMapper.readValue(json, new TypeReference<List<Long>>() {});
+                    for(Long exerciseId : exerciseIds){
+                        exerciseList.add(exerciseRepository.findById(exerciseId).orElseThrow(()-> new RuntimeException("No se encontro el ejercicio")));
+                    }
+                    workoutLogResponse.setExercisesRoutineSet(exerciseList);
+                    workoutLogResponse.setNotes(log.getNotes());
+                    WorkoutResponse newResponse = new WorkoutResponse();
+                    newResponse.setWorkoutSession(session);
+
+                    newResponse.setWorkoutLogResponse(workoutLogResponse);
+                    newResponse.setSets(new ArrayList<>());
+                    return newResponse;
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
             });
 
             // Añadir el WorkoutSet a la lista de sets
