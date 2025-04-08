@@ -33,18 +33,27 @@ public class AttendanceService {
     private MembershipRepository membershipRepository;
 
     @Autowired
+    private MembershipItemRepository membershipItemRepository;
+
+    @Autowired
     private ClassTypeRepository classTypeRepository;
+
+    @Autowired
+    private AreaRepository areaRepository;
+
 
 
     public String registerAttendance(AttendanceRequest attendanceRequest) {
         User user = userRepository.findById(attendanceRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        List<AttendanceType> attendanceTypeList = attendanceTypeRepository.findByRoleAccepted(Role.valueOf(attendanceRequest.getRole()));
-        if(attendanceTypeList.size() != 1) throw new RuntimeException("Error con tipo de asistencia");
+        Area area = areaRepository.findByName("Musculacion");
+        List<AttendanceType> attendanceTypeList = attendanceTypeRepository.findByArea(area);
 
         ClassType classType = null;
         if(attendanceRequest.getClassTypeId() != null){
+            area = areaRepository.findByName("Clases");
+            attendanceTypeList = attendanceTypeRepository.findByArea(area);
             classType = classTypeRepository.findById(attendanceRequest.getClassTypeId())
                     .orElseThrow(() -> new RuntimeException("Clase no encontrado"));
         }
@@ -140,9 +149,19 @@ public class AttendanceService {
             LocalDate startDate = payment.getPaymentDate();
             LocalDate endDate = payment.getDueDate();
             int maxClasses = 0;
-            if(payment.getMembership() != null && payment.getMembership().getMaxClasses() != null){
-                maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+            if(payment.getMembership() != null){
+                Membership membership = payment.getMembership();
+                if(membership.getMaxClasses() != null){
+                    maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+                }
+                else if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
+                    List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
+                    for (MembershipItem membershipItem : membershipItemList){
+                        if(membershipItem.getMembershipAssociated().getMaxClasses() != null) maxClasses += membershipItem.getMembershipAssociated().getMaxClasses();
+                    }
+                }
             }
+
 
             List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
 
@@ -170,8 +189,16 @@ public class AttendanceService {
             LocalDate startDate = firstActivePayment.getPaymentDate();
             LocalDate endDate = firstActivePayment.getDueDate();
             int maxClasses = 0;
-            if(firstActivePayment.getMembership().getMaxClasses() != null){
+            Membership membership = firstActivePayment.getMembership();
+            if(membership.getMaxClasses() != null){
                 maxClasses = firstActivePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+            }
+            else if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
+                List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
+                for (MembershipItem membershipItem : membershipItemList){
+                    if(membershipItem.getMembershipAssociated().getMaxClasses() != null) maxClasses += membershipItem.getMembershipAssociated().getMaxClasses();
+                }
+
             }
 
             List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);

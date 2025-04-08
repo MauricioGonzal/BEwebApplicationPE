@@ -22,6 +22,10 @@ public class ClassTypeService {
         return classTypeRepository.findByIsActive(true);
     }
 
+    public List<ClassType> getAllOnSchedule() {
+        return classTypeRepository.getAllOnSchedule();
+    }
+
     public ClassType create(ClassType classType){
         return classTypeRepository.save(classType);
     }

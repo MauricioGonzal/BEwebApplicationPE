@@ -20,6 +20,11 @@ public class ClassTypeController {
         return classTypeService.getAll();
     }
 
+    @GetMapping("/onSchedule")
+    public List<ClassType> getAllOnSchedule() {
+        return classTypeService.getAllOnSchedule();
+    }
+
     @PostMapping
     public ClassType create(@RequestBody ClassType classType){
         return classTypeService.create(classType);

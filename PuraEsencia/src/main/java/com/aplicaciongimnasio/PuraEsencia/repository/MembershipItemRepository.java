@@ -10,5 +10,9 @@ import java.util.List;
 @Repository
 public interface MembershipItemRepository extends JpaRepository<MembershipItem, Long> {
     List<MembershipItem> findByMembershipPrincipalAndIsActive(Membership membership, Boolean isActive);
+    List<MembershipItem> findByMembershipPrincipal(Membership membership);
+
     List<MembershipItem> findByMembershipAssociatedAndIsActive(Membership membership, Boolean isActive);
+    List<MembershipItem> findByMembershipAssociated(Membership membership);
+
 }

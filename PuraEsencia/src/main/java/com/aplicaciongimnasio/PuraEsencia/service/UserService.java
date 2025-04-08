@@ -239,7 +239,7 @@ public class UserService {
         if(area == null) throw new RuntimeException("ERROR. Contactar a soporte");
 
         for(Payment payment: paymentList){
-            List<MembershipItem> associatedMemberships = membershipItemRepository.findByMembershipPrincipalAndIsActive(payment.getMembership(), true);
+            List<MembershipItem> associatedMemberships = membershipItemRepository.findByMembershipPrincipal(payment.getMembership());
             if(!associatedMemberships.isEmpty()){
                 associatedMemberships.stream()
                         .map(MembershipItem::getMembershipAssociated)
@@ -250,6 +250,36 @@ public class UserService {
                               return;
                           }
                         }
+                        );
+            }
+            else{
+                if(payment.getMembership().getArea() == area){
+                    users.add(payment.getUser());
+                }
+            }
+        }
+        return users;
+    }
+
+    public List<User> getAllClassesUsers() {
+        List<Payment> paymentList = paymentRepository.findActualPayment(LocalDate.now());
+        List<User> users = new ArrayList<>();
+
+        Area area = areaRepository.findByName("Clases");
+        if(area == null) throw new RuntimeException("ERROR. Contactar a soporte");
+
+        for(Payment payment: paymentList){
+            List<MembershipItem> associatedMemberships = membershipItemRepository.findByMembershipPrincipal(payment.getMembership());
+            if(!associatedMemberships.isEmpty()){
+                associatedMemberships.stream()
+                        .map(MembershipItem::getMembershipAssociated)
+                        .filter(Objects::nonNull) // Por si acaso hay alguno null
+                        .forEach(associated -> {
+                                    if(associated.getArea() == area){
+                                        users.add(payment.getUser());
+                                        return;
+                                    }
+                                }
                         );
             }
             else{

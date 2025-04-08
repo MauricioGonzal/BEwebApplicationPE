@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class AttendanceRequest {
     private Long userId;
-    private String role;
     private Long classTypeId;
 }

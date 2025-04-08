@@ -19,11 +19,8 @@ public class AttendanceTypeService {
         return attendanceTypeRepository.findAll();
     }
 
-    public AttendanceType create (AttendanceTypeRequest attendanceTypeRequest){
-        if(!attendanceTypeRepository.findByName(attendanceTypeRequest.getName()).isEmpty()) throw new RuntimeException("Ya existe un tipo de asistencia con ese nombre");
-
-        AttendanceType attendanceType = new AttendanceType();
-        attendanceType.setName(attendanceTypeRequest.getName());
+    public AttendanceType create (AttendanceType attendanceType){
+        if(!attendanceTypeRepository.findByName(attendanceType.getName()).isEmpty()) throw new RuntimeException("Ya existe un tipo de asistencia con ese nombre");
 
         return attendanceTypeRepository.save(attendanceType);
     }

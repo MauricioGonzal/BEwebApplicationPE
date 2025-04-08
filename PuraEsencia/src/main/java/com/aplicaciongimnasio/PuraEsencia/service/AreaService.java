@@ -44,7 +44,7 @@ public class AreaService {
             Membership membership = p.getMembership();
             List<Area> areas = new ArrayList<>();
             if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
-                List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipalAndIsActive(membership, true);
+                List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
                 for(MembershipItem mi : membershipItemList){
                     areas.add(mi.getMembershipAssociated().getArea());
                 }

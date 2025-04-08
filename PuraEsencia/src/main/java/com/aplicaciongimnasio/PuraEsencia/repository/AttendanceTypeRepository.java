@@ -1,5 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.repository;
 
+import com.aplicaciongimnasio.PuraEsencia.model.Area;
 import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,5 @@ import java.util.List;
 public interface AttendanceTypeRepository extends JpaRepository<AttendanceType, Long> {
     AttendanceType getById(Long id);
     List<AttendanceType> findByName(String name);
-    List<AttendanceType> findByRoleAccepted(Role role);
+    List<AttendanceType> findByArea(Area area);
 }

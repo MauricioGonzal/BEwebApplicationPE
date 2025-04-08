@@ -21,7 +21,7 @@ public class AttendanceTypeController {
     }
 
     @PostMapping
-    public AttendanceType create(@RequestBody AttendanceTypeRequest attendanceTypeRequest) {
-        return attendanceTypeService.create(attendanceTypeRequest);
+    public AttendanceType create(@RequestBody AttendanceType attendanceType) {
+        return attendanceTypeService.create(attendanceType);
     }
 }

@@ -68,6 +68,11 @@ public class UserController {
         return userService.getAllGymUsers();
     }
 
+    @GetMapping("/getAllClassesUsers")
+    public List<User> getAllClassesUsers() {
+        return userService.getAllClassesUsers();
+    }
+
     @GetMapping("/getForSalary")
     public List<User> getAllForSalary() {
         return userService.getAllForSalary();

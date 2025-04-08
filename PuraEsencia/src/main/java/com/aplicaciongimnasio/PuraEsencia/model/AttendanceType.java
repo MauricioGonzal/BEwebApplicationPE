@@ -19,6 +19,7 @@ public class AttendanceType {
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private Role roleAccepted;
+    @ManyToOne
+    @JoinColumn(name = "area_id")
+    private Area area;
 }

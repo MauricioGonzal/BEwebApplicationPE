@@ -185,9 +185,13 @@ public class MembershipService {
         Membership existingMembership = membershipRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("La membresía no existe"));
 
+        if(Objects.equals(existingMembership.getMembershipType().getName(), "Simple") && !membershipItemRepository.findByMembershipAssociatedAndIsActive(existingMembership, true).isEmpty())
+            throw new RuntimeException("Esta membresia no se puede editar. Es parte de una membresia combinada activa.");
+
         List<MembershipItem> existingMembershipItems = membershipItemRepository.findByMembershipPrincipalAndIsActive(existingMembership, true);
         existingMembershipItems.forEach(mi -> {
-            membershipItemRepository.delete(mi);
+            mi.setIsActive(false);
+            membershipItemRepository.save(mi);
         });
 
         TransactionCategory transactionCategory = membershipRequest.getTransactionCategory();
