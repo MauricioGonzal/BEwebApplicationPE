@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface TransactionCategoryRepository extends JpaRepository<TransactionCategory, Long> {
     Optional<TransactionCategory> findByName(String name);
-    List<TransactionCategory> findByRoleAcceptedIsNotNull();
 }

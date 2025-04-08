@@ -1,16 +1,12 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceTypeRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.Area;
-import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
 import com.aplicaciongimnasio.PuraEsencia.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000

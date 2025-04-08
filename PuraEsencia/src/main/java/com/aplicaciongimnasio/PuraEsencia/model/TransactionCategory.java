@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.model;
 
-import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,4 @@ public class TransactionCategory {
     private Long id;
 
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    private Role roleAccepted;
 }

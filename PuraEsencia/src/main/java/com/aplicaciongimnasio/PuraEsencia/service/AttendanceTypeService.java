@@ -1,8 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceTypeRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
-import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

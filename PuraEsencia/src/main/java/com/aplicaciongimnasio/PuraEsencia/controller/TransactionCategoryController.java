@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.TransactionCategoryRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import com.aplicaciongimnasio.PuraEsencia.service.TransactionCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,8 @@ public class TransactionCategoryController {
         return transactionCategoryService.getAllTransactionCategory();
     }
 
-    @GetMapping("/payments")
-    public List<TransactionCategory> getAllTransactionCategoryForPayments() {
-        return transactionCategoryService.getAllTransactionCategoryForPayments();
-    }
-
     @PostMapping
-    public TransactionCategory createTransactionCategory(@RequestBody TransactionCategoryRequest transactionCategoryRequest) {
-        return transactionCategoryService.createTransactionCategory(transactionCategoryRequest);
+    public TransactionCategory createTransactionCategory(@RequestBody TransactionCategory transactionCategory) {
+        return transactionCategoryService.createTransactionCategory(transactionCategory);
     }
 }

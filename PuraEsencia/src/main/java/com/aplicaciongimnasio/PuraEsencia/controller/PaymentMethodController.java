@@ -1,8 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.TransactionCategoryRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
-import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import com.aplicaciongimnasio.PuraEsencia.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -3,7 +3,6 @@ package com.aplicaciongimnasio.PuraEsencia.service;
 import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
-import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -182,16 +181,15 @@ public class AttendanceService {
     }
 
     public Integer getLeftAttendances(Long userId) {
-        List<Payment> activePayment = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), userId);
+        Payment activePayment = paymentRepository.findActiveClassesPayment(LocalDate.now(), userId);
 
         if(activePayment != null){
-            Payment firstActivePayment = activePayment.get(0);
-            LocalDate startDate = firstActivePayment.getPaymentDate();
-            LocalDate endDate = firstActivePayment.getDueDate();
+            LocalDate startDate = activePayment.getPaymentDate();
+            LocalDate endDate = activePayment.getDueDate();
             int maxClasses = 0;
-            Membership membership = firstActivePayment.getMembership();
+            Membership membership = activePayment.getMembership();
             if(membership.getMaxClasses() != null){
-                maxClasses = firstActivePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+                maxClasses = activePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
             }
             else if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
                 List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);

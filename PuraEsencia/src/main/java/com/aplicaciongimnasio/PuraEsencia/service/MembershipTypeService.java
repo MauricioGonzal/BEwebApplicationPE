@@ -1,8 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Area;
 import com.aplicaciongimnasio.PuraEsencia.model.MembershipType;
-import com.aplicaciongimnasio.PuraEsencia.repository.AreaRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.MembershipTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

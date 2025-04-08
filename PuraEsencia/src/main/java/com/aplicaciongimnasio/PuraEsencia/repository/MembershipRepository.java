@@ -1,9 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.repository;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.MembershipResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.Membership;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
-import com.aplicaciongimnasio.PuraEsencia.model.PriceList;
 import com.aplicaciongimnasio.PuraEsencia.model.TransactionCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,8 +28,6 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
             @Param("transactionCategory") TransactionCategory transactionCategory,
             @Param("minClasses") Integer minClasses
     );
-
-
 
     @Query("SELECT m FROM Membership m JOIN PriceList pl ON pl.membership = m " +
             "WHERE pl.isActive = true " +

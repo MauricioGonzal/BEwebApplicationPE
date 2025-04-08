@@ -1,9 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceTypeRequest;
-import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.model.MembershipType;
-import com.aplicaciongimnasio.PuraEsencia.service.AttendanceTypeService;
 import com.aplicaciongimnasio.PuraEsencia.service.MembershipTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

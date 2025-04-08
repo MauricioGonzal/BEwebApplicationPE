@@ -9,6 +9,4 @@ public interface SalaryRepository extends JpaRepository<Salary, Long> {
     List<Salary> findByUserIdAndValidUntilIsNull(Long employeeId);
     List<Salary> findByValidUntilIsNull();
     List<Salary> findByIsActive(Boolean isActive);
-
-
 }

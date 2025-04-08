@@ -1,10 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
-import com.aplicaciongimnasio.PuraEsencia.dto.AttendanceTypeRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
-import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import com.aplicaciongimnasio.PuraEsencia.repository.AreaRepository;
-import com.aplicaciongimnasio.PuraEsencia.repository.AttendanceTypeRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.MembershipItemRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,25 +34,31 @@ public class AreaService {
         return areaRepository.save(area);
     }
 
-    public List<Area> getAreaByUser(Long userId){
-        List<Payment> activePayment = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), userId);
-        if(!activePayment.isEmpty()){
-            Payment p = activePayment.getFirst();
-            Membership membership = p.getMembership();
+    public List<Area> getAreaByUser(Long userId) {
+        List<Payment> activePayments = paymentRepository.findLatestActivePaymentsByUser(LocalDate.now(), userId);
+        if (!activePayments.isEmpty()) {
             List<Area> areas = new ArrayList<>();
-            if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
-                List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
-                for(MembershipItem mi : membershipItemList){
-                    areas.add(mi.getMembershipAssociated().getArea());
+            for (Payment payment : activePayments) {
+                Membership membership = payment.getMembership();
+                if (Objects.equals(membership.getMembershipType().getName(), "Combinada")) {
+                    List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
+                    for (MembershipItem mi : membershipItemList) {
+                        Area area = mi.getMembershipAssociated().getArea();
+                        if (!areas.contains(area)) {
+                            areas.add(area);
+                        }
+                    }
+                } else {
+                    Area area = membership.getArea();
+                    if (!areas.contains(area)) {
+                        areas.add(area);
+                    }
                 }
             }
-            else{
-                areas.add(membership.getArea());
-            }
             return areas;
-        }
-        else{
+        } else {
             throw new RuntimeException("ERROR");
         }
     }
+
 }

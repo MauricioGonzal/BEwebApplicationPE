@@ -46,8 +46,8 @@ public class PaymentService {
         return paymentRepository.findByStatus(status);
     }
 
-    public List<Payment> getPaymentsByStatusAndUserId(String status, Long userId) {
-        return paymentRepository.findByStatusAndUserId(status,userId);
+    public List<Payment> getPaymentsByStatusAndUserIdAndMembership(String status, Long userId, Membership membership) {
+        return paymentRepository.findByStatusAndUserIdAndMembership(status,userId,membership);
     }
 
     public Payment getLastPayment(Long userId){

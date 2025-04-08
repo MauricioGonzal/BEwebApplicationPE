@@ -109,7 +109,7 @@ public class TransactionService {
         if(transactionRequest.getUser() != null){
             var user = userRepository.findById(transactionRequest.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            List<Payment> overduePayments = paymentService.getPaymentsByStatusAndUserId("PENDIENTE", user.getId());
+            List<Payment> overduePayments = paymentService.getPaymentsByStatusAndUserIdAndMembership("PENDIENTE", user.getId(), transactionRequest.getMembership());
             if(!overduePayments.isEmpty()){
                 Payment firstOverduePayment = overduePayments.getFirst();
                 firstOverduePayment.setStatus("PAGADO");
@@ -118,7 +118,7 @@ public class TransactionService {
                 paymentRepository.save(firstOverduePayment);
             }
             else{
-                List<Payment> payments = paymentService.getPaymentsByStatusAndUserId("PAGADO", user.getId());
+                List<Payment> payments = paymentService.getPaymentsByStatusAndUserIdAndMembership("PAGADO", user.getId(), transactionRequest.getMembership());
                 if(!payments.isEmpty()){
                     Payment lastPayment = payments.getLast();
                     if(lastPayment.getDueDate().isAfter(LocalDate.now())){
