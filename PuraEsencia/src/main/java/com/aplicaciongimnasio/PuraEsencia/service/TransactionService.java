@@ -102,11 +102,12 @@ public class TransactionService {
             productStockRepository.save(productStock);
         }
 
-        var membership = membershipRepository.findById(transactionRequest.getMembership().getId())
-                .orElseThrow(() -> new RuntimeException("Membership not found"));
-        var maxDays = membership.getMaxDays();
+
 
         if(transactionRequest.getUser() != null){
+            var membership = membershipRepository.findById(transactionRequest.getMembership().getId())
+                    .orElseThrow(() -> new RuntimeException("Membership not found"));
+            var maxDays = membership.getMaxDays();
             var user = userRepository.findById(transactionRequest.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             List<Payment> overduePayments = paymentService.getPaymentsByStatusAndUserIdAndMembership("PENDIENTE", user.getId(), transactionRequest.getMembership());

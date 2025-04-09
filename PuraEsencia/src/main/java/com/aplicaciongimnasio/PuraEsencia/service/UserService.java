@@ -160,7 +160,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        List<RoutineSet> routineSets = routineSetRepository.findByRoutine(user.getRoutine());
+        List<RoutineSet> routineSets = routineSetRepository.findByRoutineAndIsActive(user.getRoutine(), true);
 
         return routineSets;
     }

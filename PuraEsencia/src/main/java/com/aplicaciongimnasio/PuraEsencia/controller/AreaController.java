@@ -21,8 +21,8 @@ public class AreaController {
     }
 
     @PostMapping
-    public Area create(@RequestBody Area area) {
-        return areaService.create(area);
+    public ResponseEntity<Area> create(@RequestBody Area area) {
+        return ResponseEntity.ok(areaService.create(area));
     }
 
     @GetMapping("/{userId}")

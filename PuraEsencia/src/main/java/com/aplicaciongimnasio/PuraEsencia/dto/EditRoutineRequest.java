@@ -18,6 +18,6 @@ public class EditRoutineRequest {
     private String name;
     private String description;
     private Boolean isCustom;
-    private List<RoutineSet> exercises;  // JSON de IDs de ejercicios (combinados)
+    private List<RoutineSetRequest> exercises;  // JSON de IDs de ejercicios (combinados)
 
 }

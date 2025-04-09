@@ -1,10 +1,14 @@
 package com.aplicaciongimnasio.PuraEsencia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,7 +31,9 @@ public class RoutineSet {
     private String exerciseIds;  // JSON de IDs de ejercicios (combinados)
 
     private int series;
-    private int repetitions;
     private int rest;
+
+    private Boolean isActive=true;
+
 }
 

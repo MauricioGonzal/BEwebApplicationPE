@@ -92,4 +92,19 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 """)
     Payment findActiveClassesPayment(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
 
+    @Query("""
+    SELECT p FROM Payment p
+    JOIN MembershipItem mi ON mi.membershipPrincipal = p.membership
+    WHERE p.paymentDate <= :currentDate
+    AND mi.membershipAssociated.area.name = "Clases"
+    AND p.user.id = :userId
+    AND p.dueDate >= :currentDate
+    AND p.paymentDate = (
+        SELECT MAX(p2.paymentDate) FROM Payment p2 
+        WHERE p2.user.id = p.user.id 
+        AND p2.paymentDate <= :currentDate
+    )
+""")
+    Payment findActiveClassesCombinatedPayment(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
+
 }

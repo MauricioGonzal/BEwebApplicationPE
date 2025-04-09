@@ -2,6 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.EditRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.RoutineRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineSetResponse;
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
 import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.service.ExerciseService;
@@ -32,7 +33,7 @@ public class RoutineController {
     }
 
     @GetMapping("/id/{id}")
-    public List<RoutineSet> getRoutineById(@PathVariable Long id) {
+    public List<RoutineSetResponse> getRoutineById(@PathVariable Long id) {
         return routineService.getRoutineById(id);
     }
 

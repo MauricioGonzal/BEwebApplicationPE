@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface RoutineSetRepository extends JpaRepository<RoutineSet, Long> {
-    List<RoutineSet> findByRoutine(Routine routine);
+    List<RoutineSet> findByRoutineAndIsActive(Routine routine, Boolean isActive);
     @Modifying
     @Transactional
     @Query("DELETE FROM RoutineSet rs WHERE rs.routine = :routine")

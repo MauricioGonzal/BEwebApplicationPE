@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class ExerciseDetails {
     private List<Long> exerciseIds;
-    private Byte series;
-    private Byte repetitions;
-    private Byte rest;
+    private Byte series; // podés mantenerlo si querés validación adicional
+    private List<Byte> repetitionsPerSeries;
+    private Byte rest; // si el descanso es igual para todas las series
 }

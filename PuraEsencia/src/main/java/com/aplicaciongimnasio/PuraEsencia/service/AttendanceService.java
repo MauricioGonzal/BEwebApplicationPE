@@ -181,15 +181,18 @@ public class AttendanceService {
     }
 
     public Integer getLeftAttendances(Long userId) {
-        Payment activePayment = paymentRepository.findActiveClassesPayment(LocalDate.now(), userId);
+        Payment activeClassesPayment = paymentRepository.findActiveClassesPayment(LocalDate.now(), userId);
+        if(activeClassesPayment == null){
+            activeClassesPayment = paymentRepository.findActiveClassesCombinatedPayment(LocalDate.now(), userId);
+        }
 
-        if(activePayment != null){
-            LocalDate startDate = activePayment.getPaymentDate();
-            LocalDate endDate = activePayment.getDueDate();
+        if(activeClassesPayment != null){
+            LocalDate startDate = activeClassesPayment.getPaymentDate();
+            LocalDate endDate = activeClassesPayment.getDueDate();
             int maxClasses = 0;
-            Membership membership = activePayment.getMembership();
+            Membership membership = activeClassesPayment.getMembership();
             if(membership.getMaxClasses() != null){
-                maxClasses = activePayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+                maxClasses = activeClassesPayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
             }
             else if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
                 List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
