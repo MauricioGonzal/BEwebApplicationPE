@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/workout-logs")
+@RequestMapping("/api/workout-log")
 @RequiredArgsConstructor
 public class WorkoutLogController {
 

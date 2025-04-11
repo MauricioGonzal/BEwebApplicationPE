@@ -1,6 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
-import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 

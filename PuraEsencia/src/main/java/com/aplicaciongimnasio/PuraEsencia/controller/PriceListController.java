@@ -8,11 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/pricelists")
+@RequestMapping("/api/price-list")
 public class PriceListController {
     @Autowired
     private PriceListService priceListService;

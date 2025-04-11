@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/health-records")
+@RequestMapping("/api/health-record")
 public class HealthRecordController {
 
     @Autowired

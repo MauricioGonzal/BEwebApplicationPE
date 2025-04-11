@@ -1,8 +1,5 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
-import com.aplicaciongimnasio.PuraEsencia.model.Exercise;
-import com.aplicaciongimnasio.PuraEsencia.model.Routine;
-import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

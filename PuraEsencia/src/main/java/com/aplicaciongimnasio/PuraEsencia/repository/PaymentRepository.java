@@ -2,7 +2,6 @@ package com.aplicaciongimnasio.PuraEsencia.repository;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Membership;
 import com.aplicaciongimnasio.PuraEsencia.model.Payment;
-import com.aplicaciongimnasio.PuraEsencia.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

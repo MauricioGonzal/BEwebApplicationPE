@@ -1,9 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

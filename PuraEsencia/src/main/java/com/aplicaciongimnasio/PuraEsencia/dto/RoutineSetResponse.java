@@ -1,7 +1,6 @@
 package com.aplicaciongimnasio.PuraEsencia.dto;
 
 import com.aplicaciongimnasio.PuraEsencia.model.Routine;
-import com.aplicaciongimnasio.PuraEsencia.model.RoutineSetSeries;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

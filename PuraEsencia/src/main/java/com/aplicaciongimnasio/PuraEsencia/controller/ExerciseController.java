@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/exercises")
+@RequestMapping("/api/exercise")
 public class ExerciseController {
 
     @Autowired

@@ -2,6 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
 import com.aplicaciongimnasio.PuraEsencia.dto.ChangePasswordRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineSetResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.UserRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -121,7 +122,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/routine")
-    public ResponseEntity<List<RoutineSet>> getUserRoutine(@PathVariable Long userId) {
+    public ResponseEntity<List<RoutineSetResponse>> getUserRoutine(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserRoutine(userId));
     }
 

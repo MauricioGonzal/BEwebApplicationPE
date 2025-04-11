@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/workout-sessions")
+@RequestMapping("/api/workout-session")
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
 @RequiredArgsConstructor
 public class WorkoutSessionController {

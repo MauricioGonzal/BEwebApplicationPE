@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/fixed-expenses")
+@RequestMapping("/api/fixed-expense")
 public class FixedExpenseController {
     @Autowired
     private FixedExpenseService fixedExpenseService;

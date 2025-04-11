@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
-@RequestMapping("/api/classTypes")
+@RequestMapping("/api/class-type")
 public class ClassTypeController {
 
     @Autowired

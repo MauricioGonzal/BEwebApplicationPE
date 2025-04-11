@@ -1,6 +1,7 @@
 package com.aplicaciongimnasio.PuraEsencia.service;
 
 import com.aplicaciongimnasio.PuraEsencia.dto.AssignRoutineRequest;
+import com.aplicaciongimnasio.PuraEsencia.dto.RoutineSetResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.UserRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.*;
 import com.aplicaciongimnasio.PuraEsencia.repository.*;
@@ -49,6 +50,9 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoutineSetSeriesRepository routineSetSeriesRepository;
 
     public User createUser(User user) {
         if(userRepository.findByEmailAndIsActive(user.getEmail(), true).isPresent()){
@@ -156,13 +160,26 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<RoutineSet> getUserRoutine(Long userId) {
+    public List<RoutineSetResponse> getUserRoutine(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         List<RoutineSet> routineSets = routineSetRepository.findByRoutineAndIsActive(user.getRoutine(), true);
 
-        return routineSets;
+        List<RoutineSetResponse> responses = routineSets.stream()
+                .map(rs -> {
+                    List<Byte> series = routineSetSeriesRepository.getRepetitionsByRoutineSet(rs);
+                    return new RoutineSetResponse(
+                            rs.getRoutine(),
+                            rs.getDayNumber(),
+                            rs.getExerciseIds(),
+                            rs.getSeries(),
+                            rs.getRest(),
+                            series
+                    );
+                }).collect(Collectors.toList());
+
+        return responses;
     }
 
     public void assignClientToTrainer(Long clientId, Long trainerId) {
