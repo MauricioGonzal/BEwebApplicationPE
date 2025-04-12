@@ -6,14 +6,17 @@ import com.aplicaciongimnasio.PuraEsencia.dto.RoutineSetResponse;
 import com.aplicaciongimnasio.PuraEsencia.dto.UserRequest;
 import com.aplicaciongimnasio.PuraEsencia.model.RoutineSet;
 import com.aplicaciongimnasio.PuraEsencia.model.User;
+import com.aplicaciongimnasio.PuraEsencia.model.enums.Role;
 import com.aplicaciongimnasio.PuraEsencia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000
@@ -140,6 +143,15 @@ public class UserController {
     public Optional<User> getTrainerByOneClient(@PathVariable Long clientId) {
         return userService.getTrainerByOneClient(clientId);
     }
+
+    @GetMapping("/getRoles")
+    public List<Role> getRoles() {
+        return Arrays.stream(Role.values())
+                .filter(role -> role != Role.SUPER_ADMIN)
+                .collect(Collectors.toList());
+    }
+
+
 
 
 
