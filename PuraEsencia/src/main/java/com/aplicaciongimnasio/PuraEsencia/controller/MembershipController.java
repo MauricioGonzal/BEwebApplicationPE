@@ -19,23 +19,23 @@ public class MembershipController {
     private MembershipService membershipService;
 
     @GetMapping
-    public List<Membership> getAll() {
-        return membershipService.getAllMemberships();
+    public ResponseEntity<List<Membership>> getAll() {
+        return ResponseEntity.ok(membershipService.getAllMemberships());
     }
 
     @GetMapping("/priceList")
-    public List<MembershipResponse> getAllMembershipsAndPriceList() {
-        return membershipService.getAllMembershipsAndPriceLists();
+    public ResponseEntity<List<MembershipResponse>> getAllMembershipsAndPriceList() {
+        return ResponseEntity.ok(membershipService.getAllMembershipsAndPriceLists());
     }
 
     @GetMapping("/priceList/simples")
-    public List<MembershipResponse> getAllSimpleMembershipsAndPriceList() {
-        return membershipService.getAllSimpleMembershipsAndPriceLists();
+    public ResponseEntity<List<MembershipResponse>>  getAllSimpleMembershipsAndPriceList() {
+        return ResponseEntity.ok(membershipService.getAllSimpleMembershipsAndPriceLists());
     }
 
     @GetMapping("/{id}")
-    public Membership getById(@PathVariable Long id) {
-        return membershipService.getById(id);
+    public ResponseEntity<Membership> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(membershipService.getById(id));
     }
 
     @PostMapping("/create-membership-price")

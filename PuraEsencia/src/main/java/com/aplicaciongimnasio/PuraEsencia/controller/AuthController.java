@@ -8,6 +8,7 @@ import com.aplicaciongimnasio.PuraEsencia.repository.PaymentRepository;
 import com.aplicaciongimnasio.PuraEsencia.repository.UserRepository;
 import com.aplicaciongimnasio.PuraEsencia.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByEmailAndIsActive(loginRequest.getEmail(), true);
         if (user.isEmpty()) throw new RuntimeException("Usuario o contraseña incorrectos.");
 
@@ -60,7 +61,7 @@ public class AuthController {
             }
         }
 
-        return jwtUtil.generateToken(authentication.getName(), user.get().getRole(), user.get().getId());
+        return ResponseEntity.ok(jwtUtil.generateToken(authentication.getName(), user.get().getRole(), user.get().getId()));
     }
 
 }

@@ -16,8 +16,8 @@ public class AreaController {
     AreaService areaService;
 
     @GetMapping
-    public List<Area> getAll() {
-        return areaService.getAll();
+    public ResponseEntity<List<Area>> getAll() {
+        return ResponseEntity.ok(areaService.getAll());
     }
 
     @PostMapping

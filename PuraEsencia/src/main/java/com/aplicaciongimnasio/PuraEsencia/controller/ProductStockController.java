@@ -28,8 +28,8 @@ public class ProductStockController {
     }
 
     @GetMapping
-    public List<ProductStock> getAll() {
-        return productStockService.getAll();
+    public ResponseEntity<List<ProductStock>> getAll() {
+        return ResponseEntity.ok(productStockService.getAll());
     }
 
     @DeleteMapping("/{id}")

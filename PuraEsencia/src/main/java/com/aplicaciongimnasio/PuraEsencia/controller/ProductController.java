@@ -19,13 +19,13 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PostMapping("/create")
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        return ResponseEntity.ok(productService.createProduct(product));
     }
 
     @GetMapping("/price-and-stock")
@@ -40,8 +40,8 @@ public class ProductController {
     }
 
     @PostMapping("/delete-product-stock-price")
-    public Boolean logicDelete(@RequestBody ProductResponse productResponse){
-        return productService.deleteProductWithStockAndPrice(productResponse);
+    public ResponseEntity<Boolean> logicDelete(@RequestBody ProductResponse productResponse){
+        return ResponseEntity.ok(productService.deleteProductWithStockAndPrice(productResponse));
     }
 
 }

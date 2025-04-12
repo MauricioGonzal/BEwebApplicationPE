@@ -3,6 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 import com.aplicaciongimnasio.PuraEsencia.model.MembershipType;
 import com.aplicaciongimnasio.PuraEsencia.service.MembershipTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +16,12 @@ public class MembershipTypeController {
     private MembershipTypeService membershipTypeService;
 
     @GetMapping
-    public List<MembershipType> getAll() {
-        return membershipTypeService.getAll();
+    public ResponseEntity<List<MembershipType>> getAll() {
+        return ResponseEntity.ok(membershipTypeService.getAll());
     }
 
     @PostMapping
-    public MembershipType create(@RequestBody MembershipType membershipType) {
-        return membershipTypeService.create(membershipType);
+    public ResponseEntity<MembershipType> create(@RequestBody MembershipType membershipType) {
+        return ResponseEntity.ok(membershipTypeService.create(membershipType));
     }
 }

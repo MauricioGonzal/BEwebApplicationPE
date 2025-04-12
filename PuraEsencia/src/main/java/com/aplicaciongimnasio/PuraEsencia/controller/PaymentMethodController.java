@@ -3,6 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 import com.aplicaciongimnasio.PuraEsencia.model.PaymentMethod;
 import com.aplicaciongimnasio.PuraEsencia.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +17,12 @@ public class PaymentMethodController {
     private PaymentMethodService paymentMethodService;
 
     @GetMapping
-    public List<PaymentMethod> getAllPaymentMethod() {
-        return paymentMethodService.getAllPaymentMethod();
+    public ResponseEntity<List<PaymentMethod>> getAllPaymentMethod() {
+        return ResponseEntity.ok(paymentMethodService.getAllPaymentMethod());
     }
 
     @PostMapping
-    public PaymentMethod createPaymentMethod(@RequestBody PaymentMethod paymentMethod) {
-        return paymentMethodService.createPaymentMethod(paymentMethod);
+    public ResponseEntity<PaymentMethod> createPaymentMethod(@RequestBody PaymentMethod paymentMethod) {
+        return ResponseEntity.ok(paymentMethodService.createPaymentMethod(paymentMethod));
     }
 }

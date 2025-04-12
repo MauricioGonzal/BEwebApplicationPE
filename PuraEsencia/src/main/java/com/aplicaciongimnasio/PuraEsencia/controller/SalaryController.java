@@ -33,8 +33,8 @@ public class SalaryController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@PathVariable Long id){
-        return salaryService.delete(id);
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        return ResponseEntity.ok(salaryService.delete(id));
     }
 }
 

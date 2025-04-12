@@ -33,18 +33,18 @@ public class RoutineController {
     }
 
     @GetMapping("/id/{id}")
-    public List<RoutineSetResponse> getRoutineById(@PathVariable Long id) {
-        return routineService.getRoutineById(id);
+    public ResponseEntity<List<RoutineSetResponse>> getRoutineById(@PathVariable Long id) {
+        return ResponseEntity.ok(routineService.getRoutineById(id));
     }
 
     @GetMapping("/email/{email}")
-    public Routine getRoutineByEmail(@PathVariable String email) {
-        return routineService.getRoutineByEmail(email);
+    public ResponseEntity<Routine> getRoutineByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(routineService.getRoutineByEmail(email));
     }
 
     @GetMapping("/nocustom")
-    public List<RoutineSet> getRoutinesByCustom() {
-        return routineService.getRoutinesByCustom(false);
+    public ResponseEntity<List<RoutineSet>> getRoutinesByCustom() {
+        return ResponseEntity.ok(routineService.getRoutinesByCustom(false));
     }
 
     @PutMapping("/{id}")
@@ -68,8 +68,8 @@ public class RoutineController {
     }
 
     @GetMapping("/routine-set/{id}")
-    public List<RoutineSet> getRoutineSetsByRoutine(@PathVariable Long id) {
-        return routineService.getRoutineSetByRoutine(id);
+    public ResponseEntity<List<RoutineSet>> getRoutineSetsByRoutine(@PathVariable Long id) {
+        return ResponseEntity.ok(routineService.getRoutineSetByRoutine(id));
     }
 
 }

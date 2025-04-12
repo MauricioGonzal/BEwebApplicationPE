@@ -18,18 +18,18 @@ public class ExerciseController {
     private ExerciseService exerciseService;
 
     @PostMapping("/create")
-    public Exercise createExercise(@RequestBody Exercise exercise) {
-        return exerciseService.createExercise(exercise);
+    public ResponseEntity<Exercise> createExercise(@RequestBody Exercise exercise) {
+        return ResponseEntity.ok(exerciseService.createExercise(exercise));
     }
 
     @GetMapping("/{id}")
-    public Exercise getExerciseById(@PathVariable Long id) {
-        return exerciseService.getExerciseById(id);
+    public ResponseEntity<Exercise> getExerciseById(@PathVariable Long id) {
+        return ResponseEntity.ok(exerciseService.getExerciseById(id));
     }
 
     @GetMapping
-    public List<Exercise> getAllExercises() {
-        return exerciseService.getAllExercises();
+    public ResponseEntity<List<Exercise>> getAllExercises() {
+        return ResponseEntity.ok(exerciseService.getAllExercises());
     }
 
     @DeleteMapping("/{id}")

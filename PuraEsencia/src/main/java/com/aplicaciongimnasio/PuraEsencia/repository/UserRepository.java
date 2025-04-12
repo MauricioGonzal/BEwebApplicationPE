@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
     void deleteById(Long id);
     List<User> findAllByRoleAndIsActive(Role role, boolean isActive);
-    List<User> findByIsActive(Boolean isActive);
+    List<User> findByIsActiveAndRoleNot(Boolean isActive, Role role);
     List<User> findByRoutine(Routine routine);
 
 }

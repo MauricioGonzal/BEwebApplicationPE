@@ -220,7 +220,7 @@ public class UserService {
 
 
     public List<User> getAll() {
-        return userRepository.findByIsActive(true);
+        return userRepository.findByIsActiveAndRoleNot(true, Role.SUPER_ADMIN);
 
     }
 

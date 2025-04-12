@@ -3,6 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 import com.aplicaciongimnasio.PuraEsencia.model.ClassType;
 import com.aplicaciongimnasio.PuraEsencia.service.ClassTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,22 +17,22 @@ public class ClassTypeController {
     ClassTypeService classTypeService;
 
     @GetMapping
-    public List<ClassType> getAll() {
-        return classTypeService.getAll();
+    public ResponseEntity<List<ClassType>> getAll() {
+        return ResponseEntity.ok(classTypeService.getAll());
     }
 
     @GetMapping("/onSchedule")
-    public List<ClassType> getAllOnSchedule() {
-        return classTypeService.getAllOnSchedule();
+    public ResponseEntity<List<ClassType>> getAllOnSchedule() {
+        return ResponseEntity.ok(classTypeService.getAllOnSchedule());
     }
 
     @PostMapping
-    public ClassType create(@RequestBody ClassType classType){
-        return classTypeService.create(classType);
+    public ResponseEntity<ClassType> create(@RequestBody ClassType classType){
+        return ResponseEntity.ok(classTypeService.create(classType));
     }
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@PathVariable Long id){
-        return classTypeService.delete(id);
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        return ResponseEntity.ok(classTypeService.delete(id));
     }
 }

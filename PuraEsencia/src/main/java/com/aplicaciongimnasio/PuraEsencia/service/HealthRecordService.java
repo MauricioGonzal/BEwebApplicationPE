@@ -19,4 +19,23 @@ public class HealthRecordService {
         userService.assignHealthRecord(userId, healthRecordCreated);
         return healthRecordCreated;
     }
+
+    public HealthRecord getById(Long id){
+        return healthRecordRepository.findById(id).orElseThrow(() -> new RuntimeException("No se encontro la ficha de salud"));
+
+    }
+
+    public HealthRecord update(Long id, HealthRecord healthRecord){
+        HealthRecord existingRecord = healthRecordRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ficha no encontrada con id: " + id));
+
+        existingRecord.setAge(healthRecord.getAge());
+        existingRecord.setPreexistingConditions(healthRecord.getPreexistingConditions());
+        existingRecord.setPreviousInjuries(healthRecord.getPreviousInjuries());
+        existingRecord.setPreviousSurgeries(healthRecord.getPreviousSurgeries());
+        existingRecord.setCurrentMedication(healthRecord.getCurrentMedication());
+        existingRecord.setAllergies(healthRecord.getAllergies());
+
+        return healthRecordRepository.save(existingRecord);
+    }
 }

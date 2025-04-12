@@ -3,6 +3,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 import com.aplicaciongimnasio.PuraEsencia.model.AttendanceType;
 import com.aplicaciongimnasio.PuraEsencia.service.AttendanceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +16,12 @@ public class AttendanceTypeController {
     private AttendanceTypeService attendanceTypeService;
 
     @GetMapping
-    public List<AttendanceType> getAll() {
-        return attendanceTypeService.getAll();
+    public ResponseEntity<List<AttendanceType>> getAll() {
+        return ResponseEntity.ok(attendanceTypeService.getAll());
     }
 
     @PostMapping
-    public AttendanceType create(@RequestBody AttendanceType attendanceType) {
-        return attendanceTypeService.create(attendanceType);
+    public ResponseEntity<AttendanceType> create(@RequestBody AttendanceType attendanceType) {
+        return ResponseEntity.ok(attendanceTypeService.create(attendanceType));
     }
 }

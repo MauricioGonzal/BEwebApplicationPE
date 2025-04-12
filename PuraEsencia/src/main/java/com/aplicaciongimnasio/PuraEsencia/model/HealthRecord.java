@@ -20,9 +20,9 @@ public class HealthRecord {
     private Long id;
 
     private Long age;
-    private String preexisting_conditions ;
-    private String previous_injuries ;
-    private String previous_surgeries ;
-    private String current_medication ;
+    private String preexistingConditions ;
+    private String previousInjuries ;
+    private String previousSurgeries ;
+    private String currentMedication ;
     private String allergies ;
 }

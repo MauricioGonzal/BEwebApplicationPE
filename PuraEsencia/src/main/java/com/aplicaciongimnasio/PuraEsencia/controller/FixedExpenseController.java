@@ -40,7 +40,7 @@ public class FixedExpenseController {
     }
 
     @GetMapping
-    public List<FixedExpense> getAllFixedExpense() {
-        return fixedExpenseService.getAll();
+    public ResponseEntity<List<FixedExpense>> getAllFixedExpense() {
+        return ResponseEntity.ok(fixedExpenseService.getAll());
     }
 }

@@ -15,8 +15,8 @@ public class ClassSessionController {
     private ClassSessionService classSessionService;
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@PathVariable Long id){
-        return classSessionService.delete(id);
+    public ResponseEntity<Boolean> delete(@PathVariable Long id){
+        return ResponseEntity.ok(classSessionService.delete(id));
     }
 
     @PutMapping("/{id}")

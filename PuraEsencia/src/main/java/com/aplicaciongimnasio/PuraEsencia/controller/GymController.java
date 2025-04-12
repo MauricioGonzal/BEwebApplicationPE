@@ -2,6 +2,7 @@ package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.service.GymService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ public class GymController {
     private GymService gymService;
 
     @PostMapping
-    public Boolean createGym(String name){
-        return gymService.createGym(name);
+    public ResponseEntity<Boolean> createGym(String name){
+        return ResponseEntity.ok(gymService.createGym(name));
     }
 }

@@ -22,13 +22,13 @@ public class PriceListController {
     }
 
     @GetMapping
-    public List<PriceList> getAllPriceList() {
-        return priceListService.getAllPriceList();
+    public ResponseEntity<List<PriceList>> getAllPriceList() {
+        return ResponseEntity.ok(priceListService.getAllPriceList());
     }
 
     @GetMapping("/payments")
-    public List<PriceList> getAllForPayments() {
-        return priceListService.getAllForPayments();
+    public ResponseEntity<List<PriceList>> getAllForPayments() {
+        return ResponseEntity.ok(priceListService.getAllForPayments());
     }
 
     @PutMapping("/{id}/updateAmount")

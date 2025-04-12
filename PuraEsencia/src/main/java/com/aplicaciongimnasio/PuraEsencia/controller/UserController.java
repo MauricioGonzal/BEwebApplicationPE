@@ -53,33 +53,33 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll(){
-        return userService.getAll();
+    public ResponseEntity<List<User>> getAll(){
+        return ResponseEntity.ok(userService.getAll());
     }
 
     @GetMapping("/getAllByRole/{role}")
-    public List<User> getAllByRole(@PathVariable String role) {
-        return userService.getAllByRole(role);
+    public ResponseEntity<List<User>> getAllByRole(@PathVariable String role) {
+        return ResponseEntity.ok(userService.getAllByRole(role));
     }
 
     @GetMapping("/getAllForAssistance")
-    public List<User> getAllForAssistance() {
-        return userService.getAllForAssistance();
+    public ResponseEntity<List<User>> getAllForAssistance() {
+        return ResponseEntity.ok(userService.getAllForAssistance());
     }
 
     @GetMapping("/getAllGymUsers")
-    public List<User> getAllGymUsers() {
-        return userService.getAllGymUsers();
+    public ResponseEntity<List<User>> getAllGymUsers() {
+        return ResponseEntity.ok(userService.getAllGymUsers());
     }
 
     @GetMapping("/getAllClassesUsers")
-    public List<User> getAllClassesUsers() {
-        return userService.getAllClassesUsers();
+    public ResponseEntity<List<User>> getAllClassesUsers() {
+        return ResponseEntity.ok(userService.getAllClassesUsers());
     }
 
     @GetMapping("/getForSalary")
-    public List<User> getAllForSalary() {
-        return userService.getAllForSalary();
+    public ResponseEntity<List<User>> getAllForSalary() {
+        return ResponseEntity.ok(userService.getAllForSalary());
     }
 
     @DeleteMapping("/{userId}")
@@ -135,20 +135,20 @@ public class UserController {
     }
 
     @GetMapping("/{trainerId}/clients")
-    public List<User> getClientsByTrainer(@PathVariable Long trainerId) {
-        return userService.getClientsByTrainerId(trainerId);
+    public ResponseEntity<List<User>> getClientsByTrainer(@PathVariable Long trainerId) {
+        return ResponseEntity.ok(userService.getClientsByTrainerId(trainerId));
     }
 
     @GetMapping("/{clientId}/trainer")
-    public Optional<User> getTrainerByOneClient(@PathVariable Long clientId) {
-        return userService.getTrainerByOneClient(clientId);
+    public ResponseEntity<Optional<User>> getTrainerByOneClient(@PathVariable Long clientId) {
+        return ResponseEntity.ok(userService.getTrainerByOneClient(clientId));
     }
 
     @GetMapping("/getRoles")
-    public List<Role> getRoles() {
-        return Arrays.stream(Role.values())
+    public ResponseEntity<List<Role>> getRoles() {
+        return ResponseEntity.ok(Arrays.stream(Role.values())
                 .filter(role -> role != Role.SUPER_ADMIN)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
 
