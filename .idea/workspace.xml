@@ -6,7 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="c7b1670f-198e-4d39-8923-e9f9ac59b37a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/HealthRecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/HealthRecordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/dto/AttendanceResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/dto/RoutineResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/FixedExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/FixedExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Salary.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Salary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Sale.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/Sale.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/WorkoutLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/WorkoutLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/WorkoutSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/WorkoutSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/WorkoutSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/model/WorkoutSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/repository/PaymentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AttendanceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AttendanceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,11 +94,6 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/dto/RoutineResponse.java</url>
-          <line>22</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AttendanceService.java</url>
           <line>121</line>
           <option name="timeStamp" value="15" />
@@ -108,18 +114,13 @@
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/TransactionService.java</url>
-          <line>126</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/AttendanceController.java</url>
           <line>27</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/AttendanceTypeController.java</url>
-          <line>20</line>
+          <line>21</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -144,7 +145,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/controller/ClassTypeController.java</url>
-          <line>29</line>
+          <line>30</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -329,12 +330,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AttendanceService.java</url>
-          <line>140</line>
-          <option name="timeStamp" value="97" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AttendanceService.java</url>
-          <line>183</line>
+          <line>203</line>
           <option name="timeStamp" value="99" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -351,6 +347,16 @@
           <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/RoutineService.java</url>
           <line>86</line>
           <option name="timeStamp" value="104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AreaService.java</url>
+          <line>37</line>
+          <option name="timeStamp" value="105" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/PuraEsencia/src/main/java/com/aplicaciongimnasio/PuraEsencia/service/AttendanceService.java</url>
+          <line>141</line>
+          <option name="timeStamp" value="109" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.hibernate.AnnotationException" package="org.hibernate" />

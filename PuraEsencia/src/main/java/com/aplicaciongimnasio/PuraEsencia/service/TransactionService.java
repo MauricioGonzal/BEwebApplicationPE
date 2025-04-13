@@ -119,27 +119,33 @@ public class TransactionService {
                 paymentRepository.save(firstOverduePayment);
             }
             else{
-                List<Payment> payments = paymentService.getPaymentsByStatusAndUserIdAndMembership("PAGADO", user.getId(), transactionRequest.getMembership());
-                if(!payments.isEmpty()){
-                    Payment lastPayment = payments.getLast();
-                    if(lastPayment.getDueDate().isAfter(LocalDate.now())){
+                if(transactionRequest.getMembership().getArea().getName().equals("Musculacion")){
+                    List<Payment> payments = paymentService.getPaymentsByStatusAndUserIdAndMembership("PAGADO", user.getId(), transactionRequest.getMembership());
+                    if(!payments.isEmpty()){
+                        Payment lastPayment = payments.getLast();
+                        if(lastPayment.getDueDate().isAfter(LocalDate.now())){
 
-                        if(maxDays != null && maxDays != 30){
-                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays), transactionRequest.getMembership(), transaction);
+                            if(maxDays != null && maxDays != 30){
+                                paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusDays(maxDays), transactionRequest.getMembership(), transaction);
+                            }
+                            else{
+                                paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1), transactionRequest.getMembership(), transaction);
+                            }
                         }
-                        else{
-                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), lastPayment.getDueDate().plusMonths(1), transactionRequest.getMembership(), transaction);
-                        }
-                    }
-                }
-                else{
-                    if(maxDays != null && maxDays != 30){
-                        paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusDays(maxDays), transactionRequest.getMembership(), transaction);
                     }
                     else{
-                        paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership(), transaction);
+                        if(maxDays != null && maxDays != 30){
+                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusDays(maxDays), transactionRequest.getMembership(), transaction);
+                        }
+                        else{
+                            paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership(), transaction);
+                        }
                     }
                 }
+                else if(transactionRequest.getMembership().getArea().getName().equals("Clases")){
+                    paymentService.registerPayment(user.getId(), transactionRequest.getAmount(), "PAGADO", LocalDate.now(), LocalDate.now().plusMonths(1), transactionRequest.getMembership(), transaction);
+                }
+
             }
         }
 

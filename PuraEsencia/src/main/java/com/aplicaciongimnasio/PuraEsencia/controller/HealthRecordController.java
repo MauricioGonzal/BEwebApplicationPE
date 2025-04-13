@@ -1,13 +1,10 @@
 package com.aplicaciongimnasio.PuraEsencia.controller;
 
 import com.aplicaciongimnasio.PuraEsencia.model.HealthRecord;
-import com.aplicaciongimnasio.PuraEsencia.model.MembershipType;
 import com.aplicaciongimnasio.PuraEsencia.service.HealthRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")  // Permite solicitudes desde el frontend en localhost:3000

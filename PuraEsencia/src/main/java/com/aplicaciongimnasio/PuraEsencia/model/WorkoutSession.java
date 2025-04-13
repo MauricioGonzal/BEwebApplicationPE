@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "workout_sessions")
 @Getter
 @Setter
 @NoArgsConstructor

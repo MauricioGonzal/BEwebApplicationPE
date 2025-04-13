@@ -140,59 +140,79 @@ public class AttendanceService {
 
     public Map<Long, Map<String, Object>> getAttendancesForAllUsersInCurrentPaymentPeriod() {
         List<Payment> activePayments = paymentRepository.findLatestActivePayments(LocalDate.now());
-
         Map<Long, Map<String, Object>> result = new HashMap<>();
 
         for (Payment payment : activePayments) {
             Long userId = payment.getUser().getId();
             LocalDate startDate = payment.getPaymentDate();
             LocalDate endDate = payment.getDueDate();
+
+            // Calcular maxClasses
             int maxClasses = 0;
-            if(payment.getMembership() != null){
+            if (payment.getMembership() != null) {
                 Membership membership = payment.getMembership();
-                if(membership.getMaxClasses() != null){
-                    maxClasses = payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
-                }
-                else if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
+                if (membership.getMaxClasses() != null) {
+                    maxClasses = membership.getMaxClasses();
+                } else if ("Combinada".equals(membership.getMembershipType().getName())) {
                     List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
-                    for (MembershipItem membershipItem : membershipItemList){
-                        if(membershipItem.getMembershipAssociated().getMaxClasses() != null) maxClasses += membershipItem.getMembershipAssociated().getMaxClasses();
+                    for (MembershipItem item : membershipItemList) {
+                        Integer associatedMax = item.getMembershipAssociated().getMaxClasses();
+                        if (associatedMax != null) {
+                            maxClasses += associatedMax;
+                        }
                     }
                 }
             }
 
-
+            // Obtener asistencias de este payment
             List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
 
-            Map<String, Integer> userAttendances = new HashMap<>();
-            for (Attendance attendance : attendances) {
-                String date = attendance.getDate().toString();
-                userAttendances.put(date, userAttendances.getOrDefault(date, 0) + 1);
+            // Si el usuario ya existe en el resultado, acumulamos
+            if (result.containsKey(userId)) {
+                Map<String, Object> userData = result.get(userId);
+
+                // Acumular max_classes
+                int previousMax = (int) userData.get("max_classes");
+                userData.put("max_classes", previousMax + maxClasses);
+
+                // Acumular asistencias sin perder fechas anteriores
+                Map<String, Integer> attendanceMap = (Map<String, Integer>) userData.get("attendance");
+                for (Attendance att : attendances) {
+                    String date = att.getDate().toString();
+                    attendanceMap.put(date, attendanceMap.getOrDefault(date, 0) + 1);
+                }
+
+            } else {
+                // Nuevo usuario
+                Map<String, Object> userData = new HashMap<>();
+                Map<String, Integer> attendanceMap = new HashMap<>();
+                for (Attendance att : attendances) {
+                    String date = att.getDate().toString();
+                    attendanceMap.put(date, attendanceMap.getOrDefault(date, 0) + 1);
+                }
+                userData.put("attendance", attendanceMap);
+                userData.put("max_classes", maxClasses);
+                result.put(userId, userData);
             }
-
-            Map<String, Object> userData = new HashMap<>();
-            userData.put("attendance", userAttendances);
-            userData.put("max_classes", maxClasses);
-
-            result.put(userId, userData);
         }
 
         return result;
     }
 
-    public Integer getLeftAttendances(Long userId) {
-        Payment activeClassesPayment = paymentRepository.findActiveClassesPayment(LocalDate.now(), userId);
-        if(activeClassesPayment == null){
-            activeClassesPayment = paymentRepository.findActiveClassesCombinatedPayment(LocalDate.now(), userId);
-        }
 
-        if(activeClassesPayment != null){
-            LocalDate startDate = activeClassesPayment.getPaymentDate();
-            LocalDate endDate = activeClassesPayment.getDueDate();
-            int maxClasses = 0;
-            Membership membership = activeClassesPayment.getMembership();
+    public Integer getLeftAttendances(Long userId) {
+        List<Payment> activeClassesPayment = paymentRepository.findActiveClassesPayment(LocalDate.now(), userId);
+        Payment activeClassesCombinatedPayment = paymentRepository.findActiveClassesCombinatedPayment(LocalDate.now(), userId);
+        List<Attendance> attendances = new ArrayList<>();
+        int maxClasses = 0;
+        Set<Long> attendanceIds = new HashSet<>();
+
+        if(activeClassesCombinatedPayment != null){
+            LocalDate startDate = activeClassesCombinatedPayment.getPaymentDate();
+            LocalDate endDate = activeClassesCombinatedPayment.getDueDate();
+            Membership membership = activeClassesCombinatedPayment.getMembership();
             if(membership.getMaxClasses() != null){
-                maxClasses = activeClassesPayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+                maxClasses = activeClassesCombinatedPayment.getMembership().getMaxClasses(); // Obtener el máximo de clases
             }
             else if(Objects.equals(membership.getMembershipType().getName(), "Combinada")){
                 List<MembershipItem> membershipItemList = membershipItemRepository.findByMembershipPrincipal(membership);
@@ -201,13 +221,32 @@ public class AttendanceService {
                 }
 
             }
+            List<Attendance> newAttendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
+            for (Attendance attendance : newAttendances) {
+                if (attendanceIds.add(attendance.getId())) {
+                    attendances.add(attendance);
+                }
+            }
 
-            List<Attendance> attendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
-
-            return maxClasses - attendances.size();
+        }
+        else{
+            for(Payment payment : activeClassesPayment){
+                LocalDate startDate = payment.getPaymentDate();
+                LocalDate endDate = payment.getDueDate();
+                Membership membership = payment.getMembership();
+                if(membership.getMaxClasses() != null){
+                    maxClasses += payment.getMembership().getMaxClasses(); // Obtener el máximo de clases
+                }
+                List<Attendance> newAttendances = attendanceRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
+                for (Attendance attendance : newAttendances) {
+                    if (attendanceIds.add(attendance.getId())) {
+                        attendances.add(attendance);
+                    }
+                }
+            }
         }
 
-        return 0;
+        return maxClasses - attendances.size();
 
     }
 

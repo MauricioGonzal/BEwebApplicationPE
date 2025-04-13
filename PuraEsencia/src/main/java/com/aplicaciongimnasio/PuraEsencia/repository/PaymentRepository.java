@@ -27,11 +27,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     SELECT p FROM Payment p
     WHERE p.paymentDate <= :currentDate
     AND p.dueDate >= :currentDate
-    AND p.paymentDate = (
-        SELECT MAX(p2.paymentDate) FROM Payment p2 
-        WHERE p2.user.id = p.user.id 
-        AND p2.paymentDate <= :currentDate
-    )
 """)
     List<Payment> findLatestActivePayments(@Param("currentDate") LocalDate currentDate);
 
@@ -83,13 +78,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     AND p.membership.area.name = "Clases"
     AND p.user.id = :userId
     AND p.dueDate >= :currentDate
-    AND p.paymentDate = (
-        SELECT MAX(p2.paymentDate) FROM Payment p2 
-        WHERE p2.user.id = p.user.id 
-        AND p2.paymentDate <= :currentDate
-    )
 """)
-    Payment findActiveClassesPayment(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
+    List<Payment> findActiveClassesPayment(@Param("currentDate") LocalDate currentDate, @Param("userId") Long userId);
 
     @Query("""
     SELECT p FROM Payment p
